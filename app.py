@@ -4,9 +4,14 @@ import sqlite3
 import os
 from datetime import datetime
 from functools import wraps
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-here'  # Change this in production
+app.secret_key = os.getenv('SECRET_KEY', 'dev-key')
 app.config['DATABASE'] = 'jobs.db'
 
 def init_db():
