@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section position-relative overflow-hidden">
+  <div class="container">
+    <div class="row align-items-center min-vh-75 py-5">
+      <div class="col-lg-6 py-5">
+        <h1 class="display-4 fw-bold mb-4">Find Your <span class="text-primary">Dream Job</span> Today</h1>
+        <p class="lead mb-4">Join thousands of professionals who found their perfect match through our platform. The right opportunity is waiting for you.</p>
+        
+        <!-- Search Form -->
+        <div class="search-box bg-white rounded shadow p-4 mb-4">
+          <form action="{{ url_for('jobs') }}" method="GET">
+            <div class="row g-3">
+              <div class="col-md-5">
+                <div class="input-group">
+                  <span class="input-group-text bg-transparent border-0"><i class="fas fa-search text-muted"></i></span>
+                  <input type="text" class="form-control border-0" name="q" placeholder="Job title, keywords, or company">
+                </div>
+              </div>
+              <div class="col-md-5">
+                <div class="input-group">
+                  <span class="input-group-text bg-transparent border-0"><i class="fas fa-map-marker-alt text-muted"></i></span>
+                  <input type="text" class="form-control border-0" name="location" placeholder="City, state, or zip code">
+                </div>
+              </div>
+              <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        
+        <div class="d-flex gap-3 flex-wrap">
+          {% if not session.user_id %}
+            <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-4">Start Your Journey</a>
+            <a href="{{ url_for('jobs') }}" class="btn btn-outline-primary btn-lg px-4">Browse Jobs</a>
+          {% else %}
+            {% if session.role == 'candidate' %}
+              <a href="{{ url_for('jobs') }}" class="btn btn-primary btn-lg px-4">Browse Jobs</a>
+              <a href="{{ url_for('candidate_profile') }}" class="btn btn-outline-primary btn-lg px-4">My Profile</a>
+            {% else %}
+              <a href="{{ url_for('post_job') }}" class="btn btn-primary btn-lg px-4">Post a Job</a>
+              <a href="{{ url_for('recruiter_dashboard') }}" class="btn btn-outline-primary btn-lg px-4">Dashboard</a>
+            {% endif %}
+          {% endif %}
+        </div>
+        
+        <div class="mt-4">
+          <p class="text-muted small">Popular searches: Software Engineer, Marketing Manager, Data Analyst, Product Designer, Sales Executive</p>
+        </div>
+      </div>
+      <div class="col-lg-6 py-5 text-center">
+        <div class="hero-image position-relative">
+          <img src="https://images.unsplash.com/photo-1521791055366-0d553872125f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Professional networking" class="img-fluid rounded shadow">
+          <div class="floating-card bg-white shadow rounded p-3 position-absolute top-0 start-0 m-3">
+            <div class="d-flex align-items-center">
+              <div class="bg-success rounded-circle p-2 me-2">
+                <i class="fas fa-check text-white"></i>
+              </div>
+              <div>
+                <p class="mb-0 fw-bold">2,500+</p>
+                <p class="mb-0 text-muted small">Jobs Posted</p>
+              </div>
+            </div>
+          </div>
+          <div class="floating-card bg-white shadow rounded p-3 position-absolute bottom-0 end-0 m-3">
+            <div class="d-flex align-items-center">
+              <div class="bg-primary rounded-circle p-2 me-2">
+                <i class="fas fa-users text-white"></i>
+              </div>
+              <div>
+                <p class="mb-0 fw-bold">15,000+</p>
+                <p class="mb-0 text-muted small">Active Users</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-md-3 mb-4 mb-md-0">
+        <h2 class="display-4 fw-bold text-primary">98%</h2>
+        <p class="text-muted">Job Placement Rate</p>
+      </div>
+      <div class="col-md-3 mb-4 mb-md-0">
+        <h2 class="display-4 fw-bold text-primary">2.5K+</h2>
+        <p class="text-muted">Companies Hiring</p>
+      </div>
+      <div class="col-md-3 mb-4 mb-md-0">
+        <h2 class="display-4 fw-bold text-primary">15K+</h2>
+        <p class="text-muted">Active Job Seekers</p>
+      </div>
+      <div class="col-md-3">
+        <h2 class="display-4 fw-bold text-primary">50+</h2>
+        <p class="text-muted">Industries Served</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Jobs Section -->
+<section class="py-5">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-md-8">
+        <h2 class="fw-bold mb-3">Featured Job Opportunities</h2>
+        <p class="text-muted">Hand-picked opportunities from top employers</p>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <a href="{{ url_for('jobs') }}" class="btn btn-outline-primary">View All Jobs <i class="fas fa-arrow-right ms-2"></i></a>
+      </div>
+    </div>
+    
+    {% if jobs %}
+      <div class="row">
+        {% for job in jobs %}
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card job-card h-100 border-0 shadow-sm hover-shadow transition">
+              <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                  <div class="company-logo bg-light rounded p-2 me-3">
+                    <i class="fas fa-building text-primary fa-lg"></i>
+                  </div>
+                  <span class="badge bg-primary">{{ job.job_type }}</span>
+                </div>
+                <h5 class="card-title fw-bold">{{ job.title }}</h5>
+                <p class="card-text text-muted mb-2">{{ job.company }}</p>
+                <div class="d-flex text-muted small mb-3">
+                  <span class="me-3"><i class="fas fa-map-marker-alt me-1"></i>{{ job.location }}</span>
+                  <span><i class="fas fa-clock me-1"></i>{{ job.created_at[:10] }}</span>
+                </div>
+                <p class="card-text">{{ job.description[:120] }}...</p>
+                <div class="mt-auto">
+                  <a href="{{ url_for('job_detail', job_id=job.id) }}" class="btn btn-primary btn-sm stretched-link">Apply Now</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="text-center py-5">
+        <i class="fas fa-briefcase fa-3x text-muted mb-3"></i>
+        <h4 class="text-muted">No jobs available at the moment</h4>
+        <p class="text-muted">Check back later for new opportunities</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-12 text-center">
+        <h2 class="fw-bold mb-3">How Job Hunt Portal Works</h2>
+        <p class="text-muted">Simple steps to your next career move</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4 text-center mb-4">
+        <div class="step-icon bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+          <i class="fas fa-user-plus text-white fa-2x"></i>
+        </div>
+        <h4 class="fw-bold">Create Your Profile</h4>
+        <p class="text-muted">Build a professional profile that highlights your skills, experience, and career goals.</p>
+      </div>
+      <div class="col-md-4 text-center mb-4">
+        <div class="step-icon bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+          <i class="fas fa-search text-white fa-2x"></i>
+        </div>
+        <h4 class="fw-bold">Find Opportunities</h4>
+        <p class="text-muted">Search through thousands of jobs and get personalized recommendations.</p>
+      </div>
+      <div class="col-md-4 text-center mb-4">
+        <div class="step-icon bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
+          <i class="fas fa-paper-plane text-white fa-2x"></i>
+        </div>
+        <h4 class="fw-bold">Apply & Connect</h4>
+        <p class="text-muted">Apply with one click and connect directly with employers and recruiters.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-5">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-12 text-center">
+        <h2 class="fw-bold mb-3">Success Stories</h2>
+        <p class="text-muted">Hear from professionals who found their dream jobs through Job Hunt Portal</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="card testimonial-card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center mb-3">
+              <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" alt="Sarah Johnson" class="rounded-circle me-3" width="60">
+              <div>
+                <h5 class="mb-0 fw-bold">Sarah Johnson</h5>
+                <p class="text-muted mb-0">Product Manager at TechCorp</p>
+              </div>
+            </div>
+            <p class="card-text">"Job Hunt Portal helped me transition from a marketing role to product management. The personalized job recommendations were spot on!"</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card testimonial-card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center mb-3">
+              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" alt="Michael Chen" class="rounded-circle me-3" width="60">
+              <div>
+                <h5 class="mb-0 fw-bold">Michael Chen</h5>
+                <p class="text-muted mb-0">Software Engineer at InnovateTech</p>
+              </div>
+            </div>
+            <p class="card-text">"I received three job offers within two weeks of using Job Hunt Portal. The platform made it easy to connect with top tech companies."</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card testimonial-card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center mb-3">
+              <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" alt="Jessica Williams" class="rounded-circle me-3" width="60">
+              <div>
+                <h5 class="mb-0 fw-bold">Jessica Williams</h5>
+                <p class="text-muted mb-0">HR Director at Global Solutions</p>
+              </div>
+            </div>
+            <p class="card-text">"As a recruiter, Job Hunt Portal has been invaluable for finding qualified candidates. The matching algorithm saves us so much time."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <h2 class="fw-bold mb-3">Ready to take the next step in your career?</h2>
+        <p class="mb-0">Join thousands of professionals who have found their dream jobs through Job Hunt Portal.</p>
+      </div>
+      <div class="col-lg-4 text-lg-end">
+        {% if not session.user_id %}
+          <a href="{{ url_for('register') }}" class="btn btn-light btn-lg px-4">Get Started Today</a>
+        {% else %}
+          {% if session.role == 'candidate' %}
+            <a href="{{ url_for('jobs') }}" class="btn btn-light btn-lg px-4">Browse Jobs</a>
+          {% else %}
+            <a href="{{ url_for('post_job') }}" class="btn btn-light btn-lg px-4">Post a Job</a>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Add custom CSS for the premium look -->
+<style>
+  .hero-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  }
+  
+  .min-vh-75 {
+    min-height: 75vh;
+  }
+  
+  .search-box {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .floating-card {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .step-icon {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .job-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .job-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .hover-shadow:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .transition {
+    transition: all 0.3s ease;
+  }
+  
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+  }
+  
+  .company-logo {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .testimonial-card {
+    border-left: 4px solid #0d6efd !important;
+  }
+</style>
+{% endblock %}

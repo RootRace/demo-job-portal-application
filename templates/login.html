@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Job Hunt Portal{% endblock %}
+
+{% block content %}
+<section class="login-section min-vh-100 d-flex align-items-center">
+  <div class="container-fluid p-0">
+    <div class="row g-0">
+      <!-- Left side - Branding and Info -->
+      <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center bg-primary text-white position-relative overflow-hidden">
+        <div class="position-absolute top-0 start-0 w-100 h-100 bg-primary" style="opacity: 0.95;"></div>
+        <div class="position-relative text-center px-5" style="z-index: 2;">
+          <div class="mb-5">
+            <i class="fas fa-briefcase fa-4x mb-4"></i>
+            <h1 class="display-4 fw-bold mb-3">Welcome to Job Hunt Portal</h1>
+            <p class="lead mb-4">Your career journey starts here. Connect with top employers and find opportunities that match your skills.</p>
+          </div>
+          
+          <div class="row text-center mt-5">
+            <div class="col-4">
+              <h3 class="fw-bold">15K+</h3>
+              <p class="mb-0">Job Seekers</p>
+            </div>
+            <div class="col-4">
+              <h3 class="fw-bold">2.5K+</h3>
+              <p class="mb-0">Companies</p>
+            </div>
+            <div class="col-4">
+              <h3 class="fw-bold">98%</h3>
+              <p class="mb-0">Success Rate</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Floating elements for visual interest -->
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;">
+          <div class="position-absolute rounded-circle bg-white opacity-50" style="width: 300px; height: 300px; top: 10%; left: 10%;"></div>
+          <div class="position-absolute rounded-circle bg-white opacity-50" style="width: 200px; height: 200px; bottom: 20%; right: 15%;"></div>
+        </div>
+      </div>
+      
+      <!-- Right side - Login Form -->
+      <div class="col-lg-6 d-flex align-items-center justify-content-center bg-light py-5">
+        <div class="w-100" style="max-width: 450px;">
+          <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold text-primary mb-2">Sign In</h2>
+            <p class="text-muted">Access your Job Hunt Portal account</p>
+          </div>
+          
+          <div class="card border-0 shadow-lg rounded-3">
+            <div class="card-body p-5">
+              <form method="POST">
+                <div class="mb-4">
+                  <label for="email" class="form-label fw-semibold">Email Address</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0">
+                      <i class="fas fa-envelope text-muted"></i>
+                    </span>
+                    <input type="email" class="form-control border-start-0 ps-0" id="email" name="email" placeholder="Enter your email" required>
+                  </div>
+                </div>
+                
+                <div class="mb-4">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <label for="password" class="form-label fw-semibold">Password</label>
+                    <a href="#" class="text-primary small text-decoration-none">Forgot password?</a>
+                  </div>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0">
+                      <i class="fas fa-lock text-muted"></i>
+                    </span>
+                    <input type="password" class="form-control border-start-0 ps-0" id="password" name="password" placeholder="Enter your password" required>
+                  </div>
+                </div>
+                
+                <div class="mb-4 form-check">
+                  <input type="checkbox" class="form-check-input" id="remember">
+                  <label class="form-check-label" for="remember">Remember me</label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-lg w-100 py-3 mb-4 fw-semibold">
+                  <i class="fas fa-sign-in-alt me-2"></i>Sign In to Your Account
+                </button>
+              </form>
+              
+              <div class="text-center mb-4">
+                <p class="mb-3 text-muted">Or continue with</p>
+                <div class="d-flex gap-3 justify-content-center">
+                  <button type="button" class="btn btn-outline-secondary rounded-pill px-4">
+                    <i class="fab fa-google me-2"></i>Google
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary rounded-pill px-4">
+                    <i class="fab fa-linkedin me-2"></i>LinkedIn
+                  </button>
+                </div>
+              </div>
+              
+              <div class="text-center pt-3 border-top">
+                <p class="mb-0">Don't have an account? <a href="{{ url_for('register') }}" class="text-primary fw-semibold text-decoration-none">Create one now</a></p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Demo credentials for testing -->
+          <div class="mt-4 p-4 bg-white rounded-3 shadow-sm">
+            <p class="small text-muted mb-2 fw-semibold text-center">Demo Credentials (For Testing)</p>
+            <div class="row small text-muted">
+              <div class="col-md-6 mb-3 mb-md-0">
+                <p class="mb-1"><i class="fas fa-user me-1 text-primary"></i><strong>Candidate Account:</strong></p>
+                <p class="mb-1 ms-3">Email: candidate@demo.com</p>
+                <p class="mb-0 ms-3">Password: demo123</p>
+              </div>
+              <div class="col-md-6">
+                <p class="mb-1"><i class="fas fa-building me-1 text-primary"></i><strong>Recruiter Account:</strong></p>
+                <p class="mb-1 ms-3">Email: recruiter@demo.com</p>
+                <p class="mb-0 ms-3">Password: demo123</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Add custom CSS for the full-screen login page -->
+<style>
+  .login-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  }
+  
+  .min-vh-100 {
+    min-height: 100vh;
+  }
+  
+  .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .input-group-text {
+    border-right: none;
+  }
+  
+  .form-control:focus {
+    box-shadow: none;
+    border-color: #0d6efd;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    border: none;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+  }
+  
+  .form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+  }
+  
+  .btn-outline-secondary {
+    transition: all 0.3s ease;
+  }
+  
+  .btn-outline-secondary:hover {
+    transform: translateY(-2px);
+  }
+</style>
+{% endblock %}

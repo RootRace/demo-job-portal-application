@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Post New Job</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="title" class="form-label">Job Title *</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="company" class="form-label">Company *</label>
+                            <input type="text" class="form-control" id="company" name="company" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="location" class="form-label">Location *</label>
+                            <input type="text" class="form-control" id="location" name="location" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="job_type" class="form-label">Job Type *</label>
+                            <select class="form-select" id="job_type" name="job_type" required>
+                                <option value="">Select Type</option>
+                                <option value="Full-time">Full-time</option>
+                                <option value="Part-time">Part-time</option>
+                                <option value="Contract">Contract</option>
+                                <option value="Internship">Internship</option>
+                                <option value="Remote">Remote</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="salary_range" class="form-label">Salary Range</label>
+                        <input type="text" class="form-control" id="salary_range" name="salary_range" 
+                               placeholder="e.g., $50,000 - $70,000">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Job Description *</label>
+                        <textarea class="form-control" id="description" name="description" rows="5" required
+                                  placeholder="Describe the role, responsibilities, and what makes this job great"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="requirements" class="form-label">Requirements *</label>
+                        <textarea class="form-control" id="requirements" name="requirements" rows="5" required
+                                  placeholder="List the required skills, experience, and qualifications"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">Post Job</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
