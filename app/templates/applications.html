@@ -21,7 +21,7 @@
                             </span>
                         </div>
                     </div>
-                    <a href="{{ url_for('recruiter_dashboard') }}" class="btn btn-primary btn-lg">
+                    <a href="{{ url_for('recruiter.dashboard') }}" class="btn btn-primary btn-lg">
                         <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
                     </a>
                 </div>
@@ -209,7 +209,7 @@
                                             
                                             <div class="card-footer bg-transparent border-0 pt-0">
                                                 <div class="action-buttons d-flex gap-2 flex-wrap">
-                                                    <form method="POST" action="{{ url_for('update_application_status') }}" class="d-flex gap-2 flex-wrap flex-grow-1">
+                                                    <form method="POST" action="{{ url_for('recruiter.update_application_status') }}" class="d-flex gap-2 flex-wrap flex-grow-1">
                                                         <input type="hidden" name="application_id" value="{{ application.id }}">
                                                         {% if application.status != 'shortlisted' %}
                                                             <button type="submit" name="status" value="shortlisted" class="btn btn-success btn-sm flex-fill">
@@ -238,7 +238,7 @@
                                 </div>
                                 <h3 class="text-muted mb-3">No Applications Yet</h3>
                                 <p class="text-muted mb-4">No candidates have applied for this job posting yet.</p>
-                                <a href="{{ url_for('recruiter_dashboard') }}" class="btn btn-primary">
+                                <a href="{{ url_for('recruiter.dashboard') }}" class="btn btn-primary">
                                     <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
                                 </a>
                             </div>

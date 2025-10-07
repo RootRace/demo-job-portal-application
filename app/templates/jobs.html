@@ -26,7 +26,7 @@
                                value="{{ location }}" placeholder="City, State">
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Search</button>
-                    <a href="{{ url_for('jobs') }}" class="btn btn-outline-secondary w-100 mt-2">Clear</a>
+                    <a href="{{ url_for('jobs.list_jobs') }}" class="btn btn-outline-secondary w-100 mt-2">Clear</a>
                 </form>
             </div>
         </div>
@@ -54,7 +54,7 @@
                                 {% if job.has_applied %}
                                     <span class="badge bg-success mb-2">Applied</span><br>
                                 {% endif %}
-                                <a href="{{ url_for('job_detail', job_id=job.id) }}" class="btn btn-primary btn-sm">View Details</a>
+                                <a href="{{ url_for('jobs.job_detail', job_id=job.id) }}" class="btn btn-primary btn-sm">View Details</a>
                             </div>
                         </div>
                     </div>
