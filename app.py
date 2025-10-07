@@ -5,6 +5,13 @@ import os
 from datetime import datetime
 from functools import wraps
 from dotenv import load_dotenv
+import fitz            # PyMuPDF
+from docx import Document
+import re
+from werkzeug.utils import secure_filename
+import app
+import spacy
+from spacy.matcher import Matcher
 
 
 load_dotenv()
@@ -13,6 +20,130 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'dev-key')
 app.config['DATABASE'] = 'jobs.db'
+
+nlp = spacy.load("en_core_web_trf")
+
+EMAIL_RE = re.compile(r'[\w\.-]+@[\w\.-]+\.\w+', re.I)
+PHONE_RE = re.compile(r'(\+?\d{1,3}[\s\-]?)?(?:\d[\d\-\s]{6,}\d)')
+
+EDUCATION_KEYWORDS = ["B.Tech","M.Tech","BSc","MSc","MBA","BE","ME","PhD"]
+
+def extract_text_from_pdf(file_path):
+    text = ""
+    with fitz.open(file_path) as pdf:
+        for page in pdf:
+            text += page.get_text("text") + "\n"
+    return text
+
+def extract_text_from_docx(file_path):
+    doc = Document(file_path)
+    return "\n".join(p.text for p in doc.paragraphs)
+
+def normalize_whitespace(s):
+    return re.sub(r'\s+', ' ', s).strip()
+
+def find_email(text):
+    m = EMAIL_RE.search(text)
+    return m.group(0).strip() if m else ""
+
+def find_phone(text):
+    m = PHONE_RE.search(text)
+    if not m:
+        return ""
+    phone = re.sub(r'[^\d\+]', '', m.group(0))
+    return phone
+
+def extract_name_location_education(text):
+    doc = nlp(text)
+    name, location, education = "", "", ""
+
+    name_match = re.search(r'(?i)(?:Name|Full Name)\s*[:\-]\s*(.+)', text)
+    if name_match:
+        name = name_match.group(1).split("\n")[0].strip()
+    else:
+        for ent in doc.ents:
+            if ent.label_ == "PERSON":
+                name = ent.text.strip()
+                break
+
+    loc_match = re.search(r'(?i)(?:Location|City)\s*[:\-]\s*(.+)', text)
+    if loc_match:
+        location = loc_match.group(1).split("\n")[0].strip()
+    else:
+        for ent in doc.ents:
+            if ent.label_ in ["GPE", "LOC"]:
+                location = ent.text.strip()
+                break
+
+    for kw in EDUCATION_KEYWORDS:
+        if kw.lower() in text.lower():
+            education = kw
+            break
+
+    return name, location, education
+
+def extract_skills(text):
+    doc = nlp(text)
+    matcher = Matcher(nlp.vocab)
+
+    pattern = [{"POS": "PROPN", "OP": "+"}, {"POS": "NOUN", "OP": "*"}]
+    matcher.add("SKILL_PATTERN", [pattern])
+
+    matches = matcher(doc)
+    skills_set = set()
+
+    for match_id, start, end in matches:
+        span = doc[start:end].text.strip()
+        if 1 <= len(span.split()) <= 4:
+            skills_set.add(span)
+
+    common_skills = ['Python','Java','Django','Flask','React','JavaScript','SQL','C++','AWS','Docker','Kubernetes','HTML','CSS','Node','ERPNext']
+    for token in doc:
+        if token.text in common_skills:
+            skills_set.add(token.text)
+
+    return ", ".join(sorted(skills_set))
+
+def extract_experience(text):
+    exp_m = re.search(r'(\d+(?:\.\d+)?)\s*(?:\+)?\s*(?:years|yrs)\s*(?:of)?\s*(?:experience|exp)?', text, re.I)
+    if exp_m:
+        return exp_m.group(1)
+    else:
+        doc = nlp(text)
+        for sent in doc.sents:
+            if "experience" in sent.text.lower():
+                nums = [token.text for token in sent if token.like_num]
+                if nums:
+                    return nums[0]
+    return ""
+
+def extract_info_from_cv(file_path):
+    ext = os.path.splitext(file_path)[1].lower()
+    if ext == ".pdf":
+        raw_text = extract_text_from_pdf(file_path)
+    elif ext in (".doc", ".docx"):
+        raw_text = extract_text_from_docx(file_path)
+    else:
+        return {}
+
+    text = normalize_whitespace(raw_text)
+
+    email = find_email(raw_text)
+    phone = find_phone(raw_text)
+    name, location, education = extract_name_location_education(raw_text)
+    skills = extract_skills(raw_text)
+    experience_years = extract_experience(raw_text)
+
+    return {
+        "full_name": name,
+        "email": email,
+        "phone": phone,
+        "location": location,
+        "skills": skills,
+        "experience_years": experience_years,
+        "education": education,
+        "resume_text": text[:5000]
+    }
 
 def init_db():
     conn = sqlite3.connect('jobs.db')
@@ -126,7 +257,6 @@ def index():
         else:
             return redirect(url_for('jobs'))
     
-    # Show recent jobs on homepage
     conn = get_db_connection()
     recent_jobs = conn.execute('''
         SELECT j.*, u.email as recruiter_email 
@@ -148,7 +278,6 @@ def register():
         
         conn = get_db_connection()
         
-        # Check if user already exists
         existing_user = conn.execute(
             'SELECT id FROM users WHERE email = ?', (email,)
         ).fetchone()
@@ -158,7 +287,6 @@ def register():
             conn.close()
             return redirect(url_for('login'))
         
-        # Create new user
         hashed_password = generate_password_hash(password)
         conn.execute(
             'INSERT INTO users (email, password, role) VALUES (?, ?, ?)',
@@ -171,6 +299,28 @@ def register():
         return redirect(url_for('login'))
     
     return render_template('register.html')
+
+@app.route('/upload-cv-extract', methods=['POST'])
+@candidate_required
+def upload_cv_extract():
+    uploaded_file = request.files.get('resume_file')
+    if not uploaded_file or uploaded_file.filename == '':
+        return jsonify({'success': False, 'error': 'No file uploaded'})
+
+    upload_folder = "uploads"
+    os.makedirs(upload_folder, exist_ok=True)
+    filename = secure_filename(uploaded_file.filename)
+    file_path = os.path.join(upload_folder, filename)
+    uploaded_file.save(file_path)
+
+    extracted_data = extract_info_from_cv(file_path)
+
+    if not extracted_data:
+        return jsonify({'success': False, 'error': 'Could not extract data'})
+
+    app.logger.debug("CV extraction result: %s", extracted_data)
+
+    return jsonify({'success': True, **extracted_data})
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -219,21 +369,18 @@ def candidate_profile():
         education = request.form['education']
         resume_text = request.form['resume_text']
         
-        # Check if profile already exists
         existing_profile = conn.execute(
             'SELECT id FROM candidate_profiles WHERE user_id = ?', 
             (session['user_id'],)
         ).fetchone()
         
         if existing_profile:
-            # Update existing profile
             conn.execute('''
                 UPDATE candidate_profiles 
                 SET full_name=?, phone=?, location=?, skills=?, experience_years=?, education=?, resume_text=?
                 WHERE user_id=?
             ''', (full_name, phone, location, skills, experience_years, education, resume_text, session['user_id']))
         else:
-            # Create new profile
             conn.execute('''
                 INSERT INTO candidate_profiles 
                 (user_id, full_name, phone, location, skills, experience_years, education, resume_text)
@@ -243,7 +390,6 @@ def candidate_profile():
         conn.commit()
         flash('Profile updated successfully!', 'success')
     
-    # Get current profile
     profile = conn.execute(
         'SELECT * FROM candidate_profiles WHERE user_id = ?', 
         (session['user_id'],)
@@ -301,7 +447,6 @@ def job_detail(job_id):
         flash('Job not found.', 'error')
         return redirect(url_for('jobs'))
     
-    # Check if user has already applied
     has_applied = conn.execute(
         'SELECT id FROM applications WHERE job_id = ? AND candidate_id = ?',
         (job_id, session['user_id'])
@@ -316,7 +461,6 @@ def job_detail(job_id):
 def apply_job(job_id):
     conn = get_db_connection()
     
-    # Check if profile exists
     profile = conn.execute(
         'SELECT id FROM candidate_profiles WHERE user_id = ?',
         (session['user_id'],)
@@ -327,7 +471,6 @@ def apply_job(job_id):
         conn.close()
         return redirect(url_for('candidate_profile'))
     
-    # Check if already applied
     existing_application = conn.execute(
         'SELECT id FROM applications WHERE job_id = ? AND candidate_id = ?',
         (job_id, session['user_id'])
@@ -338,7 +481,6 @@ def apply_job(job_id):
         conn.close()
         return redirect(url_for('job_detail', job_id=job_id))
     
-    # Create application
     conn.execute(
         'INSERT INTO applications (job_id, candidate_id, status) VALUES (?, ?, ?)',
         (job_id, session['user_id'], 'applied')
@@ -354,7 +496,6 @@ def apply_job(job_id):
 def recruiter_dashboard():
     conn = get_db_connection()
     
-    # Get recruiter's jobs with application counts
     jobs = conn.execute('''
         SELECT j.*, 
                COUNT(a.id) as application_count,
@@ -367,7 +508,6 @@ def recruiter_dashboard():
         ORDER BY j.created_at DESC
     ''', (session['user_id'],)).fetchall()
     
-    # Recent applications
     recent_applications = conn.execute('''
         SELECT a.*, j.title as job_title, cp.full_name as candidate_name
         FROM applications a
@@ -412,7 +552,6 @@ def post_job():
 def view_applications(job_id):
     conn = get_db_connection()
     
-    # Verify job belongs to recruiter
     job = conn.execute(
         'SELECT id, title FROM jobs WHERE id = ? AND recruiter_id = ?',
         (job_id, session['user_id'])
@@ -423,7 +562,6 @@ def view_applications(job_id):
         conn.close()
         return redirect(url_for('recruiter_dashboard'))
     
-    # Get applications for this job
     applications = conn.execute('''
         SELECT a.*, cp.full_name, cp.skills, cp.experience_years, cp.location as candidate_location
         FROM applications a
@@ -444,7 +582,6 @@ def update_application_status():
     
     conn = get_db_connection()
     
-    # Verify application belongs to recruiter's job
     application = conn.execute('''
         SELECT a.id 
         FROM applications a 
@@ -474,4 +611,3 @@ def add_header(response):
 if __name__ == '__main__':
     init_db()
     app.run(debug=True, port=5000)
-    

@@ -1,73 +1,466 @@
 {% extends "base.html" %}
 
+{% block title %}My Profile - JobHub{% endblock %}
+
 {% block content %}
-<div class="row">
-    <div class="col-md-8 mx-auto">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0"><i class="fas fa-user me-2"></i>My Profile</h4>
+<section class="profile-section min-vh-100">
+  <div class="container-fluid p-0">
+    <div class="row g-0">
+      <!-- Left Side - Profile Form -->
+      <div class="col-12 col-lg-8">
+        <div class="h-100 bg-light py-4 py-lg-5">
+          <div class="px-3 px-md-4 px-lg-5">
+            <!-- Page Header -->
+            <div class="mb-4 mb-lg-5 text-center text-lg-start">
+              <h1 class="display-5 fw-bold text-primary mb-2">My Professional Profile</h1>
+              <p class="lead text-muted">Build your professional presence and stand out to employers</p>
             </div>
-            <div class="card-body">
-                <form method="POST">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="full_name" class="form-label">Full Name *</label>
-                            <input type="text" class="form-control" id="full_name" name="full_name" 
-                                   value="{{ profile.full_name if profile else '' }}" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="phone" class="form-label">Phone</label>
-                            <input type="tel" class="form-control" id="phone" name="phone" 
-                                   value="{{ profile.phone if profile else '' }}">
-                        </div>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="location" class="form-label">Location</label>
-                        <input type="text" class="form-control" id="location" name="location" 
-                               value="{{ profile.location if profile else '' }}" placeholder="City, State">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="skills" class="form-label">Skills</label>
-                        <textarea class="form-control" id="skills" name="skills" rows="3" 
-                                  placeholder="List your skills separated by commas">{{ profile.skills if profile else '' }}</textarea>
-                        <div class="form-text">Example: Python, JavaScript, React, SQL, Project Management</div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="experience_years" class="form-label">Years of Experience</label>
-                            <input type="number" class="form-control" id="experience_years" name="experience_years" 
-                                   value="{{ profile.experience_years if profile else '' }}" step="0.5" min="0">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="education" class="form-label">Education</label>
-                            <input type="text" class="form-control" id="education" name="education" 
-                                   value="{{ profile.education if profile else '' }}" placeholder="Degree, University">
-                        </div>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="resume_text" class="form-label">Resume Summary</label>
-                        <textarea class="form-control" id="resume_text" name="resume_text" rows="5" 
-                                  placeholder="Brief summary of your experience, achievements, and career objectives">{{ profile.resume_text if profile else '' }}</textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary w-100">Save Profile</button>
-                </form>
-                
-                {% if profile %}
-                <div class="mt-4 p-3 bg-light rounded">
-                    <h6>Profile Preview</h6>
-                    <p><strong>Name:</strong> {{ profile.full_name }}</p>
-                    <p><strong>Skills:</strong> {{ profile.skills }}</p>
-                    <p><strong>Experience:</strong> {{ profile.experience_years }} years</p>
-                    <p><strong>Location:</strong> {{ profile.location }}</p>
+
+            <div class="card border-0 shadow-lg rounded-3">
+              <div class="card-header bg-primary text-white py-3 py-lg-4">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                  <div class="mb-2 mb-md-0">
+                    <h3 class="h4 mb-1 fw-bold"><i class="fas fa-user-edit me-2"></i>Profile Information</h3>
+                    <p class="mb-0 opacity-75 small">Complete your profile to get better job matches</p>
+                  </div>
+                  <span class="badge bg-light text-primary fs-6">Auto-fill from CV</span>
                 </div>
-                {% endif %}
+              </div>
+              
+              <div class="card-body p-3 p-md-4 p-lg-5">
+                <!-- Upload CV Section -->
+                <div class="cv-upload-section mb-4 mb-lg-5 p-3 p-md-4 bg-light rounded-3 border">
+                  <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-file-upload fa-lg text-primary me-3"></i>
+                    <div>
+                      <h5 class="fw-bold mb-1 fs-6">Upload Your CV</h5>
+                      <p class="text-muted mb-0 small">Upload your resume to automatically fill your profile details</p>
+                    </div>
+                  </div>
+                  
+                  <div class="row align-items-end">
+                    <div class="col-12 col-md-8">
+                      <input type="file" class="form-control form-control-sm" id="resume_file" name="resume_file" accept=".pdf,.doc,.docx">
+                      <div class="form-text text-muted mt-2 small">Supported formats: PDF, DOC, DOCX (Max 5MB)</div>
+                      <div id="upload-status" class="mt-2 fw-semibold small"></div>
+                    </div>
+                    <div class="col-12 col-md-4 text-start text-md-end mt-3 mt-md-0">
+                      <button type="button" class="btn btn-outline-primary btn-sm w-100 w-md-auto" onclick="document.getElementById('resume_file').click()">
+                        <i class="fas fa-cloud-upload-alt me-2"></i>Browse Files
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Profile Form -->
+                <form id="profileForm" method="POST" enctype="multipart/form-data">
+                  <div class="row g-3 g-lg-4">
+                    <!-- Personal Information -->
+                    <div class="col-12">
+                      <h5 class="fw-bold border-bottom pb-2 pb-lg-3 mb-3 mb-lg-4 text-primary fs-5 fs-lg-4">
+                        <i class="fas fa-user-circle me-2"></i>Personal Information
+                      </h5>
+                    </div>
+                    
+                    <div class="col-12 col-md-6">
+                      <label for="full_name" class="form-label fw-semibold">Full Name *</label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                          <i class="fas fa-user text-muted"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0 ps-0" id="full_name" name="full_name" 
+                               value="{{ profile.full_name if profile else '' }}" required placeholder="Enter your full name">
+                      </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-6">
+                      <label for="phone" class="form-label fw-semibold">Phone Number</label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                          <i class="fas fa-phone text-muted"></i>
+                        </span>
+                        <input type="tel" class="form-control border-start-0 ps-0" id="phone" name="phone" 
+                               value="{{ profile.phone if profile else '' }}" placeholder="+1 (555) 123-4567">
+                      </div>
+                    </div>
+                    
+                    <div class="col-12">
+                      <label for="location" class="form-label fw-semibold">Location</label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                          <i class="fas fa-map-marker-alt text-muted"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0 ps-0" id="location" name="location" 
+                               value="{{ profile.location if profile else '' }}" placeholder="City, State, Country">
+                      </div>
+                    </div>
+                    
+                    <!-- Professional Details -->
+                    <div class="col-12 mt-4 mt-lg-5">
+                      <h5 class="fw-bold border-bottom pb-2 pb-lg-3 mb-3 mb-lg-4 text-primary fs-5 fs-lg-4">
+                        <i class="fas fa-briefcase me-2"></i>Professional Details
+                      </h5>
+                    </div>
+                    
+                    <div class="col-12 col-md-6">
+                      <label for="experience_years" class="form-label fw-semibold">Years of Experience</label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                          <i class="fas fa-chart-line text-muted"></i>
+                        </span>
+                        <input type="number" class="form-control border-start-0 ps-0" id="experience_years" name="experience_years" 
+                               value="{{ profile.experience_years if profile else '' }}" step="0.5" min="0" placeholder="0.0">
+                      </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-6">
+                      <label for="education" class="form-label fw-semibold">Education</label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                          <i class="fas fa-graduation-cap text-muted"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0 ps-0" id="education" name="education" 
+                               value="{{ profile.education if profile else '' }}" placeholder="Degree, University">
+                      </div>
+                    </div>
+                    
+                    <div class="col-12">
+                      <label for="skills" class="form-label fw-semibold">Skills</label>
+                      <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 align-items-start pt-3">
+                          <i class="fas fa-tools text-muted"></i>
+                        </span>
+                        <textarea class="form-control border-start-0 ps-0" id="skills" name="skills" rows="3" 
+                                  placeholder="List your skills separated by commas">{{ profile.skills if profile else '' }}</textarea>
+                      </div>
+                      <div class="form-text text-muted mt-1">Example: Python, JavaScript, React, SQL, Project Management</div>
+                    </div>
+                    
+                    <div class="col-12">
+                      <label for="resume_text" class="form-label fw-semibold">Professional Summary</label>
+                      <textarea class="form-control" id="resume_text" name="resume_text" rows="4" 
+                                placeholder="Brief summary of your experience, achievements, and career objectives">{{ profile.resume_text if profile else '' }}</textarea>
+                      <div class="form-text text-muted mt-1">This summary will be visible to employers when they view your profile.</div>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <div class="col-12 mt-4 mt-lg-5">
+                      <button type="submit" class="btn btn-primary btn-lg w-100 py-3 fw-bold">
+                        <i class="fas fa-save me-2"></i>Save Profile & Update
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
+      
+      <!-- Right Side - Profile Preview & Stats -->
+      <div class="col-12 col-lg-4">
+        <div class="h-100 bg-white py-4 py-lg-5">
+          <div class="px-3 px-md-4 px-lg-4">
+            <!-- Profile Preview Card -->
+            {% if profile %}
+            <div class="card border-0 shadow-lg rounded-3 mb-4">
+              <div class="card-header bg-success text-white py-3">
+                <h5 class="mb-0 fw-bold"><i class="fas fa-eye me-2"></i>Profile Preview</h5>
+              </div>
+              <div class="card-body p-3 p-md-4">
+                <div class="text-center mb-3">
+                  <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 80px; height: 80px;">
+                    <i class="fas fa-user text-white fa-2x"></i>
+                  </div>
+                  <h5 class="fw-bold mb-1">{{ profile.full_name }}</h5>
+                  {% if profile.location %}
+                  <p class="text-muted mb-2"><i class="fas fa-map-marker-alt me-1"></i>{{ profile.location }}</p>
+                  {% endif %}
+                  
+                  <!-- Profile Strength -->
+                  <div class="mb-3">
+                    <h6 class="fw-bold text-primary mb-1">Profile Strength</h6>
+                    <div class="progress mb-1" style="height: 8px;">
+                      <div class="progress-bar bg-success" style="width: 75%"></div>
+                    </div>
+                    <small class="text-muted">Good - Complete more fields to improve</small>
+                  </div>
+                </div>
+                
+                <div class="mb-3">
+                  <h6 class="fw-bold text-primary mb-2">Skills</h6>
+                  <div class="d-flex flex-wrap gap-1">
+                    {% if profile.skills %}
+                      {% for skill in profile.skills.split(',') %}
+                        <span class="badge bg-light text-dark border small py-1 px-2">{{ skill.strip() }}</span>
+                      {% endfor %}
+                    {% else %}
+                      <span class="text-muted small">No skills added yet</span>
+                    {% endif %}
+                  </div>
+                </div>
+                
+                <div class="row text-center g-2">
+                  <div class="col-6">
+                    <div class="p-2 border rounded-3 bg-light">
+                      <h5 class="fw-bold text-primary mb-0">{{ profile.experience_years or '0' }}</h5>
+                      <p class="mb-0 text-muted small">Years Exp</p>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="p-2 border rounded-3 bg-light">
+                      <h5 class="fw-bold text-primary mb-0">
+                        {% if profile.skills %}
+                          {{ profile.skills.split(',')|length }}
+                        {% else %}
+                          0
+                        {% endif %}
+                      </h5>
+                      <p class="mb-0 text-muted small">Skills</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+            
+            <!-- Quick Stats -->
+            <div class="card border-0 shadow-lg rounded-3 mb-4">
+              <div class="card-header bg-info text-white py-3">
+                <h5 class="mb-0 fw-bold"><i class="fas fa-chart-bar me-2"></i>Profile Performance</h5>
+              </div>
+              <div class="card-body p-3 p-md-4">
+                <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light rounded-3">
+                  <div>
+                    <h6 class="fw-bold text-primary mb-0">Profile Views</h6>
+                    <p class="mb-0 text-muted small">This month</p>
+                  </div>
+                  <h5 class="fw-bold text-success mb-0">24</h5>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light rounded-3">
+                  <div>
+                    <h6 class="fw-bold text-primary mb-0">Applications</h6>
+                    <p class="mb-0 text-muted small">Total submitted</p>
+                  </div>
+                  <h5 class="fw-bold text-warning mb-0">8</h5>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded-3">
+                  <div>
+                    <h6 class="fw-bold text-primary mb-0">Matches</h6>
+                    <p class="mb-0 text-muted small">Job recommendations</p>
+                  </div>
+                  <h5 class="fw-bold text-info mb-0">12</h5>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Tips Card -->
+            <div class="card border-0 shadow-lg rounded-3">
+              <div class="card-header bg-warning text-white py-3">
+                <h5 class="mb-0 fw-bold"><i class="fas fa-lightbulb me-2"></i>Profile Tips</h5>
+              </div>
+              <div class="card-body p-3 p-md-4">
+                <div class="d-flex mb-3">
+                  <div class="me-3 text-primary">
+                    <i class="fas fa-check-circle"></i>
+                  </div>
+                  <div>
+                    <h6 class="fw-bold mb-1">Complete All Fields</h6>
+                    <p class="small text-muted mb-0">Complete profiles get 3x more views</p>
+                  </div>
+                </div>
+                
+                <div class="d-flex mb-3">
+                  <div class="me-3 text-primary">
+                    <i class="fas fa-check-circle"></i>
+                  </div>
+                  <div>
+                    <h6 class="fw-bold mb-1">Use Specific Skills</h6>
+                    <p class="small text-muted mb-0">List technical skills and tools</p>
+                  </div>
+                </div>
+                
+                <div class="d-flex mb-3">
+                  <div class="me-3 text-primary">
+                    <i class="fas fa-check-circle"></i>
+                  </div>
+                  <div>
+                    <h6 class="fw-bold mb-1">Quantify Achievements</h6>
+                    <p class="small text-muted mb-0">Use numbers to show your impact</p>
+                  </div>
+                </div>
+                
+                <div class="d-flex">
+                  <div class="me-3 text-primary">
+                    <i class="fas fa-check-circle"></i>
+                  </div>
+                  <div>
+                    <h6 class="fw-bold mb-1">Upload Your CV</h6>
+                    <p class="small text-muted mb-0">Auto-fill to save time</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+</section>
+
+<!-- Add custom CSS for responsive profile page -->
+<style>
+  .profile-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  }
+  
+  .min-vh-100 {
+    min-height: 100vh;
+  }
+  
+  .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .input-group-text {
+    border-right: none;
+  }
+  
+  .form-control:focus {
+    box-shadow: none;
+    border-color: #0d6efd;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    border: none;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+  }
+  
+  .cv-upload-section {
+    border-left: 4px solid #0d6efd;
+  }
+  
+  .badge {
+    font-size: 0.75em;
+  }
+  
+  .progress {
+    border-radius: 10px;
+  }
+  
+  .progress-bar {
+    border-radius: 10px;
+  }
+  
+  /* Mobile-specific adjustments */
+  @media (max-width: 768px) {
+    .profile-section .container-fluid {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    
+    .profile-section .row.g-0 > [class*="col-"] {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    
+    .profile-section .bg-light,
+    .profile-section .bg-white {
+      padding-top: 1.5rem !important;
+      padding-bottom: 1.5rem !important;
+    }
+    
+    .profile-section .display-5 {
+      font-size: 2rem;
+    }
+    
+    .profile-section .lead {
+      font-size: 1rem;
+    }
+    
+    .card-body {
+      padding: 1rem !important;
+    }
+    
+    .btn-lg {
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+    }
+  }
+  
+  /* Medium devices (tablets) */
+  @media (min-width: 768px) and (max-width: 991.98px) {
+    .profile-section .bg-light,
+    .profile-section .bg-white {
+      padding-top: 2rem !important;
+      padding-bottom: 2rem !important;
+    }
+    
+    .card-body {
+      padding: 1.5rem !important;
+    }
+  }
+</style>
+
+<!-- ✅ AJAX CV Upload Script -->
+<script>
+document.getElementById('resume_file').addEventListener('change', async function() {
+    const fileInput = this;
+    const uploadStatus = document.getElementById('upload-status');
+    
+    if (!fileInput.files.length) return;
+
+    const formData = new FormData();
+    formData.append('resume_file', fileInput.files[0]);
+
+    uploadStatus.textContent = "Extracting data from CV... ⏳";
+    uploadStatus.classList.remove('text-danger','text-success');
+    uploadStatus.classList.add('text-muted');
+
+    try {
+        const response = await fetch('{{ url_for("upload_cv_extract") }}', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            uploadStatus.textContent = "CV data extracted successfully ✅";
+            uploadStatus.classList.remove('text-muted','text-danger');
+            uploadStatus.classList.add('text-success');
+
+            // Auto-fill form fields
+            document.getElementById('full_name').value = data.full_name || '';
+            document.getElementById('phone').value = data.phone || '';
+            document.getElementById('location').value = data.location || '';
+            document.getElementById('skills').value = data.skills || '';
+            document.getElementById('experience_years').value = data.experience_years || '';
+            document.getElementById('education').value = data.education || '';
+            document.getElementById('resume_text').value = data.resume_text || '';
+        } else {
+            uploadStatus.textContent = data.error || "Couldn't extract data from CV ❌";
+            uploadStatus.classList.remove('text-muted','text-success');
+            uploadStatus.classList.add('text-danger');
+        }
+    } catch (err) {
+        console.error(err);
+        uploadStatus.textContent = "Error while reading CV ❌";
+        uploadStatus.classList.remove('text-muted','text-success');
+        uploadStatus.classList.add('text-danger');
+    }
+});
+</script>
 {% endblock %}

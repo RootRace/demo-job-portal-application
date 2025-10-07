@@ -1,658 +1,409 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container-fluid applications-dashboard">
-    <!-- Header Section -->
-    <div class="row mb-5">
-        <div class="col-12">
-            <div class="dashboard-header">
-                <div class="d-flex justify-content-between align-items-start">
+<section class="applications-dashboard min-vh-100 bg-light">
+    <div class="container-fluid px-4 py-5">
+        <!-- Header Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-start mb-4">
                     <div>
-                        <h1 class="display-6 fw-bold text-dark mb-2">Applications for "{{ job.title }}"</h1>
-                        <div class="d-flex align-items-center job-meta">
-                            <span class="meta-item">
-                                <i class="fas fa-building me-2"></i>{{ job.company }}
+                        <h1 class="display-5 fw-bold text-primary mb-3">Applications for "{{ job.title }}"</h1>
+                        <div class="d-flex align-items-center flex-wrap gap-3 job-meta">
+                            <span class="meta-item bg-white px-3 py-2 rounded-3 shadow-sm">
+                                <i class="fas fa-building text-primary me-2"></i>{{ job.company }}
                             </span>
-                            <span class="meta-divider">•</span>
-                            <span class="meta-item">
-                                <i class="fas fa-map-marker-alt me-2"></i>{{ job.location }}
+                            <span class="meta-item bg-white px-3 py-2 rounded-3 shadow-sm">
+                                <i class="fas fa-map-marker-alt text-primary me-2"></i>{{ job.location }}
                             </span>
-                            <span class="meta-divider">•</span>
-                            <span class="meta-item">
-                                <i class="fas fa-clock me-2"></i>{{ job.job_type }}
+                            <span class="meta-item bg-white px-3 py-2 rounded-3 shadow-sm">
+                                <i class="fas fa-clock text-primary me-2"></i>{{ job.job_type }}
                             </span>
                         </div>
                     </div>
-                    <a href="{{ url_for('recruiter_dashboard') }}" class="btn btn-premium">
+                    <a href="{{ url_for('recruiter_dashboard') }}" class="btn btn-primary btn-lg">
                         <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
                     </a>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Statistics Cards -->
-    <div class="row mb-5">
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="stat-card total">
-                <div class="stat-content">
-                    <div class="stat-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 class="stat-number">{{ applications|length }}</h3>
-                        <p class="stat-label">Total Applicants</p>
-                    </div>
-                </div>
-                <div class="stat-background">
-                    <i class="fas fa-users"></i>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="stat-card shortlisted">
-                <div class="stat-content">
-                    <div class="stat-icon">
-                        <i class="fas fa-user-check"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 class="stat-number">{{ applications|selectattr('status', 'equalto', 'shortlisted')|list|length }}</h3>
-                        <p class="stat-label">Shortlisted</p>
-                    </div>
-                </div>
-                <div class="stat-background">
-                    <i class="fas fa-user-check"></i>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="stat-card review">
-                <div class="stat-content">
-                    <div class="stat-icon">
-                        <i class="fas fa-inbox"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 class="stat-number">{{ applications|selectattr('status', 'equalto', 'applied')|list|length }}</h3>
-                        <p class="stat-label">Under Review</p>
-                    </div>
-                </div>
-                <div class="stat-background">
-                    <i class="fas fa-inbox"></i>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="stat-card rejected">
-                <div class="stat-content">
-                    <div class="stat-icon">
-                        <i class="fas fa-user-times"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 class="stat-number">{{ applications|selectattr('status', 'equalto', 'rejected')|list|length }}</h3>
-                        <p class="stat-label">Rejected</p>
-                    </div>
-                </div>
-                <div class="stat-background">
-                    <i class="fas fa-user-times"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Control Panel -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="control-panel">
-                <div class="row g-3 align-items-end">
-                    <div class="col-lg-4 col-md-6">
-                        <label class="form-label small text-uppercase fw-semibold text-muted mb-2">Search Candidates</label>
-                        <div class="search-wrapper">
-                            <i class="fas fa-search"></i>
-                            <input type="text" id="searchInput" class="form-control" placeholder="Search by name, skills, or location...">
+        <!-- Statistics Cards -->
+        <div class="row mb-5">
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card stat-card border-0 shadow-lg h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-primary rounded-3 me-4">
+                                <i class="fas fa-users text-white"></i>
+                            </div>
+                            <div>
+                                <h2 class="stat-number fw-bold text-dark mb-1">{{ applications|length }}</h2>
+                                <p class="stat-label text-muted mb-0">Total Applicants</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-2 col-md-3">
-                        <label class="form-label small text-uppercase fw-semibold text-muted mb-2">Status</label>
-                        <select class="form-select" id="statusFilter">
-                            <option value="all">All Status</option>
-                            <option value="applied">Under Review</option>
-                            <option value="shortlisted">Shortlisted</option>
-                            <option value="rejected">Rejected</option>
-                        </select>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card stat-card border-0 shadow-lg h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-success rounded-3 me-4">
+                                <i class="fas fa-user-check text-white"></i>
+                            </div>
+                            <div>
+                                <h2 class="stat-number fw-bold text-dark mb-1">{{ applications|selectattr('status', 'equalto', 'shortlisted')|list|length }}</h2>
+                                <p class="stat-label text-muted mb-0">Shortlisted</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-lg-2 col-md-3">
-                        <label class="form-label small text-uppercase fw-semibold text-muted mb-2">Experience</label>
-                        <select class="form-select" id="experienceFilter">
-                            <option value="all">All Experience</option>
-                            <option value="0-2">0-2 years</option>
-                            <option value="2-5">2-5 years</option>
-                            <option value="5-10">5-10 years</option>
-                            <option value="10+">10+ years</option>
-                        </select>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card stat-card border-0 shadow-lg h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-warning rounded-3 me-4">
+                                <i class="fas fa-inbox text-white"></i>
+                            </div>
+                            <div>
+                                <h2 class="stat-number fw-bold text-dark mb-1">{{ applications|selectattr('status', 'equalto', 'applied')|list|length }}</h2>
+                                <p class="stat-label text-muted mb-0">Under Review</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-lg-2 col-md-4">
-                        <label class="form-label small text-uppercase fw-semibold text-muted mb-2">Sort By</label>
-                        <select class="form-select" id="sortSelect">
-                            <option value="recent">Most Recent</option>
-                            <option value="experience_high">Experience (High to Low)</option>
-                            <option value="experience_low">Experience (Low to High)</option>
-                            <option value="name">Name (A-Z)</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-2 col-md-4">
-                        <button class="btn btn-outline-premium w-100" id="resetFilters">
-                            <i class="fas fa-redo me-2"></i>Reset
-                        </button>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card stat-card border-0 shadow-lg h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-danger rounded-3 me-4">
+                                <i class="fas fa-user-times text-white"></i>
+                            </div>
+                            <div>
+                                <h2 class="stat-number fw-bold text-dark mb-1">{{ applications|selectattr('status', 'equalto', 'rejected')|list|length }}</h2>
+                                <p class="stat-label text-muted mb-0">Rejected</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Applications Grid -->
-    <div class="row">
-        <div class="col-12">
-            <div class="applications-section">
-                <div class="section-header">
-                    <h3 class="section-title">Candidate Applications</h3>
-                    <span class="applications-count">{{ applications|length }} candidates</span>
-                </div>
-                
-                {% if applications %}
-                    <div class="applications-grid" id="applicationsGrid">
-                        {% for application in applications %}
-                            <div class="candidate-card" data-status="{{ application.status }}" data-experience="{{ application.experience_years }}">
-                                <div class="card-header">
-                                    <div class="candidate-avatar">
-                                        {{ application.full_name[0]|upper }}
-                                    </div>
-                                    <div class="candidate-meta">
-                                        <h4 class="candidate-name">{{ application.full_name }}</h4>
-                                        <div class="candidate-location">
-                                            <i class="fas fa-map-marker-alt"></i>
-                                            {{ application.candidate_location }}
-                                        </div>
-                                    </div>
-                                    <div class="status-indicator status-{{ application.status }}">
-                                        {{ application.status|title }}
-                                    </div>
-                                </div>
-                                
-                                <div class="card-body">
-                                    <div class="experience-section">
-                                        <div class="experience-item">
-                                            <i class="fas fa-briefcase"></i>
-                                            <span>{{ application.experience_years }} years experience</span>
-                                        </div>
-                                        <div class="experience-item">
-                                            <i class="far fa-clock"></i>
-                                            <span>Applied {{ application.applied_at[:10] }}</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="skills-section">
-                                        <label class="skills-label">Key Skills</label>
-                                        <div class="skills-container">
-                                            {% set skills_list = application.skills.split(',') %}
-                                            {% for skill in skills_list[:3] %}
-                                                <span class="skill-tag">{{ skill.strip() }}</span>
-                                            {% endfor %}
-                                            {% if skills_list|length > 3 %}
-                                                <span class="skill-tag more">+{{ skills_list|length - 3 }} more</span>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="card-footer">
-                                    <div class="action-buttons">
-                                        <form method="POST" action="{{ url_for('update_application_status') }}" class="action-form">
-                                            <input type="hidden" name="application_id" value="{{ application.id }}">
-                                            {% if application.status != 'shortlisted' %}
-                                                <button type="submit" name="status" value="shortlisted" class="btn btn-success">
-                                                    <i class="fas fa-check me-2"></i>Shortlist
-                                                </button>
-                                            {% endif %}
-                                            {% if application.status != 'rejected' %}
-                                                <button type="submit" name="status" value="rejected" class="btn btn-outline-danger">
-                                                    <i class="fas fa-times me-2"></i>Reject
-                                                </button>
-                                            {% endif %}
-                                        </form>
-                                        <button class="btn btn-outline-premium view-profile" data-id="{{ application.id }}">
-                                            <i class="fas fa-eye me-2"></i>View
-                                        </button>
-                                    </div>
+        <!-- Control Panel -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body p-4">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-lg-4 col-md-6">
+                                <label class="form-label small text-uppercase fw-semibold text-muted mb-2">Search Candidates</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fas fa-search text-muted"></i>
+                                    </span>
+                                    <input type="text" id="searchInput" class="form-control border-start-0 ps-0" placeholder="Search by name, skills, or location...">
                                 </div>
                             </div>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <div class="empty-state">
-                        <div class="empty-icon">
-                            <i class="fas fa-users"></i>
+                            <div class="col-lg-2 col-md-3">
+                                <label class="form-label small text-uppercase fw-semibold text-muted mb-2">Status</label>
+                                <select class="form-select" id="statusFilter">
+                                    <option value="all">All Status</option>
+                                    <option value="applied">Under Review</option>
+                                    <option value="shortlisted">Shortlisted</option>
+                                    <option value="rejected">Rejected</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-md-3">
+                                <label class="form-label small text-uppercase fw-semibold text-muted mb-2">Experience</label>
+                                <select class="form-select" id="experienceFilter">
+                                    <option value="all">All Experience</option>
+                                    <option value="0-2">0-2 years</option>
+                                    <option value="2-5">2-5 years</option>
+                                    <option value="5-10">5-10 years</option>
+                                    <option value="10+">10+ years</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-md-4">
+                                <label class="form-label small text-uppercase fw-semibold text-muted mb-2">Sort By</label>
+                                <select class="form-select" id="sortSelect">
+                                    <option value="recent">Most Recent</option>
+                                    <option value="experience_high">Experience (High to Low)</option>
+                                    <option value="experience_low">Experience (Low to High)</option>
+                                    <option value="name">Name (A-Z)</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-md-4">
+                                <button class="btn btn-outline-primary w-100" id="resetFilters">
+                                    <i class="fas fa-redo me-2"></i>Reset
+                                </button>
+                            </div>
                         </div>
-                        <h3>No Applications Yet</h3>
-                        <p class="text-muted">No candidates have applied for this job posting yet.</p>
-                        <a href="{{ url_for('recruiter_dashboard') }}" class="btn btn-premium">
-                            <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
-                        </a>
                     </div>
-                {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Applications Grid -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-header bg-white py-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="card-title mb-0 fw-bold">Candidate Applications</h3>
+                            <span class="badge bg-primary fs-6">{{ applications|length }} candidates</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body p-4">
+                        {% if applications %}
+                            <div class="row g-4" id="applicationsGrid">
+                                {% for application in applications %}
+                                    <div class="col-xl-6 col-xxl-4">
+                                        <div class="card candidate-card h-100 border-0 shadow-sm" data-status="{{ application.status }}" data-experience="{{ application.experience_years }}">
+                                            <div class="card-header bg-transparent border-0 pb-0">
+                                                <div class="d-flex align-items-start gap-3">
+                                                    <div class="candidate-avatar bg-primary text-white rounded-3 d-flex align-items-center justify-content-center">
+                                                        {{ application.full_name[0]|upper }}
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <h5 class="candidate-name fw-bold mb-1">{{ application.full_name }}</h5>
+                                                        <div class="candidate-location text-muted small">
+                                                            <i class="fas fa-map-marker-alt me-1"></i>
+                                                            {{ application.candidate_location }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="status-indicator status-{{ application.status }} small">
+                                                        {{ application.status|title }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="card-body py-3">
+                                                <div class="experience-section mb-3">
+                                                    <div class="d-flex align-items-center text-muted small mb-2">
+                                                        <i class="fas fa-briefcase text-primary me-2"></i>
+                                                        <span>{{ application.experience_years }} years experience</span>
+                                                    </div>
+                                                    <div class="d-flex align-items-center text-muted small">
+                                                        <i class="far fa-clock text-primary me-2"></i>
+                                                        <span>Applied {{ application.applied_at[:10] }}</span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="skills-section">
+                                                    <label class="skills-label small text-uppercase text-muted fw-semibold mb-2">Key Skills</label>
+                                                    <div class="skills-container d-flex flex-wrap gap-1">
+                                                        {% set skills_list = application.skills.split(',') %}
+                                                        {% for skill in skills_list[:3] %}
+                                                            <span class="skill-tag bg-light text-dark border small px-2 py-1 rounded-2">{{ skill.strip() }}</span>
+                                                        {% endfor %}
+                                                        {% if skills_list|length > 3 %}
+                                                            <span class="skill-tag bg-primary text-white border small px-2 py-1 rounded-2">+{{ skills_list|length - 3 }} more</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="card-footer bg-transparent border-0 pt-0">
+                                                <div class="action-buttons d-flex gap-2 flex-wrap">
+                                                    <form method="POST" action="{{ url_for('update_application_status') }}" class="d-flex gap-2 flex-wrap flex-grow-1">
+                                                        <input type="hidden" name="application_id" value="{{ application.id }}">
+                                                        {% if application.status != 'shortlisted' %}
+                                                            <button type="submit" name="status" value="shortlisted" class="btn btn-success btn-sm flex-fill">
+                                                                <i class="fas fa-check me-1"></i>Shortlist
+                                                            </button>
+                                                        {% endif %}
+                                                        {% if application.status != 'rejected' %}
+                                                            <button type="submit" name="status" value="rejected" class="btn btn-outline-danger btn-sm flex-fill">
+                                                                <i class="fas fa-times me-1"></i>Reject
+                                                            </button>
+                                                        {% endif %}
+                                                    </form>
+                                                    <button class="btn btn-outline-primary btn-sm view-profile" data-id="{{ application.id }}">
+                                                        <i class="fas fa-eye me-1"></i>View
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5">
+                                <div class="empty-icon bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-users fa-2x text-muted"></i>
+                                </div>
+                                <h3 class="text-muted mb-3">No Applications Yet</h3>
+                                <p class="text-muted mb-4">No candidates have applied for this job posting yet.</p>
+                                <a href="{{ url_for('recruiter_dashboard') }}" class="btn btn-primary">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
 <style>
     .applications-dashboard {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
         min-height: 100vh;
-        padding: 2rem 0;
     }
     
-    .dashboard-header {
-        padding: 2rem 0;
-    }
-    
-    .job-meta {
-        color: #64748b;
-        font-size: 1.1rem;
-    }
-    
-    .meta-item {
-        display: flex;
-        align-items: center;
-    }
-    
-    .meta-divider {
-        margin: 0 1rem;
-        color: #cbd5e1;
-    }
-    
-    /* Premium Button Styles */
-    .btn-premium {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border: none;
-        color: white;
-        padding: 0.75rem 1.5rem;
-        border-radius: 10px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    }
-    
-    .btn-premium:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        color: white;
-    }
-    
-    .btn-outline-premium {
-        border: 2px solid #667eea;
-        color: #667eea;
-        background: transparent;
-        padding: 0.75rem 1.5rem;
-        border-radius: 10px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-outline-premium:hover {
-        background: #667eea;
-        color: white;
-        transform: translateY(-2px);
+    .job-meta .meta-item {
+        border: 1px solid #e2e8f0;
+        font-weight: 500;
     }
     
     /* Stat Cards */
     .stat-card {
-        background: white;
-        border-radius: 16px;
-        padding: 2rem;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         transition: all 0.3s ease;
-        border: 1px solid #f1f5f9;
+        border-radius: 16px;
     }
     
     .stat-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-    }
-    
-    .stat-content {
-        position: relative;
-        z-index: 2;
-        display: flex;
-        align-items: center;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
     }
     
     .stat-icon {
         width: 60px;
         height: 60px;
-        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.5rem;
-        margin-right: 1rem;
-    }
-    
-    .stat-background {
-        position: absolute;
-        top: -20px;
-        right: -20px;
-        font-size: 6rem;
-        opacity: 0.03;
-        z-index: 1;
     }
     
     .stat-number {
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin: 0;
-        line-height: 1;
+        font-size: 2.25rem;
     }
     
-    .stat-label {
-        color: #64748b;
-        margin: 0;
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
-    
-    /* Color variants for stat cards */
-    .stat-card.total .stat-icon { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
-    .stat-card.shortlisted .stat-icon { background: linear-gradient(135deg, #10b981, #059669); color: white; }
-    .stat-card.review .stat-icon { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
-    .stat-card.rejected .stat-icon { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
-    
-    /* Control Panel */
-    .control-panel {
-        background: white;
-        padding: 2rem;
-        border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        border: 1px solid #f1f5f9;
-    }
-    
-    .search-wrapper {
-        position: relative;
-    }
-    
-    .search-wrapper i {
-        position: absolute;
-        left: 1rem;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #64748b;
-        z-index: 10;
-    }
-    
-    .search-wrapper .form-control {
-        padding-left: 3rem;
-        border-radius: 12px;
-        border: 2px solid #e2e8f0;
-        font-size: 0.95rem;
-        transition: all 0.3s ease;
-    }
-    
-    .search-wrapper .form-control:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-    
-    .form-select {
-        border-radius: 12px;
-        border: 2px solid #e2e8f0;
-        font-size: 0.95rem;
-        transition: all 0.3s ease;
-    }
-    
-    .form-select:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-    
-    /* Applications Section */
-    .applications-section {
-        background: white;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        border: 1px solid #f1f5f9;
-    }
-    
-    .section-header {
-        padding: 1.5rem 2rem;
-        border-bottom: 1px solid #f1f5f9;
-        display: flex;
-        justify-content: between;
-        align-items: center;
-    }
-    
-    .section-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin: 0;
-        color: #1e293b;
-    }
-    
-    .applications-count {
-        background: #f1f5f9;
-        color: #64748b;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        font-size: 0.875rem;
-        font-weight: 600;
-    }
-    
-    /* Applications Grid */
-    .applications-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-        gap: 1.5rem;
-        padding: 2rem;
-    }
-    
+    /* Candidate Cards */
     .candidate-card {
-        background: white;
-        border: 1px solid #f1f5f9;
-        border-radius: 16px;
-        overflow: hidden;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        border-radius: 12px;
     }
     
     .candidate-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-    }
-    
-    .card-header {
-        padding: 1.5rem;
-        border-bottom: 1px solid #f1f5f9;
-        display: flex;
-        align-items: flex-start;
-        gap: 1rem;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
     }
     
     .candidate-avatar {
         width: 50px;
         height: 50px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         font-weight: 700;
         font-size: 1.25rem;
         flex-shrink: 0;
     }
     
-    .candidate-meta {
-        flex: 1;
-    }
-    
-    .candidate-name {
-        font-size: 1.1rem;
-        font-weight: 700;
-        margin: 0 0 0.5rem 0;
-        color: #1e293b;
-    }
-    
-    .candidate-location {
-        color: #64748b;
-        font-size: 0.9rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    
     .status-indicator {
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    .status-applied { background: #dbeafe; color: #1d4ed8; }
-    .status-shortlisted { background: #dcfce7; color: #166534; }
-    .status-rejected { background: #fee2e2; color: #991b1b; }
-    
-    .card-body {
-        padding: 1.5rem;
-    }
-    
-    .experience-section {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    .experience-item {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        color: #64748b;
-        font-size: 0.9rem;
-    }
-    
-    .experience-item i {
-        width: 16px;
-        text-align: center;
-        color: #667eea;
-    }
-    
-    .skills-label {
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: #64748b;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 0.75rem;
-        display: block;
-    }
-    
-    .skills-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-    }
-    
-    .skill-tag {
-        background: #f8fafc;
-        color: #475569;
         padding: 0.375rem 0.75rem;
-        border-radius: 8px;
-        font-size: 0.8rem;
-        font-weight: 500;
+        border-radius: 20px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 0.75rem;
+    }
+    
+    .status-applied { 
+        background: rgba(59, 130, 246, 0.1); 
+        color: #1d4ed8; 
+        border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    .status-shortlisted { 
+        background: rgba(34, 197, 94, 0.1); 
+        color: #166534; 
+        border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+    
+    .status-rejected { 
+        background: rgba(239, 68, 68, 0.1); 
+        color: #991b1b; 
+        border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+    
+    .skills-container .skill-tag {
+        font-size: 0.75rem;
         border: 1px solid #e2e8f0;
     }
     
-    .skill-tag.more {
-        background: #667eea;
-        color: white;
-        border: none;
+    /* Form Controls */
+    .form-control:focus, .form-select:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
     
-    .card-footer {
-        padding: 1.5rem;
-        border-top: 1px solid #f1f5f9;
-        background: #f8fafc;
+    .input-group-text {
+        border-right: none;
     }
     
-    .action-buttons {
-        display: flex;
-        gap: 0.75rem;
-        flex-wrap: wrap;
+    .form-control.border-start-0 {
+        border-left: none;
     }
     
+    /* Action Buttons */
     .action-buttons .btn {
-        flex: 1;
-        min-width: 120px;
-        border-radius: 10px;
-        font-weight: 600;
-        font-size: 0.875rem;
-        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-weight: 500;
+        min-width: 100px;
     }
     
     /* Empty State */
-    .empty-state {
-        text-align: center;
-        padding: 4rem 2rem;
-    }
-    
     .empty-icon {
-        width: 80px;
-        height: 80px;
         background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2rem;
-        color: #64748b;
-        margin: 0 auto 2rem;
-    }
-    
-    .empty-state h3 {
-        color: #1e293b;
-        margin-bottom: 1rem;
     }
     
     /* Responsive Design */
     @media (max-width: 768px) {
-        .applications-grid {
-            grid-template-columns: 1fr;
-            padding: 1rem;
+        .stat-number {
+            font-size: 1.75rem;
         }
         
-        .card-header {
-            flex-direction: column;
-            text-align: center;
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 1.25rem;
         }
         
         .candidate-avatar {
-            align-self: center;
+            width: 45px;
+            height: 45px;
+            font-size: 1.1rem;
         }
         
         .action-buttons {
             flex-direction: column;
         }
         
-        .job-meta {
-            flex-direction: column;
-            gap: 0.5rem;
+        .action-buttons .btn {
+            min-width: auto;
+            width: 100%;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .container-fluid {
+            padding-left: 1rem;
+            padding-right: 1rem;
         }
         
-        .meta-divider {
-            display: none;
+        .job-meta {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+        
+        .job-meta .meta-item {
+            width: 100%;
+            text-align: center;
         }
     }
 </style>
