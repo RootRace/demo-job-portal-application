@@ -11,6 +11,14 @@ PHONE_RE = re.compile(r'(\+?\d{1,3}[\s\-]?)?(?:\d[\d\-\s]{6,}\d)')
 EDUCATION_KEYWORDS = ['B.Tech','M.Tech','BSc','MSc','MBA','BE','ME','PhD']
 
 
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    import subprocess
+    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
+    nlp = spacy.load("en_core_web_sm")
+
+
 def _load_nlp():
     model = current_app.config.get('SPACY_MODEL', 'en_core_web_sm')
     try:
