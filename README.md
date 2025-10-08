@@ -8,3 +8,5 @@ python -m spacy download en_core_web_sm --> AI model for resume parsing
 Run 
 -----------------------
 python run.py
+
+web: gunicorn "app:create_app()"
