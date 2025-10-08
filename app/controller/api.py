@@ -21,11 +21,20 @@ def upload_cv_extract():
     # ensure spaCy model loaded lazily
     ensure_nlp()
 
-    extracted_data = extract_info_from_cv(file_path)
+    try:
+        extracted_data = extract_info_from_cv(file_path)
+    except Exception as e:
+        current_app.logger.error("Error during CV extraction: %s", e)
+        extracted_data = {}
+
+    # ✅ Clean up uploaded file to save storage
+    try:
+        os.remove(file_path)
+    except Exception as e:
+        current_app.logger.warning("Could not delete uploaded file: %s", e)
 
     if not extracted_data:
         return jsonify({'success': False, 'error': 'Could not extract data'})
 
     current_app.logger.debug('CV extraction result: %s', extracted_data)
-
     return jsonify({'success': True, **extracted_data})
