@@ -430,7 +430,7 @@ document.getElementById('resume_file').addEventListener('change', async function
     uploadStatus.classList.add('text-muted');
 
     try {
-        const response = await fetch('{{ url_for("upload_cv_extract") }}', {
+        const response = await fetch('{{ url_for("api.upload_cv_extract") }}', {
             method: 'POST',
             body: formData
         });

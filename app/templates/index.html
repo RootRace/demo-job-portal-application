@@ -11,7 +11,7 @@
         
         <!-- Search Form -->
         <div class="search-box bg-white rounded shadow p-4 mb-4">
-          <form action="{{ url_for('jobs') }}" method="GET">
+          <form action="{{ url_for('jobs.list_jobs') }}" method="GET">
             <div class="row g-3">
               <div class="col-md-5">
                 <div class="input-group">
@@ -34,15 +34,15 @@
         
         <div class="d-flex gap-3 flex-wrap">
           {% if not session.user_id %}
-            <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-4">Start Your Journey</a>
-            <a href="{{ url_for('jobs') }}" class="btn btn-outline-primary btn-lg px-4">Browse Jobs</a>
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg px-4">Start Your Journey</a>
+            <a href="{{ url_for('jobs.list_jobs') }}" class="btn btn-outline-primary btn-lg px-4">Browse Jobs</a>
           {% else %}
             {% if session.role == 'candidate' %}
-              <a href="{{ url_for('jobs') }}" class="btn btn-primary btn-lg px-4">Browse Jobs</a>
-              <a href="{{ url_for('candidate_profile') }}" class="btn btn-outline-primary btn-lg px-4">My Profile</a>
+              <a href="{{ url_for('jobs.list_jobs') }}" class="btn btn-primary btn-lg px-4">Browse Jobs</a>
+              <a href="{{ url_for('candidate.candidate_profile') }}" class="btn btn-outline-primary btn-lg px-4">My Profile</a>
             {% else %}
-              <a href="{{ url_for('post_job') }}" class="btn btn-primary btn-lg px-4">Post a Job</a>
-              <a href="{{ url_for('recruiter_dashboard') }}" class="btn btn-outline-primary btn-lg px-4">Dashboard</a>
+              <a href="{{ url_for('recruiter.post_job') }}" class="btn btn-primary btn-lg px-4">Post a Job</a>
+              <a href="{{ url_for('recruiter.dashboard') }}" class="btn btn-outline-primary btn-lg px-4">Dashboard</a>
             {% endif %}
           {% endif %}
         </div>
@@ -115,7 +115,7 @@
         <p class="text-muted">Hand-picked opportunities from top employers</p>
       </div>
       <div class="col-md-4 text-md-end">
-        <a href="{{ url_for('jobs') }}" class="btn btn-outline-primary">View All Jobs <i class="fas fa-arrow-right ms-2"></i></a>
+        <a href="{{ url_for('jobs.list_jobs') }}" class="btn btn-outline-primary">View All Jobs <i class="fas fa-arrow-right ms-2"></i></a>
       </div>
     </div>
     
@@ -139,7 +139,7 @@
                 </div>
                 <p class="card-text">{{ job.description[:120] }}...</p>
                 <div class="mt-auto">
-                  <a href="{{ url_for('job_detail', job_id=job.id) }}" class="btn btn-primary btn-sm stretched-link">Apply Now</a>
+                  <a href="{{ url_for('jobs.job_detail', job_id=job.id) }}" class="btn btn-primary btn-sm stretched-link">Apply Now</a>
                 </div>
               </div>
             </div>
@@ -257,12 +257,12 @@
       </div>
       <div class="col-lg-4 text-lg-end">
         {% if not session.user_id %}
-          <a href="{{ url_for('register') }}" class="btn btn-light btn-lg px-4">Get Started Today</a>
+          <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg px-4">Get Started Today</a>
         {% else %}
           {% if session.role == 'candidate' %}
-            <a href="{{ url_for('jobs') }}" class="btn btn-light btn-lg px-4">Browse Jobs</a>
+            <a href="{{ url_for('jobs.list_jobs') }}" class="btn btn-light btn-lg px-4">Browse Jobs</a>
           {% else %}
-            <a href="{{ url_for('post_job') }}" class="btn btn-light btn-lg px-4">Post a Job</a>
+            <a href="{{ url_for('jobs.list_jobs') }}" class="btn btn-light btn-lg px-4">Post a Job</a>
           {% endif %}
         {% endif %}
       </div>
