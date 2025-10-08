@@ -1,6 +1,7 @@
 import os
 import re
 from flask import current_app
+import fitz
 from docx import Document
 import spacy
 from spacy.matcher import Matcher
@@ -37,7 +38,6 @@ def ensure_nlp():
 
 
 def extract_text_from_pdf(file_path):
-    import fitz  
     text = ''
     with fitz.open(file_path) as pdf:
         for page in pdf:
@@ -162,5 +162,5 @@ def extract_info_from_cv(file_path):
         'skills': skills,
         'experience_years': experience_years,
         'education': education,
-        'resume_text': text[:3000]
+        'resume_text': text[:5000]
     }
