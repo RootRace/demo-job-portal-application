@@ -6,9 +6,9 @@ from app.controller.candidate import candidate_bp
 from app.controller.recruiter import recruiter_bp
 from app.controller.jobs import jobs_bp
 from app.controller.api import api_bp
+from app.services.db import init_db
 
 load_dotenv()
-
 
 def create_app():
     app = Flask(__name__, template_folder='templates', static_folder='static')
@@ -17,16 +17,20 @@ def create_app():
     app.config['UPLOAD_FOLDER'] = os.getenv('UPLOAD_FOLDER', 'uploads')
     app.config['SPACY_MODEL'] = os.getenv('SPACY_MODEL', 'en_core_web_sm')
 
-    # register blueprints
+    # ✅ Initialize database automatically when the app starts
+    with app.app_context():
+        if not os.path.exists(app.config['DATABASE']):
+            init_db()
+            print("✅ Database created automatically.")
 
-
+    # ✅ Register blueprints
     app.register_blueprint(auth_bp)
     app.register_blueprint(candidate_bp)
     app.register_blueprint(recruiter_bp)
     app.register_blueprint(jobs_bp)
     app.register_blueprint(api_bp)
 
-    # simple cache-control header
+    # ✅ Prevent caching issues
     @app.after_request
     def add_header(response):
         response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
