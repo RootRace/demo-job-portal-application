@@ -3,10 +3,11 @@ from flask import current_app
 
 
 def get_db_connection():
-    db_path = current_app.config.get('DATABASE', 'jobs.db')
+    db_path = current_app.config.get("DATABASE", "jobs.db")
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
+
 
 def migrate_users_table():
     conn = get_db_connection()
@@ -25,11 +26,12 @@ def migrate_users_table():
     conn.commit()
     conn.close()
 
+
 def init_db():
     conn = get_db_connection()
     c = conn.cursor()
 
-    c.execute('''
+    c.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             email TEXT UNIQUE NOT NULL,
@@ -39,9 +41,9 @@ def init_db():
             reset_code_expiry TIMESTAMP,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
-    ''')
+    """)
 
-    c.execute('''
+    c.execute("""
         CREATE TABLE IF NOT EXISTS candidate_profiles (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
@@ -55,9 +57,9 @@ def init_db():
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users (id)
         )
-    ''')
+    """)
 
-    c.execute('''
+    c.execute("""
         CREATE TABLE IF NOT EXISTS jobs (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             recruiter_id INTEGER NOT NULL,
@@ -71,9 +73,9 @@ def init_db():
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (recruiter_id) REFERENCES users (id)
         )
-    ''')
+    """)
 
-    c.execute('''
+    c.execute("""
         CREATE TABLE IF NOT EXISTS applications (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             job_id INTEGER NOT NULL,
@@ -84,8 +86,7 @@ def init_db():
             FOREIGN KEY (job_id) REFERENCES jobs (id),
             FOREIGN KEY (candidate_id) REFERENCES users (id)
         )
-    ''')
+    """)
 
     conn.commit()
     conn.close()
-    
