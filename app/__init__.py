@@ -6,7 +6,7 @@ from app.controller.candidate import candidate_bp
 from app.controller.recruiter import recruiter_bp
 from app.controller.jobs import jobs_bp
 from app.controller.api import api_bp
-from app.services.db import init_db
+from app.services.db import init_db, migrate_users_table
 
 load_dotenv()
 
@@ -19,9 +19,8 @@ def create_app():
 
     # ✅ Initialize database automatically when the app starts
     with app.app_context():
-        if not os.path.exists(app.config['DATABASE']):
-            init_db()
-            print("✅ Database created automatically.")
+        init_db()               # safe (CREATE IF NOT EXISTS)
+        migrate_users_table()   # 🔥 REQUIRED for existing DBs
 
     # ✅ Register blueprints
     app.register_blueprint(auth_bp)

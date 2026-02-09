@@ -1,411 +1,227 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="applications-dashboard min-vh-100 bg-light">
-    <div class="container-fluid px-4 py-5">
-        <!-- Header Section -->
-        <div class="row mb-5">
-            <div class="col-12">
-                <div class="d-flex justify-content-between align-items-start mb-4">
-                    <div>
-                        <h1 class="display-5 fw-bold text-primary mb-3">Applications for "{{ job.title }}"</h1>
-                        <div class="d-flex align-items-center flex-wrap gap-3 job-meta">
-                            <span class="meta-item bg-white px-3 py-2 rounded-3 shadow-sm">
-                                <i class="fas fa-building text-primary me-2"></i>{{ job.company }}
-                            </span>
-                            <span class="meta-item bg-white px-3 py-2 rounded-3 shadow-sm">
-                                <i class="fas fa-map-marker-alt text-primary me-2"></i>{{ job.location }}
-                            </span>
-                            <span class="meta-item bg-white px-3 py-2 rounded-3 shadow-sm">
-                                <i class="fas fa-clock text-primary me-2"></i>{{ job.job_type }}
-                            </span>
-                        </div>
-                    </div>
-                    <a href="{{ url_for('recruiter.dashboard') }}" class="btn btn-primary btn-lg">
-                        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
-                    </a>
+<section class="intelligence-hub min-vh-100 bg-white">
+    <div class="header-dark py-5 mb-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb x-small text-uppercase tracking-widest mb-2">
+                        <li class="breadcrumb-item"><a href="{{ url_for('recruiter.dashboard') }}" class="text-white opacity-50 text-decoration-none">Console</a></li>
+                        <li class="breadcrumb-item active text-white fw-bold">Intelligence</li>
+                    </ol>
+                </nav>
+                <a href="{{ url_for('recruiter.dashboard') }}" class="btn-exec-outline-white">
+                    <i class="fas fa-chevron-left me-2"></i>Exit Hub
+                </a>
+            </div>
+            <h1 class="display-5 fw-extrabold text-white tracking-tight mb-4">
+                Applications: <span class="text-outline-white">{{ job.title }}</span>
+            </h1>
+            <div class="d-flex align-items-center flex-wrap gap-3">
+                <div class="meta-capsule"><i class="fas fa-building me-2"></i>{{ job.company }}</div>
+                <div class="meta-capsule"><i class="fas fa-map-marker-alt me-2"></i>{{ job.location }}</div>
+                <div class="meta-capsule border-primary"><i class="fas fa-bolt me-2"></i>{{ job.job_type }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <div class="hub-stat-card">
+                    <span class="lbl">Inbound Total</span>
+                    <h2 class="val">{{ applications|length }}</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="hub-stat-card border-success">
+                    <span class="lbl text-success">Shortlisted</span>
+                    <h2 class="val">{{ applications|selectattr('status', 'equalto', 'shortlisted')|list|length }}</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="hub-stat-card border-warning">
+                    <span class="lbl text-warning">Under Review</span>
+                    <h2 class="val">{{ applications|selectattr('status', 'equalto', 'applied')|list|length }}</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="hub-stat-card border-danger">
+                    <span class="lbl text-danger">Rejected</span>
+                    <h2 class="val">{{ applications|selectattr('status', 'equalto', 'rejected')|list|length }}</h2>
                 </div>
             </div>
         </div>
 
-        <!-- Statistics Cards -->
-        <div class="row mb-5">
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card stat-card border-0 shadow-lg h-100">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center">
-                            <div class="stat-icon bg-primary rounded-3 me-4">
-                                <i class="fas fa-users text-white"></i>
-                            </div>
-                            <div>
-                                <h2 class="stat-number fw-bold text-dark mb-1">{{ applications|length }}</h2>
-                                <p class="stat-label text-muted mb-0">Total Applicants</p>
-                            </div>
+        <div class="card control-center-card border-0 shadow-sm mb-5">
+            <div class="card-body p-4 p-md-5">
+                <div class="row g-4 align-items-end">
+                    <div class="col-lg-4">
+                        <label class="exec-label">Candidate Search</label>
+                        <div class="exec-input-group">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInput" class="exec-control" placeholder="Name, skills, or location...">
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card stat-card border-0 shadow-lg h-100">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center">
-                            <div class="stat-icon bg-success rounded-3 me-4">
-                                <i class="fas fa-user-check text-white"></i>
-                            </div>
-                            <div>
-                                <h2 class="stat-number fw-bold text-dark mb-1">{{ applications|selectattr('status', 'equalto', 'shortlisted')|list|length }}</h2>
-                                <p class="stat-label text-muted mb-0">Shortlisted</p>
-                            </div>
-                        </div>
+                    <div class="col-md-3 col-lg-2">
+                        <label class="exec-label">Status Flow</label>
+                        <select class="exec-control" id="statusFilter">
+                            <option value="all">All Channels</option>
+                            <option value="applied">Under Review</option>
+                            <option value="shortlisted">Shortlisted</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
                     </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card stat-card border-0 shadow-lg h-100">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center">
-                            <div class="stat-icon bg-warning rounded-3 me-4">
-                                <i class="fas fa-inbox text-white"></i>
-                            </div>
-                            <div>
-                                <h2 class="stat-number fw-bold text-dark mb-1">{{ applications|selectattr('status', 'equalto', 'applied')|list|length }}</h2>
-                                <p class="stat-label text-muted mb-0">Under Review</p>
-                            </div>
-                        </div>
+                    <div class="col-md-3 col-lg-2">
+                        <label class="exec-label">Experience Matrix</label>
+                        <select class="exec-control" id="experienceFilter">
+                            <option value="all">All Tiers</option>
+                            <option value="0-2">0-2 years</option>
+                            <option value="2-5">2-5 years</option>
+                            <option value="5-10">5-10 years</option>
+                            <option value="10+">10+ years</option>
+                        </select>
                     </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card stat-card border-0 shadow-lg h-100">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center">
-                            <div class="stat-icon bg-danger rounded-3 me-4">
-                                <i class="fas fa-user-times text-white"></i>
-                            </div>
-                            <div>
-                                <h2 class="stat-number fw-bold text-dark mb-1">{{ applications|selectattr('status', 'equalto', 'rejected')|list|length }}</h2>
-                                <p class="stat-label text-muted mb-0">Rejected</p>
-                            </div>
-                        </div>
+                    <div class="col-md-3 col-lg-2">
+                        <label class="exec-label">Sort Logic</label>
+                        <select class="exec-control" id="sortSelect">
+                            <option value="recent">Sequence: Recent</option>
+                            <option value="experience_high">Tier: Seniority</option>
+                            <option value="name">Alpha: A-Z</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-lg-2">
+                        <button class="btn-exec-outline w-100" id="resetFilters">
+                            <i class="fas fa-redo me-2"></i>Reset
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Control Panel -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card border-0 shadow-lg">
-                    <div class="card-body p-4">
-                        <div class="row g-3 align-items-end">
-                            <div class="col-lg-4 col-md-6">
-                                <label class="form-label small text-uppercase fw-semibold text-muted mb-2">Search Candidates</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0">
-                                        <i class="fas fa-search text-muted"></i>
-                                    </span>
-                                    <input type="text" id="searchInput" class="form-control border-start-0 ps-0" placeholder="Search by name, skills, or location...">
+        <div class="row g-4" id="applicationsGrid">
+            {% if applications %}
+                {% for application in applications %}
+                <div class="col-xl-4 col-md-6 candidate-wrapper" data-status="{{ application.status }}" data-experience="{{ application.experience_years }}">
+                    <div class="card candidate-matrix-card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="avatar-sq">
+                                        {{ application.full_name[0]|upper }}
+                                    </div>
+                                    <div>
+                                        <h5 class="candidate-name fw-extrabold mb-1">{{ application.full_name }}</h5>
+                                        <div class="x-small text-muted fw-bold text-uppercase tracking-wider">
+                                            <i class="fas fa-location-arrow me-1 text-primary"></i>{{ application.candidate_location }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="status-pill-exec status-{{ application.status }}">
+                                    {{ application.status }}
+                                </span>
+                            </div>
+
+                            <div class="data-row mb-4">
+                                <div class="d-flex align-items-center x-small fw-bold text-muted mb-2">
+                                    <i class="fas fa-briefcase text-dark me-2"></i> {{ application.experience_years }} YEARS TENURE
+                                </div>
+                                <div class="d-flex align-items-center x-small fw-bold text-muted">
+                                    <i class="fas fa-calendar-alt text-dark me-2"></i> LOGGED: {{ application.applied_at[:10] }}
                                 </div>
                             </div>
-                            <div class="col-lg-2 col-md-3">
-                                <label class="form-label small text-uppercase fw-semibold text-muted mb-2">Status</label>
-                                <select class="form-select" id="statusFilter">
-                                    <option value="all">All Status</option>
-                                    <option value="applied">Under Review</option>
-                                    <option value="shortlisted">Shortlisted</option>
-                                    <option value="rejected">Rejected</option>
-                                </select>
+
+                            <div class="skill-stack mb-4">
+                                <label class="exec-label x-small mb-2">Keyword Proficiency</label>
+                                <div class="d-flex flex-wrap gap-2">
+                                    {% set skills_list = application.skills.split(',') %}
+                                    {% for skill in skills_list[:3] %}
+                                        <span class="skill-pill-sm">{{ skill.strip() }}</span>
+                                    {% endfor %}
+                                    {% if skills_list|length > 3 %}
+                                        <span class="skill-pill-sm bg-dark text-white">+{{ skills_list|length - 3 }}</span>
+                                    {% endif %}
+                                </div>
                             </div>
-                            <div class="col-lg-2 col-md-3">
-                                <label class="form-label small text-uppercase fw-semibold text-muted mb-2">Experience</label>
-                                <select class="form-select" id="experienceFilter">
-                                    <option value="all">All Experience</option>
-                                    <option value="0-2">0-2 years</option>
-                                    <option value="2-5">2-5 years</option>
-                                    <option value="5-10">5-10 years</option>
-                                    <option value="10+">10+ years</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-2 col-md-4">
-                                <label class="form-label small text-uppercase fw-semibold text-muted mb-2">Sort By</label>
-                                <select class="form-select" id="sortSelect">
-                                    <option value="recent">Most Recent</option>
-                                    <option value="experience_high">Experience (High to Low)</option>
-                                    <option value="experience_low">Experience (Low to High)</option>
-                                    <option value="name">Name (A-Z)</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-2 col-md-4">
-                                <button class="btn btn-outline-primary w-100" id="resetFilters">
-                                    <i class="fas fa-redo me-2"></i>Reset
+
+                            <div class="hub-actions d-flex gap-2">
+                                <form method="POST" action="{{ url_for('recruiter.update_application_status') }}" class="d-flex gap-2 flex-grow-1">
+                                    <input type="hidden" name="application_id" value="{{ application.id }}">
+                                    {% if application.status != 'shortlisted' %}
+                                        <button type="submit" name="status" value="shortlisted" class="btn-exec-status bg-success-glow">Shortlist</button>
+                                    {% endif %}
+                                    {% if application.status != 'rejected' %}
+                                        <button type="submit" name="status" value="rejected" class="btn-exec-status-outline text-danger border-danger">Reject</button>
+                                    {% endif %}
+                                </form>
+                                <button class="btn-exec-view view-profile" data-id="{{ application.id }}">
+                                    <i class="fas fa-eye"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Applications Grid -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card border-0 shadow-lg">
-                    <div class="card-header bg-white py-3">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h3 class="card-title mb-0 fw-bold">Candidate Applications</h3>
-                            <span class="badge bg-primary fs-6">{{ applications|length }} candidates</span>
-                        </div>
-                    </div>
-                    
-                    <div class="card-body p-4">
-                        {% if applications %}
-                            <div class="row g-4" id="applicationsGrid">
-                                {% for application in applications %}
-                                    <div class="col-xl-6 col-xxl-4">
-                                        <div class="card candidate-card h-100 border-0 shadow-sm" data-status="{{ application.status }}" data-experience="{{ application.experience_years }}">
-                                            <div class="card-header bg-transparent border-0 pb-0">
-                                                <div class="d-flex align-items-start gap-3">
-                                                    <div class="candidate-avatar bg-primary text-white rounded-3 d-flex align-items-center justify-content-center">
-                                                        {{ application.full_name[0]|upper }}
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        <h5 class="candidate-name fw-bold mb-1">{{ application.full_name }}</h5>
-                                                        <div class="candidate-location text-muted small">
-                                                            <i class="fas fa-map-marker-alt me-1"></i>
-                                                            {{ application.candidate_location }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="status-indicator status-{{ application.status }} small">
-                                                        {{ application.status|title }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="card-body py-3">
-                                                <div class="experience-section mb-3">
-                                                    <div class="d-flex align-items-center text-muted small mb-2">
-                                                        <i class="fas fa-briefcase text-primary me-2"></i>
-                                                        <span>{{ application.experience_years }} years experience</span>
-                                                    </div>
-                                                    <div class="d-flex align-items-center text-muted small">
-                                                        <i class="far fa-clock text-primary me-2"></i>
-                                                        <span>Applied {{ application.applied_at[:10] }}</span>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="skills-section">
-                                                    <label class="skills-label small text-uppercase text-muted fw-semibold mb-2">Key Skills</label>
-                                                    <div class="skills-container d-flex flex-wrap gap-1">
-                                                        {% set skills_list = application.skills.split(',') %}
-                                                        {% for skill in skills_list[:3] %}
-                                                            <span class="skill-tag bg-light text-dark border small px-2 py-1 rounded-2">{{ skill.strip() }}</span>
-                                                        {% endfor %}
-                                                        {% if skills_list|length > 3 %}
-                                                            <span class="skill-tag bg-primary text-white border small px-2 py-1 rounded-2">+{{ skills_list|length - 3 }} more</span>
-                                                        {% endif %}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="card-footer bg-transparent border-0 pt-0">
-                                                <div class="action-buttons d-flex gap-2 flex-wrap">
-                                                    <form method="POST" action="{{ url_for('recruiter.update_application_status') }}" class="d-flex gap-2 flex-wrap flex-grow-1">
-                                                        <input type="hidden" name="application_id" value="{{ application.id }}">
-                                                        {% if application.status != 'shortlisted' %}
-                                                            <button type="submit" name="status" value="shortlisted" class="btn btn-success btn-sm flex-fill">
-                                                                <i class="fas fa-check me-1"></i>Shortlist
-                                                            </button>
-                                                        {% endif %}
-                                                        {% if application.status != 'rejected' %}
-                                                            <button type="submit" name="status" value="rejected" class="btn btn-outline-danger btn-sm flex-fill">
-                                                                <i class="fas fa-times me-1"></i>Reject
-                                                            </button>
-                                                        {% endif %}
-                                                    </form>
-                                                    <button class="btn btn-outline-primary btn-sm view-profile" data-id="{{ application.id }}">
-                                                        <i class="fas fa-eye me-1"></i>View
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            <div class="text-center py-5">
-                                <div class="empty-icon bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
-                                    <i class="fas fa-users fa-2x text-muted"></i>
-                                </div>
-                                <h3 class="text-muted mb-3">No Applications Yet</h3>
-                                <p class="text-muted mb-4">No candidates have applied for this job posting yet.</p>
-                                <a href="{{ url_for('recruiter.dashboard') }}" class="btn btn-primary">
-                                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
-                                </a>
-                            </div>
-                        {% endif %}
+                {% endfor %}
+            {% else %}
+                <div class="col-12 text-center py-5">
+                    <div class="empty-state-exec">
+                        <i class="fas fa-radar fa-3x mb-4"></i>
+                        <h4 class="fw-bold">Awaiting Talent Inbound</h4>
+                        <p class="text-muted">No candidates have interfaced with this vacancy yet.</p>
                     </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
     </div>
 </section>
 
 <style>
-    .applications-dashboard {
-        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-        min-height: 100vh;
+    :root {
+        --exec-dark: #0a0a0b;
+        --exec-grey: #f4f4f5;
+        --exec-border: #e4e4e7;
     }
-    
-    .job-meta .meta-item {
-        border: 1px solid #e2e8f0;
-        font-weight: 500;
-    }
-    
-    /* Stat Cards */
-    .stat-card {
-        transition: all 0.3s ease;
-        border-radius: 16px;
-    }
-    
-    .stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
-    }
-    
-    .stat-icon {
-        width: 60px;
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-    }
-    
-    .stat-number {
-        font-size: 2.25rem;
-    }
-    
-    /* Candidate Cards */
-    .candidate-card {
-        transition: all 0.3s ease;
-        border-radius: 12px;
-    }
-    
-    .candidate-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
-    }
-    
-    .candidate-avatar {
-        width: 50px;
-        height: 50px;
-        font-weight: 700;
-        font-size: 1.25rem;
-        flex-shrink: 0;
-    }
-    
-    .status-indicator {
-        padding: 0.375rem 0.75rem;
-        border-radius: 20px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        font-size: 0.75rem;
-    }
-    
-    .status-applied { 
-        background: rgba(59, 130, 246, 0.1); 
-        color: #1d4ed8; 
-        border: 1px solid rgba(59, 130, 246, 0.2);
-    }
-    
-    .status-shortlisted { 
-        background: rgba(34, 197, 94, 0.1); 
-        color: #166534; 
-        border: 1px solid rgba(34, 197, 94, 0.2);
-    }
-    
-    .status-rejected { 
-        background: rgba(239, 68, 68, 0.1); 
-        color: #991b1b; 
-        border: 1px solid rgba(239, 68, 68, 0.2);
-    }
-    
-    .skills-container .skill-tag {
-        font-size: 0.75rem;
-        border: 1px solid #e2e8f0;
-    }
-    
-    /* Form Controls */
-    .form-control:focus, .form-select:focus {
-        border-color: #2563eb;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-    }
-    
-    .input-group-text {
-        border-right: none;
-    }
-    
-    .form-control.border-start-0 {
-        border-left: none;
-    }
-    
-    /* Action Buttons */
-    .action-buttons .btn {
-        border-radius: 8px;
-        font-weight: 500;
-        min-width: 100px;
-    }
-    
-    /* Empty State */
-    .empty-icon {
-        background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-    }
-    
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .stat-number {
-            font-size: 1.75rem;
-        }
-        
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            font-size: 1.25rem;
-        }
-        
-        .candidate-avatar {
-            width: 45px;
-            height: 45px;
-            font-size: 1.1rem;
-        }
-        
-        .action-buttons {
-            flex-direction: column;
-        }
-        
-        .action-buttons .btn {
-            min-width: auto;
-            width: 100%;
-        }
-    }
-    
-    @media (max-width: 576px) {
-        .container-fluid {
-            padding-left: 1rem;
-            padding-right: 1rem;
-        }
-        
-        .job-meta {
-            flex-direction: column;
-            align-items: flex-start !important;
-        }
-        
-        .job-meta .meta-item {
-            width: 100%;
-            text-align: center;
-        }
-    }
+
+    /* Header & Base */
+    .header-dark { background: var(--exec-dark); border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .text-outline-white { -webkit-text-stroke: 1px #fff; color: transparent; }
+    .meta-capsule { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 16px; border-radius: 100px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+
+    /* Hub Stats */
+    .hub-stat-card { background: #fff; border: 1px solid var(--exec-border); border-radius: 20px; padding: 25px; transition: transform 0.3s; }
+    .hub-stat-card .lbl { font-size: 0.65rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; display: block; margin-bottom: 5px; }
+    .hub-stat-card .val { font-weight: 800; color: var(--exec-dark); margin: 0; }
+    .hub-stat-card:hover { transform: translateY(-5px); }
+
+    /* Controls */
+    .control-center-card { border-radius: 30px; border: 1px solid var(--exec-border); }
+    .exec-label { font-size: 0.65rem; text-transform: uppercase; font-weight: 800; color: #71717a; letter-spacing: 1.5px; margin-bottom: 8px; display: block; }
+    .exec-input-group { position: relative; display: flex; align-items: center; }
+    .exec-input-group i { position: absolute; left: 16px; color: #a1a1aa; font-size: 0.9rem; }
+    .exec-control { width: 100%; background: var(--exec-grey); border: 1px solid transparent; padding: 12px 16px 12px 45px; border-radius: 12px; font-weight: 600; font-size: 0.9rem; transition: 0.2s; }
+    .exec-control:focus { outline: none; border-color: var(--exec-dark); background: #fff; }
+
+    /* Candidate Matrix */
+    .candidate-matrix-card { border-radius: 24px; border: 1px solid var(--exec-border); transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .candidate-matrix-card:hover { border-color: var(--exec-dark); transform: scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.06) !important; }
+    .avatar-sq { width: 50px; height: 50px; background: var(--exec-dark); color: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.25rem; }
+    .status-pill-exec { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; padding: 4px 10px; border-radius: 100px; letter-spacing: 1px; }
+    .status-applied { background: #f4f4f5; color: #71717a; }
+    .status-shortlisted { background: #dcfce7; color: #166534; }
+    .status-rejected { background: #fee2e2; color: #991b1b; }
+
+    /* Buttons & Actions */
+    .skill-pill-sm { background: var(--exec-grey); color: var(--exec-dark); padding: 4px 12px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; }
+    .btn-exec-status { border: none; border-radius: 8px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #fff; padding: 10px; flex-grow: 1; transition: 0.2s; }
+    .bg-success-glow { background: #10b981; }
+    .bg-success-glow:hover { background: #059669; }
+    .btn-exec-status-outline { background: transparent; border: 1px solid; border-radius: 8px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; padding: 10px; flex-grow: 1; }
+    .btn-exec-view { background: var(--exec-grey); border: none; border-radius: 8px; width: 42px; display: flex; align-items: center; justify-content: center; }
+    .btn-exec-view:hover { background: var(--exec-dark); color: #fff; }
+
+    .empty-state-exec { padding: 60px; color: var(--exec-border); }
+    .fw-extrabold { font-weight: 800; }
 </style>
 
 <script>
@@ -415,7 +231,7 @@
         const experienceFilter = document.getElementById('experienceFilter');
         const sortSelect = document.getElementById('sortSelect');
         const resetFilters = document.getElementById('resetFilters');
-        const candidateCards = document.querySelectorAll('.candidate-card');
+        const candidateCards = document.querySelectorAll('.candidate-wrapper');
         
         function filterAndSortCards() {
             const searchTerm = searchInput.value.toLowerCase();
@@ -428,40 +244,22 @@
                 const experience = parseInt(card.getAttribute('data-experience'));
                 const text = card.textContent.toLowerCase();
                 
-                // Filter by search
                 const searchMatch = text.includes(searchTerm);
-                
-                // Filter by status
                 const statusMatch = statusValue === 'all' || status === statusValue;
                 
-                // Filter by experience
                 let experienceMatch = true;
                 if (experienceValue !== 'all') {
                     switch(experienceValue) {
-                        case '0-2':
-                            experienceMatch = experience >= 0 && experience <= 2;
-                            break;
-                        case '2-5':
-                            experienceMatch = experience >= 2 && experience <= 5;
-                            break;
-                        case '5-10':
-                            experienceMatch = experience >= 5 && experience <= 10;
-                            break;
-                        case '10+':
-                            experienceMatch = experience >= 10;
-                            break;
+                        case '0-2': experienceMatch = experience >= 0 && experience <= 2; break;
+                        case '2-5': experienceMatch = experience >= 2 && experience <= 5; break;
+                        case '5-10': experienceMatch = experience >= 5 && experience <= 10; break;
+                        case '10+': experienceMatch = experience >= 10; break;
                     }
                 }
                 
-                // Show/hide based on filters
-                if (searchMatch && statusMatch && experienceMatch) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+                card.style.display = (searchMatch && statusMatch && experienceMatch) ? 'block' : 'none';
             });
             
-            // Sort functionality
             const visibleCards = Array.from(candidateCards).filter(card => card.style.display !== 'none');
             const grid = document.getElementById('applicationsGrid');
             
@@ -471,45 +269,30 @@
                 const expA = parseInt(a.getAttribute('data-experience'));
                 const expB = parseInt(b.getAttribute('data-experience'));
                 
-                switch(sortValue) {
-                    case 'name':
-                        return nameA.localeCompare(nameB);
-                    case 'experience_high':
-                        return expB - expA;
-                    case 'experience_low':
-                        return expA - expB;
-                    case 'recent':
-                    default:
-                        return 0;
-                }
+                if (sortValue === 'name') return nameA.localeCompare(nameB);
+                if (sortValue === 'experience_high') return expB - expA;
+                return 0; // Default: recent (DOM order)
             });
             
-            // Reorder in DOM
-            visibleCards.forEach(card => {
-                grid.appendChild(card);
-            });
+            visibleCards.forEach(card => grid.appendChild(card));
         }
-        
-        // Event listeners
+
         searchInput.addEventListener('input', filterAndSortCards);
-        statusFilter.addEventListener('change', filterAndSortCards);
-        experienceFilter.addEventListener('change', filterAndSortCards);
-        sortSelect.addEventListener('change', filterAndSortCards);
+        [statusFilter, experienceFilter, sortSelect].forEach(el => el.addEventListener('change', filterAndSortCards));
         
-        resetFilters.addEventListener('click', function() {
+        resetFilters.addEventListener('click', () => {
             searchInput.value = '';
             statusFilter.value = 'all';
             experienceFilter.value = 'all';
             sortSelect.value = 'recent';
             filterAndSortCards();
         });
-        
-        // View profile buttons
-        document.querySelectorAll('.view-profile').forEach(button => {
-            button.addEventListener('click', function() {
-                const applicationId = this.getAttribute('data-id');
-                alert('Viewing profile for application ID: ' + applicationId);
-                // In real implementation, open modal or navigate to profile page
+
+        document.querySelectorAll('.view-profile').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                // Potential integration point for candidate detail modal
+                console.log("Analyzing Candidate ID:", id);
             });
         });
     });

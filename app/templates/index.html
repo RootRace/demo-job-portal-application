@@ -1,330 +1,260 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="hero-section position-relative overflow-hidden">
-  <div class="container">
-    <div class="row align-items-center min-vh-75 py-5">
-      <div class="col-lg-6 py-5">
-        <h1 class="display-4 fw-bold mb-4">Find Your <span class="text-primary">Dream Job</span> Today</h1>
-        <p class="lead mb-4">Join thousands of professionals who found their perfect match through our platform. The right opportunity is waiting for you.</p>
+<section class="hero-executive position-relative d-flex align-items-center">
+  <div class="container py-6 position-relative" style="z-index: 5;">
+    <div class="row align-items-center">
+      <div class="col-lg-7 text-white">
+        <div class="premium-tag mb-4">
+          <span class="dot"></span> 15,402 ACTIVE OPPORTUNITIES
+        </div>
+        <h1 class="display-2 fw-bold mb-4 tracking-tight leading-tight">
+          The <span class="text-accent">Elite</span> Standard for <br>Modern Careers.
+        </h1>
+        <p class="lead-premium mb-5 pe-lg-5">
+          Join an exclusive network of industry leaders. We connect high-caliber talent with the world's most innovative companies.
+        </p>
         
-        <!-- Search Form -->
-        <div class="search-box bg-white rounded shadow p-4 mb-4">
-          <form action="{{ url_for('jobs.list_jobs') }}" method="GET">
-            <div class="row g-3">
-              <div class="col-md-5">
-                <div class="input-group">
-                  <span class="input-group-text bg-transparent border-0"><i class="fas fa-search text-muted"></i></span>
-                  <input type="text" class="form-control border-0" name="q" placeholder="Job title, keywords, or company">
-                </div>
+        <div class="search-executive shadow-2xl mb-5">
+          <form action="{{ url_for('jobs.list_jobs') }}" method="GET" class="row g-0">
+            <div class="col-md-5">
+              <div class="input-wrapper border-end">
+                <i class="fas fa-search"></i>
+                <input type="text" name="q" placeholder="Job title or company..." class="control-premium">
               </div>
-              <div class="col-md-5">
-                <div class="input-group">
-                  <span class="input-group-text bg-transparent border-0"><i class="fas fa-map-marker-alt text-muted"></i></span>
-                  <input type="text" class="form-control border-0" name="location" placeholder="City, state, or zip code">
-                </div>
+            </div>
+            <div class="col-md-4">
+              <div class="input-wrapper">
+                <i class="fas fa-map-marker-alt"></i>
+                <input type="text" name="location" placeholder="City or Remote" class="control-premium">
               </div>
-              <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">Search</button>
-              </div>
+            </div>
+            <div class="col-md-3">
+              <button type="submit" class="btn-search-premium">Find Opportunities</button>
             </div>
           </form>
         </div>
         
-        <div class="d-flex gap-3 flex-wrap">
+        <div class="d-flex gap-4 flex-wrap align-items-center">
           {% if not session.user_id %}
-            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg px-4">Start Your Journey</a>
-            <a href="{{ url_for('jobs.list_jobs') }}" class="btn btn-outline-primary btn-lg px-4">Browse Jobs</a>
+            <a href="{{ url_for('auth.register') }}" class="btn-solid-premium">Register Now</a>
+            <a href="{{ url_for('jobs.list_jobs') }}" class="btn-outline-premium">Browse Catalog</a>
           {% else %}
             {% if session.role == 'candidate' %}
-              <a href="{{ url_for('jobs.list_jobs') }}" class="btn btn-primary btn-lg px-4">Browse Jobs</a>
-              <a href="{{ url_for('candidate.candidate_profile') }}" class="btn btn-outline-primary btn-lg px-4">My Profile</a>
+              <a href="{{ url_for('jobs.list_jobs') }}" class="btn-solid-premium">Browse Jobs</a>
+              <a href="{{ url_for('candidate.candidate_profile') }}" class="btn-outline-premium">My Profile</a>
             {% else %}
-              <a href="{{ url_for('recruiter.post_job') }}" class="btn btn-primary btn-lg px-4">Post a Job</a>
-              <a href="{{ url_for('recruiter.dashboard') }}" class="btn btn-outline-primary btn-lg px-4">Dashboard</a>
+              <a href="{{ url_for('recruiter.post_job') }}" class="btn-solid-premium">Post a Job</a>
+              <a href="{{ url_for('recruiter.dashboard') }}" class="btn-outline-premium">Executive Dashboard</a>
             {% endif %}
           {% endif %}
-        </div>
-        
-        <div class="mt-4">
-          <p class="text-muted small">Popular searches: Software Engineer, Marketing Manager, Data Analyst, Product Designer, Sales Executive</p>
+          <div class="popular-searches ms-lg-3">
+             <span class="label">POPULAR:</span> Software Engineer, Finance, Product
+          </div>
         </div>
       </div>
-      <div class="col-lg-6 py-5 text-center">
-        <div class="hero-image position-relative">
-          <img src="https://images.unsplash.com/photo-1521791055366-0d553872125f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Professional networking" class="img-fluid rounded shadow">
-          <div class="floating-card bg-white shadow rounded p-3 position-absolute top-0 start-0 m-3">
-            <div class="d-flex align-items-center">
-              <div class="bg-success rounded-circle p-2 me-2">
-                <i class="fas fa-check text-white"></i>
-              </div>
-              <div>
-                <p class="mb-0 fw-bold">2,500+</p>
-                <p class="mb-0 text-muted small">Jobs Posted</p>
-              </div>
+      
+      <div class="col-lg-5 d-none d-lg-block">
+        <div class="hero-visual-premium">
+          <div class="image-frame shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1521791055366-0d553872125f?auto=format&fit=crop&w=800&q=80" alt="Professional" class="hero-img">
+            <div class="stat-badge badge-top">
+              <div class="badge-icon"><i class="fas fa-check"></i></div>
+              <div class="badge-text"><strong>2,500+</strong><span>Jobs Posted</span></div>
             </div>
-          </div>
-          <div class="floating-card bg-white shadow rounded p-3 position-absolute bottom-0 end-0 m-3">
-            <div class="d-flex align-items-center">
-              <div class="bg-primary rounded-circle p-2 me-2">
-                <i class="fas fa-users text-white"></i>
-              </div>
-              <div>
-                <p class="mb-0 fw-bold">15,000+</p>
-                <p class="mb-0 text-muted small">Active Users</p>
-              </div>
+            <div class="stat-badge badge-bottom">
+              <div class="badge-icon"><i class="fas fa-users"></i></div>
+              <div class="badge-text"><strong>15,000+</strong><span>Active Users</span></div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <div class="background-mesh"></div>
 </section>
 
-<!-- Stats Section -->
-<section class="py-5 bg-light">
+<section class="stats-bar">
   <div class="container">
     <div class="row text-center">
-      <div class="col-md-3 mb-4 mb-md-0">
-        <h2 class="display-4 fw-bold text-primary">98%</h2>
-        <p class="text-muted">Job Placement Rate</p>
+      <div class="col-md-3 stat-item">
+        <div class="stat-val">98%</div>
+        <div class="stat-lbl">Placement Success</div>
       </div>
-      <div class="col-md-3 mb-4 mb-md-0">
-        <h2 class="display-4 fw-bold text-primary">2.5K+</h2>
-        <p class="text-muted">Companies Hiring</p>
+      <div class="col-md-3 stat-item">
+        <div class="stat-val">2.5K+</div>
+        <div class="stat-lbl">Global Entities</div>
       </div>
-      <div class="col-md-3 mb-4 mb-md-0">
-        <h2 class="display-4 fw-bold text-primary">15K+</h2>
-        <p class="text-muted">Active Job Seekers</p>
+      <div class="col-md-3 stat-item">
+        <div class="stat-val">15K+</div>
+        <div class="stat-lbl">Elite Talents</div>
       </div>
-      <div class="col-md-3">
-        <h2 class="display-4 fw-bold text-primary">50+</h2>
-        <p class="text-muted">Industries Served</p>
+      <div class="col-md-3 stat-item">
+        <div class="stat-val">50+</div>
+        <div class="stat-lbl">Industries</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Featured Jobs Section -->
-<section class="py-5">
+<section class="py-6 bg-white">
   <div class="container">
-    <div class="row mb-5">
-      <div class="col-md-8">
-        <h2 class="fw-bold mb-3">Featured Job Opportunities</h2>
-        <p class="text-muted">Hand-picked opportunities from top employers</p>
+    <div class="section-header d-flex justify-content-between align-items-end mb-5">
+      <div>
+        <h6 class="text-accent fw-bold tracking-widest text-uppercase small mb-2">Selected Opportunities</h6>
+        <h2 class="display-6 fw-bold text-dark">Premium Vacancies</h2>
       </div>
-      <div class="col-md-4 text-md-end">
-        <a href="{{ url_for('jobs.list_jobs') }}" class="btn btn-outline-primary">View All Jobs <i class="fas fa-arrow-right ms-2"></i></a>
-      </div>
+      <a href="{{ url_for('jobs.list_jobs') }}" class="text-dark fw-bold text-decoration-none border-bottom border-dark pb-1">View Full Catalog <i class="fas fa-chevron-right ms-2 small"></i></a>
     </div>
     
     {% if jobs %}
-      <div class="row">
+      <div class="row g-4">
         {% for job in jobs %}
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card job-card h-100 border-0 shadow-sm hover-shadow transition">
-              <div class="card-body p-4">
-                <div class="d-flex justify-content-between align-items-start mb-3">
-                  <div class="company-logo bg-light rounded p-2 me-3">
-                    <i class="fas fa-building text-primary fa-lg"></i>
-                  </div>
-                  <span class="badge bg-primary">{{ job.job_type }}</span>
+          <div class="col-lg-4 col-md-6">
+            <div class="job-card-elite">
+              <div class="card-top">
+                <div class="company-sq">
+                  <i class="fas fa-building"></i>
                 </div>
-                <h5 class="card-title fw-bold">{{ job.title }}</h5>
-                <p class="card-text text-muted mb-2">{{ job.company }}</p>
-                <div class="d-flex text-muted small mb-3">
-                  <span class="me-3"><i class="fas fa-map-marker-alt me-1"></i>{{ job.location }}</span>
-                  <span><i class="fas fa-clock me-1"></i>{{ job.created_at[:10] }}</span>
-                </div>
-                <p class="card-text">{{ job.description[:120] }}...</p>
-                <div class="mt-auto">
-                  <a href="{{ url_for('jobs.job_detail', job_id=job.id) }}" class="btn btn-primary btn-sm stretched-link">Apply Now</a>
-                </div>
+                <span class="type-tag">{{ job.job_type }}</span>
               </div>
+              <h5 class="job-title">{{ job.title }}</h5>
+              <p class="company-name">{{ job.company }}</p>
+              <div class="job-meta">
+                <span><i class="fas fa-map-marker-alt"></i> {{ job.location }}</span>
+                <span><i class="fas fa-clock"></i> {{ job.created_at[:10] }}</span>
+              </div>
+              <p class="job-snippet">{{ job.description[:110] }}...</p>
+              <a href="{{ url_for('jobs.job_detail', job_id=job.id) }}" class="btn-apply-elite">Apply For This Role</a>
             </div>
           </div>
         {% endfor %}
       </div>
     {% else %}
       <div class="text-center py-5">
-        <i class="fas fa-briefcase fa-3x text-muted mb-3"></i>
-        <h4 class="text-muted">No jobs available at the moment</h4>
-        <p class="text-muted">Check back later for new opportunities</p>
+        <h4 class="text-muted fw-light">Catalog currently being updated.</h4>
       </div>
     {% endif %}
   </div>
 </section>
 
-<!-- How It Works Section -->
-<section class="py-5 bg-light">
+<section class="cta-executive">
   <div class="container">
-    <div class="row mb-5">
-      <div class="col-12 text-center">
-        <h2 class="fw-bold mb-3">How Job Hunt Portal Works</h2>
-        <p class="text-muted">Simple steps to your next career move</p>
+    <div class="row align-items-center py-6 px-4 bg-dark rounded-4 shadow-2xl">
+      <div class="col-lg-8 text-center text-lg-start">
+        <h2 class="display-5 fw-bold text-white mb-3">Ready to Accelerate?</h2>
+        <p class="text-secondary lead mb-0">Experience the difference of a tailored career platform.</p>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-4 text-center mb-4">
-        <div class="step-icon bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-          <i class="fas fa-user-plus text-white fa-2x"></i>
-        </div>
-        <h4 class="fw-bold">Create Your Profile</h4>
-        <p class="text-muted">Build a professional profile that highlights your skills, experience, and career goals.</p>
-      </div>
-      <div class="col-md-4 text-center mb-4">
-        <div class="step-icon bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-          <i class="fas fa-search text-white fa-2x"></i>
-        </div>
-        <h4 class="fw-bold">Find Opportunities</h4>
-        <p class="text-muted">Search through thousands of jobs and get personalized recommendations.</p>
-      </div>
-      <div class="col-md-4 text-center mb-4">
-        <div class="step-icon bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-          <i class="fas fa-paper-plane text-white fa-2x"></i>
-        </div>
-        <h4 class="fw-bold">Apply & Connect</h4>
-        <p class="text-muted">Apply with one click and connect directly with employers and recruiters.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Testimonials Section -->
-<section class="py-5">
-  <div class="container">
-    <div class="row mb-5">
-      <div class="col-12 text-center">
-        <h2 class="fw-bold mb-3">Success Stories</h2>
-        <p class="text-muted">Hear from professionals who found their dream jobs through Job Hunt Portal</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-4 mb-4">
-        <div class="card testimonial-card border-0 shadow-sm h-100">
-          <div class="card-body p-4">
-            <div class="d-flex align-items-center mb-3">
-              <img src="{{ url_for('static', filename='img/sarah.png') }}" alt="Sarah Johnson" class="rounded-circle me-3" width="60">
-              <div>
-                <h5 class="mb-0 fw-bold">Sarah Johnson</h5>
-                <p class="text-muted mb-0">Product Manager at TechCorp</p>
-              </div>
-            </div>
-            <p class="card-text">"Job Hunt Portal helped me transition from a marketing role to product management. The personalized job recommendations were spot on!"</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 mb-4">
-        <div class="card testimonial-card border-0 shadow-sm h-100">
-          <div class="card-body p-4">
-            <div class="d-flex align-items-center mb-3">
-              <img src="{{ url_for('static', filename='img/michael.png') }}" alt="Michael Chen" class="rounded-circle me-3" width="60">
-              <div>
-                <h5 class="mb-0 fw-bold">Michael Chen</h5>
-                <p class="text-muted mb-0">Software Engineer at InnovateTech</p>
-              </div>
-            </div>
-            <p class="card-text">"I received three job offers within two weeks of using Job Hunt Portal. The platform made it easy to connect with top tech companies."</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 mb-4">
-        <div class="card testimonial-card border-0 shadow-sm h-100">
-          <div class="card-body p-4">
-            <div class="d-flex align-items-center mb-3">
-              <img src="{{ url_for('static', filename='img/jessica.png') }}" alt="Jessica Williams" class="rounded-circle me-3" width="60">
-              <div>
-                <h5 class="mb-0 fw-bold">Jessica Williams</h5>
-                <p class="text-muted mb-0">HR Director at Global Solutions</p>
-              </div>
-            </div>
-            <p class="card-text">"As a recruiter, Job Hunt Portal has been invaluable for finding qualified candidates. The matching algorithm saves us so much time."</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA Section -->
-<section class="py-5 bg-primary text-white">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-8">
-        <h2 class="fw-bold mb-3">Ready to take the next step in your career?</h2>
-        <p class="mb-0">Join thousands of professionals who have found their dream jobs through Job Hunt Portal.</p>
-      </div>
-      <div class="col-lg-4 text-lg-end">
+      <div class="col-lg-4 text-center text-lg-end mt-4 mt-lg-0">
         {% if not session.user_id %}
-          <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg px-4">Get Started Today</a>
+          <a href="{{ url_for('auth.register') }}" class="btn-cta-white">Get Started Now</a>
         {% else %}
-          {% if session.role == 'candidate' %}
-            <a href="{{ url_for('jobs.list_jobs') }}" class="btn btn-light btn-lg px-4">Browse Jobs</a>
-          {% else %}
-            <a href="{{ url_for('jobs.list_jobs') }}" class="btn btn-light btn-lg px-4">Post a Job</a>
-          {% endif %}
+          <a href="{{ url_for('jobs.list_jobs') }}" class="btn-cta-white">Go to Dashboard</a>
         {% endif %}
       </div>
     </div>
   </div>
 </section>
 
-<!-- Add custom CSS for the premium look -->
 <style>
-  .hero-section {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+
+  :root {
+    --executive-dark: #0a0a0b;
+    --accent: #ffffff;
+    --secondary-dark: #141416;
+    --text-gray: #a0a0ab;
+    --border-dim: #27272a;
   }
+
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; color: var(--executive-dark); }
+  .py-6 { padding: 6rem 0; }
+  .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4); }
+
+  /* Hero: Midnight Theme */
+  .hero-executive {
+    background-color: var(--executive-dark);
+    min-height: 90vh;
+    padding: 100px 0;
+    overflow: hidden;
+  }
+  .background-mesh {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  .premium-tag {
+    display: inline-flex; align-items: center; background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 100px;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; color: #fff;
+  }
+  .premium-tag .dot { width: 6px; height: 6px; background: #fff; border-radius: 50%; margin-right: 10px; animation: pulse 2s infinite; }
   
-  .min-vh-75 {
-    min-height: 75vh;
+  .text-accent { color: #fff; text-decoration: underline; text-underline-offset: 8px; }
+  .lead-premium { color: var(--text-gray); font-size: 1.25rem; font-weight: 400; line-height: 1.7; }
+
+  /* Search: Perfect Visibility */
+  .search-executive { background: #fff; border-radius: 16px; overflow: hidden; }
+  .input-wrapper { display: flex; align-items: center; padding: 15px 25px; background: #fff; }
+  .input-wrapper i { color: #71717a; margin-right: 15px; }
+  .control-premium { border: none; font-size: 1rem; color: #18181b; width: 100%; font-weight: 500; }
+  .control-premium:focus { outline: none; }
+  .btn-search-premium {
+    background: var(--executive-dark); color: #fff; border: none; width: 100%; height: 100%;
+    font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
+    transition: all 0.3s;
   }
+  .btn-search-premium:hover { background: #000; letter-spacing: 1.5px; }
+
+  /* Buttons */
+  .btn-solid-premium { background: #fff; color: #000; padding: 16px 40px; border-radius: 12px; font-weight: 800; text-decoration: none; display: inline-block; transition: transform 0.3s; }
+  .btn-outline-premium { border: 2px solid rgba(255,255,255,0.2); color: #fff; padding: 14px 40px; border-radius: 12px; font-weight: 800; text-decoration: none; display: inline-block; }
+  .btn-solid-premium:hover { transform: translateY(-3px); background: #f4f4f5; }
+  .popular-searches { color: #52525b; font-size: 0.75rem; }
+  .popular-searches .label { color: var(--text-gray); font-weight: 800; margin-right: 10px; }
+
+  /* Hero Visuals */
+  .hero-visual-premium { position: relative; padding: 20px; }
+  .image-frame { border-radius: 30px; overflow: hidden; border: 8px solid rgba(255,255,255,0.05); }
+  .hero-img { width: 100%; height: auto; filter: grayscale(20%); }
   
-  .search-box {
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+  .stat-badge {
+    position: absolute; background: #fff; padding: 15px 20px; border-radius: 20px;
+    display: flex; align-items: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   }
-  
-  .floating-card {
-    animation: float 6s ease-in-out infinite;
+  .badge-top { top: 10%; left: -10%; }
+  .badge-bottom { bottom: 10%; right: -5%; }
+  .badge-icon { width: 40px; height: 40px; background: #000; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
+  .badge-text strong { display: block; font-size: 1.2rem; color: #000; line-height: 1; }
+  .badge-text span { font-size: 0.7rem; color: #71717a; text-transform: uppercase; font-weight: 700; }
+
+  /* Stats Bar */
+  .stats-bar { padding: 40px 0; background: #fafafa; border-bottom: 1px solid #e4e4e7; }
+  .stat-val { font-size: 2.5rem; font-weight: 800; color: var(--executive-dark); }
+  .stat-lbl { font-size: 0.7rem; font-weight: 700; color: #71717a; text-transform: uppercase; letter-spacing: 2px; }
+
+  /* Job Card Elite */
+  .job-card-elite {
+    background: #fff; border: 1px solid #e4e4e7; padding: 30px; border-radius: 20px;
+    transition: all 0.3s; position: relative; height: 100%; display: flex; flex-direction: column;
   }
-  
-  .step-icon {
-    width: 80px;
-    height: 80px;
+  .job-card-elite:hover { border-color: #000; box-shadow: 0 15px 30px rgba(0,0,0,0.05); transform: translateY(-5px); }
+  .company-sq { width: 50px; height: 50px; background: #18181b; color: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+  .type-tag { font-size: 0.65rem; font-weight: 800; background: #f4f4f5; padding: 5px 12px; border-radius: 100px; text-transform: uppercase; }
+  .job-title { margin-top: 20px; font-weight: 800; font-size: 1.2rem; }
+  .company-name { color: #71717a; font-weight: 600; font-size: 0.9rem; }
+  .job-meta { margin: 15px 0; display: flex; gap: 20px; font-size: 0.75rem; color: #a1a1aa; font-weight: 600; }
+  .job-snippet { color: #52525b; font-size: 0.9rem; margin-bottom: 25px; line-height: 1.6; }
+  .btn-apply-elite {
+    margin-top: auto; text-align: center; background: #f4f4f5; color: #18181b; padding: 12px;
+    border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 0.85rem; transition: all 0.3s;
   }
-  
-  .job-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .job-card:hover {
-    transform: translateY(-5px);
-  }
-  
-  .hover-shadow:hover {
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
-  }
-  
-  .transition {
-    transition: all 0.3s ease;
-  }
-  
-  @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
-  }
-  
-  .company-logo {
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .testimonial-card {
-    border-left: 4px solid #0d6efd !important;
-  }
+  .btn-apply-elite:hover { background: #000; color: #fff; }
+
+  /* CTA */
+  .btn-cta-white { background: #fff; color: #000; padding: 18px 45px; border-radius: 12px; font-weight: 800; text-decoration: none; display: inline-block; font-size: 1rem; }
+
+  @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 </style>
 {% endblock %}

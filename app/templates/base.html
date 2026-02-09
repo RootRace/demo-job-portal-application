@@ -3,456 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}JobHub - Find Your Dream Job{% endblock %}</title>
+    <title>{% block title %}JobHub | Executive Career Portal{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --primary-light: #3b82f6;
-            --secondary: #64748b;
-            --accent: #f59e0b;
-            --text: #334155;
-            --text-light: #64748b;
-            --background: #f8fafc;
-            --white: #ffffff;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --error: #ef4444;
-            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --exec-black: #0a0a0b;
+            --exec-dark-grey: #18181b;
+            --exec-border: rgba(255, 255, 255, 0.1);
+            --accent-white: #ffffff;
+            --text-muted: #a1a1aa;
+            --success-glow: #10b981;
+            --error-glow: #ef4444;
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            color: var(--text);
-            background-color: var(--background);
-            line-height: 1.6;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #ffffff;
+            color: var(--exec-black);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden; /* Prevent horizontal scroll */
         }
-        
-        /* Premium Navbar */
-        .navbar {
-            background: linear-gradient(135deg, var(--white) 0%, #f8fafc 100%);
-            box-shadow: var(--shadow-lg);
-            padding: 0.75rem 0;
+
+        /* --- High-Contrast Midnight Navbar --- */
+        .navbar-executive {
+            background-color: var(--exec-black);
+            padding: 1.25rem 0;
+            border-bottom: 1px solid var(--exec-border);
             position: sticky;
             top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+            z-index: 1050;
         }
-        
-        .navbar .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        .navbar-brand {
-            font-weight: 700;
-            font-size: 1.75rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.5rem 0;
-        }
-        
-        .nav-link {
-            color: var(--text) !important;
-            font-weight: 500;
-            padding: 0.75rem 1.25rem !important;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            margin: 0 0.25rem;
-            position: relative;
-        }
-        
-        .nav-link:hover {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(59, 130, 246, 0.08) 100%);
-            color: var(--primary) !important;
-            transform: translateY(-1px);
-        }
-        
-        .nav-link.active {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            color: var(--white) !important;
-            box-shadow: var(--shadow);
-        }
-        
-        .navbar-text {
-            color: var(--text-light) !important;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.25rem;
-            background: rgba(248, 250, 252, 0.8);
-            border-radius: 8px;
-            border: 1px solid var(--border);
-        }
-        
-        .navbar-toggler {
-            border: none;
-            padding: 0.5rem;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
-        
-        .navbar-toggler:focus {
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-        
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            padding: 0;
-            width: 100%;
-            overflow-x: hidden; /* Prevent horizontal scroll */
-        }
-        
-        /* Premium Alerts */
-        .alert {
-            border: none;
-            border-radius: 12px;
-            padding: 1.25rem 1.5rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            border-left: 4px solid;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
-        }
-        
-        .alert-success {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
-            border-left-color: var(--success);
-            color: #065f46;
-        }
-        
-        .alert-danger {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
-            border-left-color: var(--error);
-            color: #7f1d1d;
-        }
-        
-        .alert-dismissible .btn-close {
-            padding: 1.2rem;
-        }
-        
-        /* Premium Footer */
-        footer {
-            background: linear-gradient(135deg, var(--white) 0%, #f8fafc 100%);
-            border-top: 1px solid var(--border);
-            padding: 3rem 0 2rem;
-            margin-top: auto;
-            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
-            width: 100%;
-        }
-        
-        footer .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        .footer-brand {
-            font-weight: 700;
+
+        .navbar-brand-exec {
+            font-weight: 800;
             font-size: 1.5rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
-            display: inline-block;
-        }
-        
-        .footer-links {
+            color: #fff !important;
+            letter-spacing: -0.5px;
             display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-        
-        .footer-link {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-        }
-        
-        .footer-link:hover {
-            color: var(--primary);
-            background: rgba(37, 99, 235, 0.05);
-            transform: translateY(-1px);
-        }
-        
-        .footer-bottom {
-            border-top: 1px solid var(--border);
-            padding-top: 1.5rem;
-            margin-top: 2rem;
-        }
-        
-        /* Enhanced Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding-left: 1rem;
-            padding-right: 1rem;
-        }
-        
-        /* Premium Button Styles */
-        .btn {
-            border-radius: 8px;
-            font-weight: 600;
-            padding: 0.75rem 1.5rem;
-            transition: all 0.3s ease;
-            border: none;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn:hover::before {
-            left: 100%;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            box-shadow: var(--shadow);
-        }
-        
-        .btn-primary:hover {
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .btn-outline-primary {
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            background: transparent;
-        }
-        
-        .btn-outline-primary:hover {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-        
-        /* Premium Form Controls */
-        .form-control, .form-select {
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            padding: 0.875rem 1.25rem;
-            transition: all 0.3s ease;
-            font-weight: 400;
-        }
-        
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-            transform: translateY(-1px);
-        }
-        
-        /* Premium Card Styles */
-        .card {
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            overflow: hidden;
-        }
-        
-        .card:hover {
-            box-shadow: var(--shadow-xl);
-            transform: translateY(-5px);
-        }
-        
-        .card-header {
-            background: linear-gradient(135deg, var(--white) 0%, #f8fafc 100%);
-            border-bottom: 1px solid var(--border);
-            padding: 1.25rem 1.5rem;
-            font-weight: 600;
-        }
-        
-        /* User Badge */
-        .user-badge {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.875rem;
-            display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 12px;
         }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .navbar-nav .nav-link {
-                margin: 0.25rem 0;
-                text-align: left;
-            }
-            
-            .navbar-text {
-                justify-content: flex-start;
-                margin: 0.5rem 0;
-                text-align: center;
-            }
-            
-            .alert {
-                margin: 1rem 0;
-                padding: 1rem 1.25rem;
-            }
-            
-            .footer-links {
-                gap: 1rem;
-            }
-            
-            .footer-link {
-                padding: 0.5rem;
-            }
-            
-            .btn {
-                padding: 0.875rem 1.25rem;
-            }
-            
-            .container {
-                padding-left: 0.75rem;
-                padding-right: 0.75rem;
-            }
+
+        .brand-icon {
+            background: #fff;
+            color: #000;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 0.9rem;
         }
-        
-        @media (max-width: 576px) {
-            .container {
-                padding-left: 0.5rem;
-                padding-right: 0.5rem;
-            }
+
+        .nav-link-exec {
+            color: var(--text-muted) !important;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.5rem 1.2rem !important;
+            transition: color 0.3s ease;
         }
-        
-        /* Animation */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        .nav-link-exec:hover, .nav-link-exec.active {
+            color: #fff !important;
         }
-        
-        .main-content .container {
-            animation: fadeIn 0.6s ease-out;
+
+        /* --- User Profile Badge in Nav --- */
+        .nav-user-context {
+            background: var(--exec-dark-grey);
+            border: 1px solid var(--exec-border);
+            padding: 6px 16px;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        
-        /* Ensure no horizontal overflow */
-        .row {
-            margin-left: 0;
-            margin-right: 0;
+
+        .user-email-text {
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 600;
         }
-        
-        .col, .col-1, .col-10, .col-11, .col-12, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-auto, .col-lg, .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto, .col-md, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-auto, .col-sm, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-auto, .col-xl, .col-xl-1, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-auto {
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
+
+        .role-indicator {
+            font-size: 0.65rem;
+            background: rgba(255,255,255,0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        /* --- Content Area --- */
+        .main-wrapper {
+            flex: 1;
+            padding-bottom: 5rem;
+        }
+
+        /* --- Solid Alerts for Visibility --- */
+        .alert-premium {
+            border: none;
+            border-radius: 0;
+            background: var(--exec-black);
+            color: #fff;
+            border-left: 4px solid var(--success-glow);
+            padding: 1rem 2rem;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .alert-premium.alert-danger {
+            border-left-color: var(--error-glow);
+        }
+
+        /* --- Minimalist Footer --- */
+        .footer-exec {
+            background: var(--exec-black);
+            color: var(--text-muted);
+            padding: 4rem 0 2rem;
+            border-top: 1px solid var(--exec-border);
+        }
+
+        .footer-logo {
+            color: #fff;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            text-decoration: none;
+        }
+
+        .footer-nav-links {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .footer-nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+
+        .footer-nav-links a:hover {
+            color: #fff;
+        }
+
+        /* --- Global Transitions --- */
+        .fade-in {
+            animation: fadeInEffect 0.5s ease forwards;
+        }
+
+        @keyframes fadeInEffect {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-executive">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('auth.index') }}">
-                <i class="fas fa-briefcase"></i>JobHub
+            <a class="navbar-brand-exec" href="{{ url_for('auth.index') }}">
+                <div class="brand-icon"><i class="fas fa-briefcase"></i></div>
+                JOBHUB
             </a>
+            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link-exec" href="{{ url_for('jobs.list_jobs') }}">Marketplace</a>
+                    </li>
                     {% if session.user_id %}
                         {% if session.role == 'candidate' %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('jobs.list_jobs') }}">
-                                    <i class="fas fa-search me-1"></i>Find Jobs
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('candidate.candidate_profile') }}">
-                                    <i class="fas fa-user me-1"></i>My Profile
-                                </a>
+                                <a class="nav-link-exec" href="{{ url_for('candidate.candidate_profile') }}">My Profile</a>
                             </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('recruiter.dashboard') }}">
-                                    <i class="fas fa-tachometer-alt me-1"></i>Dashboard
-                                </a>
+                                <a class="nav-link-exec" href="{{ url_for('recruiter.dashboard') }}">Dashboard</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('recruiter.post_job') }}">
-                                    <i class="fas fa-plus-circle me-1"></i>Post Job
-                                </a>
+                                <a class="nav-link-exec" href="{{ url_for('recruiter.post_job') }}">Post Vacancy</a>
                             </li>
                         {% endif %}
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('jobs.list_jobs') }}">
-                                <i class="fas fa-search me-1"></i>Find Jobs
-                            </a>
-                        </li>
                     {% endif %}
                 </ul>
-                <ul class="navbar-nav">
+
+                <ul class="navbar-nav align-items-center">
                     {% if session.user_id %}
-                        <li class="nav-item">
-                            <span class="navbar-text">
-                                <span class="user-badge">
-                                    <i class="fas fa-user-circle"></i>
-                                    {{ session.email }} ({{ session.role }})
-                                </span>
-                            </span>
+                        <li class="nav-item me-lg-3 mb-3 mb-lg-0">
+                            <div class="nav-user-context">
+                                <i class="fas fa-user-circle text-muted"></i>
+                                <span class="user-email-text">{{ session.email }}</span>
+                                <span class="role-indicator">{{ session.role }}</span>
+                            </div>
                         </li>
-                        <li class="nav-item ms-2">
-                            <a class="nav-link" href="{{ url_for('auth.logout') }}">
-                                <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        <li class="nav-item">
+                            <a class="nav-link-exec text-white" href="{{ url_for('auth.logout') }}">
+                                <i class="fas fa-power-off me-2 small"></i>Logout
                             </a>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('auth.login') }}">
-                                <i class="fas fa-sign-in-alt me-1"></i>Login
-                            </a>
+                            <a class="nav-link-exec" href="{{ url_for('auth.login') }}">Login</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="btn btn-primary ms-2" href="{{ url_for('auth.register') }}">
-                                <i class="fas fa-user-plus me-1"></i>Get Started
+                        <li class="nav-item ms-lg-2">
+                            <a class="btn btn-light fw-bold px-4 rounded-pill" href="{{ url_for('auth.register') }}">
+                                Get Started
                             </a>
                         </li>
                     {% endif %}
@@ -461,79 +237,63 @@
         </div>
     </nav>
 
-    <div class="main-content">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="container mt-4">
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show">
-                            <div class="d-flex align-items-center">
-                                <i class="fas fa-{{ 'exclamation-triangle' if category == 'error' else 'check-circle' }} me-3 fs-5"></i>
-                                <div class="flex-grow-1">
-                                    {{ message }}
-                                </div>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-
-        {% block content %}{% endblock %}
-    </div>
-
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center mb-4">
-                    <div class="footer-brand">
-                        <i class="fas fa-briefcase me-2"></i>JobHub
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-premium alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show" role="alert">
+                    <div class="container d-flex align-items-center">
+                        <i class="fas fa-{{ 'circle-exclamation' if category == 'error' else 'circle-check' }} me-3"></i>
+                        <span>{{ message }}</span>
+                        <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="alert"></button>
                     </div>
-                    <p class="text-muted mb-4">Connecting talent with opportunity</p>
                 </div>
-            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <main class="main-wrapper fade-in">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer-exec">
+        <div class="container text-center">
+            <a href="/" class="footer-logo">JOBHUB</a>
             
-            <div class="footer-links">
-                <a href="#" class="footer-link">About Us</a>
-                <a href="#" class="footer-link">For Employers</a>
-                <a href="#" class="footer-link">Success Stories</a>
-                <a href="#" class="footer-link">Help Center</a>
-                <a href="#" class="footer-link">Contact</a>
-                <a href="#" class="footer-link">Privacy Policy</a>
-                <a href="#" class="footer-link">Terms of Service</a>
-            </div>
-            
-            <div class="footer-bottom text-center">
-                <p class="text-muted mb-0">&copy; 2024 JobHub. All rights reserved. | Building careers, one connection at a time.</p>
+            <ul class="footer-nav-links">
+                <li><a href="#">Network</a></li>
+                <li><a href="#">Enterprise</a></li>
+                <li><a href="#">Success Stories</a></li>
+                <li><a href="#">Privacy</a></li>
+                <li><a href="#">Intelligence</a></li>
+            </ul>
+
+            <div class="pt-4 border-top border-secondary border-opacity-10 mt-4">
+                <p class="small text-uppercase tracking-widest opacity-50 mb-0">
+                    &copy; 2026 JobHub Infrastructure. All Rights Reserved.
+                </p>
             </div>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Add active class to current page nav link
-            const currentLocation = location.href;
-            const menuItems = document.querySelectorAll('.nav-link');
-            
-            menuItems.forEach(item => {
-                if (item.href === currentLocation) {
-                    item.classList.add('active');
+            // Set active navigation based on URL
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.nav-link-exec').forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
                 }
             });
-            
-            // Auto-dismiss alerts after 5 seconds
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(alert => {
-                setTimeout(() => {
-                    if (alert.classList.contains('show')) {
-                        const bsAlert = new bootstrap.Alert(alert);
-                        bsAlert.close();
-                    }
-                }, 5000);
-            });
+
+            // Clean auto-dismiss for alerts
+            setTimeout(() => {
+                const alerts = document.querySelectorAll('.alert-premium');
+                alerts.forEach(a => {
+                    const bsAlert = new bootstrap.Alert(a);
+                    bsAlert.close();
+                });
+            }, 6000);
         });
     </script>
 </body>

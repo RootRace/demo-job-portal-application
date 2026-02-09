@@ -1,271 +1,162 @@
-{% extends "base.html" %} {% block title %}Register - JobHub{% endblock %} {%
-block content %}
+{% extends "base.html" %} 
+
+{% block title %}Register | JobHub Executive{% endblock %} 
+
+{% block content %}
 <section class="register-section min-vh-100 d-flex align-items-center">
   <div class="container-fluid p-0">
     <div class="row g-0">
-      <!-- Left side - Branding and Info -->
-      <div
-        class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center bg-primary text-white position-relative overflow-hidden"
-      >
-        <div
-          class="position-absolute top-0 start-0 w-100 h-100 bg-primary"
-          style="opacity: 0.95"
-        ></div>
-        <div class="position-relative text-center px-5" style="z-index: 2">
-          <div class="mb-5">
-            <i class="fas fa-rocket fa-4x mb-4"></i>
-            <h1 class="display-4 fw-bold mb-3">Start Your Journey</h1>
-            <p class="lead mb-4">
-              Join thousands of professionals and companies finding their
-              perfect match on JobHub.
-            </p>
+      
+      <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center position-relative overflow-hidden branding-column">
+        <div class="overlay"></div>
+        <div class="position-relative text-center px-5 content-z">
+          <div class="mb-5 fade-in">
+            <div class="icon-box mx-auto mb-4">
+               <i class="fas fa-rocket fa-3x text-white"></i>
+            </div>
+            <h1 class="display-4 fw-extrabold mb-3 tracking-tight">Accelerate Your <br>Career Trajectory</h1>
+            <p class="lead mb-4 opacity-75">Join an elite ecosystem of professionals and high-growth companies finding their perfect synergy.</p>
           </div>
 
-          <div class="row text-center mt-5">
-            <div class="col-4">
-              <h3 class="fw-bold">15K+</h3>
-              <p class="mb-0">Active Users</p>
+          <div class="row text-center mt-5 fade-in-delayed">
+            <div class="col-4 border-end border-white border-opacity-25">
+              <h3 class="fw-bold mb-0">15K+</h3>
+              <p class="small text-uppercase tracking-wider opacity-75">Active Talents</p>
+            </div>
+            <div class="col-4 border-end border-white border-opacity-25">
+              <h3 class="fw-bold mb-0">2.5K+</h3>
+              <p class="small text-uppercase tracking-wider opacity-75">Enterprises</p>
             </div>
             <div class="col-4">
-              <h3 class="fw-bold">2.5K+</h3>
-              <p class="mb-0">Companies</p>
-            </div>
-            <div class="col-4">
-              <h3 class="fw-bold">98%</h3>
-              <p class="mb-0">Success Rate</p>
+              <h3 class="fw-bold mb-0">98%</h3>
+              <p class="small text-uppercase tracking-wider opacity-75">Placement Rate</p>
             </div>
           </div>
 
-          <!-- Role Benefits -->
-          <div class="row mt-5 text-start">
+          <div class="row mt-5 text-start fade-in-delayed">
             <div class="col-md-6 mb-4">
-              <div class="d-flex">
-                <div class="me-3">
-                  <i class="fas fa-user-graduate fa-2x text-warning"></i>
+              <div class="d-flex align-items-center p-3 rounded-4 benefit-box">
+                <div class="me-3 icon-circle bg-white text-dark">
+                  <i class="fas fa-user-graduate"></i>
                 </div>
                 <div>
-                  <h5 class="fw-bold">For Job Seekers</h5>
-                  <p class="small mb-0 opacity-75">
-                    Find your dream job with personalized recommendations
-                  </p>
+                  <h6 class="fw-bold mb-0">For Talent</h6>
+                  <p class="x-small mb-0 opacity-75">Precision job matching.</p>
                 </div>
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <div class="d-flex">
-                <div class="me-3">
-                  <i class="fas fa-briefcase fa-2x text-info"></i>
+              <div class="d-flex align-items-center p-3 rounded-4 benefit-box">
+                <div class="me-3 icon-circle bg-white text-dark">
+                  <i class="fas fa-briefcase"></i>
                 </div>
                 <div>
-                  <h5 class="fw-bold">For Recruiters</h5>
-                  <p class="small mb-0 opacity-75">
-                    Connect with qualified candidates quickly and efficiently
-                  </p>
+                  <h6 class="fw-bold mb-0">For Partners</h6>
+                  <p class="x-small mb-0 opacity-75">Elite candidate sourcing.</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Floating elements for visual interest -->
-        <div
-          class="position-absolute top-0 start-0 w-100 h-100"
-          style="z-index: 1"
-        >
-          <div
-            class="position-absolute rounded-circle bg-white opacity-25"
-            style="width: 300px; height: 300px; top: 10%; left: 10%"
-          ></div>
-          <div
-            class="position-absolute rounded-circle bg-white opacity-50"
-            style="width: 200px; height: 200px; bottom: 20%; right: 15%"
-          ></div>
-        </div>
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
       </div>
 
-      <!-- Right side - Registration Form -->
-      <div
-        class="col-lg-6 d-flex align-items-center justify-content-center bg-light py-5"
-      >
-        <div class="w-100" style="max-width: 500px">
-          <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold text-primary mb-2">Create Account</h2>
-            <p class="text-muted">
-              Join JobHub today and unlock new opportunities
-            </p>
+      <div class="col-lg-6 d-flex align-items-center justify-content-center bg-form-dark py-5">
+        <div class="w-100 px-4" style="max-width: 550px">
+          <div class="text-center mb-5 fade-in">
+            <h2 class="display-6 fw-extrabold text-white mb-2">Create Identity</h2>
+            <p class="text-secondary small text-uppercase tracking-widest">Secure Infrastructure Enrollment</p>
           </div>
 
-          <div class="card border-0 shadow-lg rounded-3">
-            <div class="card-body p-5">
+          <div class="card premium-card border-0 shadow-2xl fade-in-up">
+            <div class="card-body p-4 p-md-5">
               <form method="POST">
                 <div class="mb-4">
-                  <label for="email" class="form-label fw-semibold"
-                    >Email Address</label
-                  >
-                  <div class="input-group">
-                    <span class="input-group-text bg-light border-end-0">
-                      <i class="fas fa-envelope text-muted"></i>
-                    </span>
-                    <input
-                      type="email"
-                      class="form-control border-start-0 ps-0"
-                      id="email"
-                      name="email"
-                      placeholder="Enter your email"
-                      required
-                    />
-                  </div>
-                  <div class="form-text">
-                    We'll never share your email with anyone else.
+                  <label for="email" class="exec-label">Professional Email</label>
+                  <div class="input-group-premium">
+                    <span class="icon"><i class="fas fa-envelope"></i></span>
+                    <input type="email" class="form-control-premium" id="email" name="email" placeholder="name@company.com" required />
                   </div>
                 </div>
 
                 <div class="mb-4">
-                  <label for="password" class="form-label fw-semibold"
-                    >Password</label
-                  >
-                  <div class="input-group">
-                    <span class="input-group-text bg-light border-end-0">
-                      <i class="fas fa-lock text-muted"></i>
-                    </span>
-                    <input
-                      type="password"
-                      class="form-control border-start-0 ps-0"
-                      id="password"
-                      name="password"
-                      placeholder="Create a strong password"
-                      required
-                    />
-                  </div>
-                  <div class="form-text">
-                    Use at least 8 characters with a mix of letters, numbers,
-                    and symbols.
+                  <label for="password" class="exec-label">Security Protocol (Password)</label>
+                  <div class="input-group-premium">
+                    <span class="icon"><i class="fas fa-lock"></i></span>
+                    <input type="password" class="form-control-premium" id="password" name="password" placeholder="Min. 8 characters" required />
                   </div>
                 </div>
 
                 <div class="mb-4">
-                  <label for="role" class="form-label fw-semibold"
-                    >I am a:</label
-                  >
+                  <label for="confirm_password" class="exec-label">Confirm Security Protocol</label>
+                  <div class="input-group-premium">
+                    <span class="icon"><i class="fas fa-check-double"></i></span>
+                    <input type="password" class="form-control-premium" id="confirm_password" name="confirm_password" placeholder="Repeat password" required />
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <label class="exec-label">Account Classification</label>
                   <div class="row g-3">
                     <div class="col-6">
-                      <input
-                        type="radio"
-                        class="btn-check"
-                        name="role"
-                        id="candidate"
-                        value="candidate"
-                        autocomplete="off"
-                      />
-                      <label
-                        class="btn btn-outline-primary w-100 py-3"
-                        for="candidate"
-                      >
-                        <i class="fas fa-user-graduate me-2"></i>Job Seeker
+                      <input type="radio" class="btn-check" name="role" id="candidate" value="candidate" autocomplete="off" required />
+                      <label class="btn btn-role-select w-100 py-3" for="candidate">
+                        <i class="fas fa-user-graduate d-block mb-2"></i>
+                        <span class="small fw-bold">Job Seeker</span>
                       </label>
                     </div>
                     <div class="col-6">
-                      <input
-                        type="radio"
-                        class="btn-check"
-                        name="role"
-                        id="recruiter"
-                        value="recruiter"
-                        autocomplete="off"
-                      />
-                      <label
-                        class="btn btn-outline-primary w-100 py-3"
-                        for="recruiter"
-                      >
-                        <i class="fas fa-briefcase me-2"></i>Recruiter
+                      <input type="radio" class="btn-check" name="role" id="recruiter" value="recruiter" autocomplete="off" />
+                      <label class="btn btn-role-select w-100 py-3" for="recruiter">
+                        <i class="fas fa-briefcase d-block mb-2"></i>
+                        <span class="small fw-bold">Recruiter</span>
                       </label>
                     </div>
                   </div>
                 </div>
 
-                <div class="mb-4 form-check">
-                  <input
-                    type="checkbox"
-                    class="form-check-input"
-                    id="terms"
-                    required
-                  />
-                  <label class="form-check-label" for="terms">
-                    I agree to the
-                    <a href="#" class="text-primary text-decoration-none"
-                      >Terms of Service</a
-                    >
-                    and
-                    <a href="#" class="text-primary text-decoration-none"
-                      >Privacy Policy</a
-                    >
+                <div class="mb-4 form-check custom-check">
+                  <input type="checkbox" class="form-check-input" id="terms" required />
+                  <label class="form-check-label x-small text-secondary" for="terms">
+                    I acknowledge the <a href="#" class="text-white text-decoration-none border-bottom border-secondary">Terms of Service</a> and <a href="#" class="text-white text-decoration-none border-bottom border-secondary">Privacy Policy</a>.
                   </label>
                 </div>
 
-                <button
-                  type="submit"
-                  class="btn btn-primary btn-lg w-100 py-3 mb-4 fw-semibold"
-                >
-                  <i class="fas fa-user-plus me-2"></i>Create Your Account
+                <button type="submit" class="btn-primary-premium w-100 py-3 mb-4 fw-bold text-uppercase tracking-widest">
+                  Initialize Account <i class="fas fa-chevron-right ms-2"></i>
                 </button>
               </form>
 
               <div class="text-center mb-4">
-                <p class="mb-3 text-muted">Or sign up with</p>
+                <p class="divider-text text-secondary mb-4"><span>Third-Party Authentication</span></p>
                 <div class="d-flex gap-3 justify-content-center">
-                  <button
-                    type="button"
-                    class="btn btn-outline-secondary rounded-pill px-4"
-                  >
-                    <i class="fab fa-google me-2"></i>Google
+                  <button type="button" class="btn-social">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="18" alt="Google" />
                   </button>
-                  <button
-                    type="button"
-                    class="btn btn-outline-secondary rounded-pill px-4"
-                  >
-                    <i class="fab fa-linkedin me-2"></i>LinkedIn
+                  <button type="button" class="btn-social">
+                    <i class="fab fa-linkedin-in"></i>
                   </button>
                 </div>
               </div>
 
-              <div class="text-center pt-3 border-top">
-                <p class="mb-0">
-                  Already have an account?
-                  <a
-                    href="{{ url_for('auth.login') }}"
-                    class="text-primary fw-semibold text-decoration-none"
-                    >Sign in here</a
-                  >
-                </p>
+              <div class="text-center pt-3 border-top border-white border-opacity-10">
+                <p class="mb-0 text-secondary small">Existing identity found? <a href="{{ url_for('auth.login') }}" class="text-white fw-bold text-decoration-none ms-1">Sign In</a></p>
               </div>
             </div>
           </div>
 
-          <!-- Role Explanation -->
-          <div class="mt-4 p-4 bg-white rounded-3 shadow-sm">
-            <p class="small text-muted mb-3 fw-semibold text-center">
-              What type of account should I choose?
-            </p>
-            <div class="row small text-muted">
-              <div class="col-md-6 mb-3 mb-md-0">
-                <p class="mb-1">
-                  <i class="fas fa-user-graduate me-1 text-primary"></i
-                  ><strong>Job Seeker:</strong>
-                </p>
-                <p class="mb-0 ms-3">
-                  Search and apply for jobs, create a professional profile, get
-                  matched with opportunities
-                </p>
+          <div class="mt-4 p-4 demo-box rounded-4 fade-in-delayed">
+            <p class="x-small text-uppercase tracking-widest text-white opacity-50 mb-3 text-center fw-bold">Framework Classifications</p>
+            <div class="row g-3 x-small text-secondary">
+              <div class="col-md-6 border-end border-white border-opacity-10">
+                <p class="mb-1 fw-bold text-white"><i class="fas fa-user-graduate me-1"></i> Talent:</p>
+                <p class="mb-0">Construct profiles and deploy applications across global opportunities.</p>
               </div>
               <div class="col-md-6">
-                <p class="mb-1">
-                  <i class="fas fa-briefcase me-1 text-primary"></i
-                  ><strong>Recruiter:</strong>
-                </p>
-                <p class="mb-0 ms-3">
-                  Post job listings, search candidate profiles, manage
-                  applications, and hire talent
-                </p>
+                <p class="mb-1 fw-bold text-white"><i class="fas fa-briefcase me-1"></i> Partner:</p>
+                <p class="mb-0">Publish vacancies and filter candidates via advanced search logic.</p>
               </div>
             </div>
           </div>
@@ -275,66 +166,83 @@ block content %}
   </div>
 </section>
 
-<!-- Add custom CSS for the full-screen registration page -->
 <style>
-  .register-section {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  :root {
+    --exec-darker: #0f1115;
+    --exec-card: #161a21;
+    --accent-blue: #ffffff;
+    --text-muted: #94a3b8;
   }
 
-  .min-vh-100 {
-    min-height: 100vh;
+  /* Layout & Branding */
+  .register-section { background-color: var(--exec-darker); font-family: 'Plus Jakarta Sans', sans-serif; }
+  .bg-form-dark { background-color: var(--exec-darker); }
+  .branding-column { background-color: #000; color: white; }
+  .overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.9) 100%); z-index: 1; }
+  .content-z { z-index: 2; }
+  .benefit-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
+  .icon-circle { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+
+  /* Premium Card & Inputs */
+  .premium-card { background: var(--exec-card); border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+  .exec-label { font-size: 0.7rem; text-transform: uppercase; font-weight: 800; color: var(--text-muted); letter-spacing: 1.5px; margin-bottom: 8px; display: block; }
+  .input-group-premium { position: relative; display: flex; align-items: center; }
+  .input-group-premium .icon { position: absolute; left: 18px; color: #fff; opacity: 0.5; z-index: 5; }
+  .form-control-premium {
+    width: 100%; background: #1e252e; border: 1px solid #2d3748;
+    color: white; padding: 14px 16px 14px 48px; border-radius: 12px;
+    transition: all 0.3s;
+  }
+  .form-control-premium:focus {
+    outline: none; border-color: #fff; background: #252d37;
   }
 
-  .card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* Role Select Buttons */
+  .btn-role-select { 
+    background: #1e252e; border: 1px solid #2d3748; color: var(--text-muted); 
+    transition: all 0.2s; border-radius: 12px; 
+  }
+  .btn-role-select:hover { border-color: #fff; color: #fff; }
+  .btn-check:checked + .btn-role-select { 
+    background: #fff; border-color: #fff; color: #000 !important; 
+    box-shadow: 0 10px 20px rgba(255,255,255,0.1);
   }
 
-  .card:hover {
-    transform: translateY(-5px);
+  /* Main Action Button */
+  .btn-primary-premium {
+    background: #fff; border: none; border-radius: 12px; color: #000;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
+  .btn-primary-premium:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(255,255,255,0.2); background: #f4f4f5; }
 
-  .input-group-text {
-    border-right: none;
+  /* Social Auth */
+  .btn-social {
+    background: #1e252e; border: 1px solid #2d3748; color: white;
+    width: 60px; height: 50px; border-radius: 12px; transition: all 0.2s;
   }
+  .btn-social:hover { background: #2d3748; border-color: #fff; }
 
-  .form-control:focus {
-    box-shadow: none;
-    border-color: #0d6efd;
-  }
+  /* Framework Description Box */
+  .demo-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); }
 
-  .btn-primary {
-    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
-    border: none;
-    transition: all 0.3s ease;
-  }
+  /* Decorative Elements */
+  .shape { position: absolute; border-radius: 50%; filter: blur(100px); z-index: 0; }
+  .shape-1 { width: 400px; height: 400px; background: rgba(255,255,255,0.05); top: -100px; left: -100px; }
+  .shape-2 { width: 300px; height: 300px; background: rgba(255,255,255,0.03); bottom: -50px; right: -50px; }
 
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
-  }
+  /* Typography & Misc */
+  .fw-extrabold { font-weight: 800; }
+  .tracking-tight { letter-spacing: -0.02em; }
+  .x-small { font-size: 0.65rem; }
+  .divider-text { display: flex; align-items: center; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+  .divider-text::before, .divider-text::after { content: ""; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+  .divider-text span { padding: 0 15px; }
+  .icon-box { width: 80px; height: 80px; background: #fff; border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 15px 30px rgba(255,255,255,0.2); color: #000; }
 
-  .btn-outline-primary:checked {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
-  }
-
-  .btn-check:checked + .btn-outline-primary {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
-    color: white;
-  }
-
-  .form-check-input:checked {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
-  }
-
-  .btn-outline-secondary {
-    transition: all 0.3s ease;
-  }
-
-  .btn-outline-secondary:hover {
-    transform: translateY(-2px);
-  }
+  /* Animations */
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-in { animation: fadeInUp 0.8s ease forwards; }
+  .fade-in-up { animation: fadeInUp 0.8s 0.2s ease forwards; opacity: 0; }
+  .fade-in-delayed { animation: fadeInUp 0.8s 0.4s ease forwards; opacity: 0; }
 </style>
 {% endblock %}

@@ -8,9 +8,25 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+def migrate_users_table():
+    conn = get_db_connection()
+    c = conn.cursor()
+
+    try:
+        c.execute("ALTER TABLE users ADD COLUMN reset_code TEXT")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        c.execute("ALTER TABLE users ADD COLUMN reset_code_expiry TIMESTAMP")
+    except sqlite3.OperationalError:
+        pass
+
+    conn.commit()
+    conn.close()
 
 def init_db():
-    conn = sqlite3.connect('jobs.db')
+    conn = get_db_connection()
     c = conn.cursor()
 
     c.execute('''
@@ -19,6 +35,8 @@ def init_db():
             email TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL,
             role TEXT NOT NULL,
+            reset_code TEXT,
+            reset_code_expiry TIMESTAMP,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ''')
@@ -70,3 +88,4 @@ def init_db():
 
     conn.commit()
     conn.close()
+    

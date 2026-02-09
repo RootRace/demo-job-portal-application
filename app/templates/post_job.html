@@ -1,65 +1,183 @@
 {% extends "base.html" %}
 
+{% block title %}Deploy Vacancy | JobHub Executive{% endblock %}
+
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Post New Job</h4>
+<section class="deployment-layout py-5">
+    <div class="container">
+        <div class="row mb-5 justify-content-center">
+            <div class="col-lg-10">
+                <nav aria-label="breadcrumb" class="mb-3">
+                    <ol class="breadcrumb small text-uppercase tracking-widest">
+                        <li class="breadcrumb-item"><a href="{{ url_for('recruiter.dashboard') }}" class="text-muted text-decoration-none">Console</a></li>
+                        <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">Deployment</li>
+                    </ol>
+                </nav>
+                <h1 class="display-5 fw-extrabold text-dark tracking-tight">Deploy New <span class="text-outline">Vacancy</span></h1>
+                <p class="text-secondary">Initialize a new talent acquisition campaign with precise specifications.</p>
             </div>
-            <div class="card-body">
-                <form method="POST">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="title" class="form-label">Job Title *</label>
-                            <input type="text" class="form-control" id="title" name="title" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="company" class="form-label">Company *</label>
-                            <input type="text" class="form-control" id="company" name="company" required>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="location" class="form-label">Location *</label>
-                            <input type="text" class="form-control" id="location" name="location" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="job_type" class="form-label">Job Type *</label>
-                            <select class="form-select" id="job_type" name="job_type" required>
-                                <option value="">Select Type</option>
-                                <option value="Full-time">Full-time</option>
-                                <option value="Part-time">Part-time</option>
-                                <option value="Contract">Contract</option>
-                                <option value="Internship">Internship</option>
-                                <option value="Remote">Remote</option>
-                            </select>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card executive-deployment-card border-0 shadow-2xl overflow-hidden">
+                    <div class="card-header-midnight p-4 px-md-5">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="deployment-icon">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <div>
+                                <h4 class="mb-0 fw-bold text-white">Vacancy Specifications</h4>
+                                <p class="mb-0 x-small text-uppercase tracking-widest text-white opacity-50">Secure Deployment Module</p>
+                            </div>
                         </div>
                     </div>
-                    
-                    <div class="mb-3">
-                        <label for="salary_range" class="form-label">Salary Range</label>
-                        <input type="text" class="form-control" id="salary_range" name="salary_range" 
-                               placeholder="e.g., $50,000 - $70,000">
+
+                    <div class="card-body p-4 p-md-5 bg-white">
+                        <form method="POST" class="deployment-form">
+                            <div class="row g-4 mb-5">
+                                <div class="col-12">
+                                    <h6 class="text-uppercase tracking-widest fw-bold text-primary small">01. Core Attributes</h6>
+                                    <hr class="mt-2 border-primary border-opacity-25">
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="title" class="exec-label">Job Designation *</label>
+                                    <div class="exec-input-group">
+                                        <i class="fas fa-id-badge"></i>
+                                        <input type="text" class="exec-control" id="title" name="title" required placeholder="e.g. Senior Systems Architect">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="company" class="exec-label">Hiring Entity *</label>
+                                    <div class="exec-input-group">
+                                        <i class="fas fa-building"></i>
+                                        <input type="text" class="exec-control" id="company" name="company" required placeholder="Corporate or Division Name">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="location" class="exec-label">Deployment Location *</label>
+                                    <div class="exec-input-group">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <input type="text" class="exec-control" id="location" name="location" required placeholder="City, State or Remote">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="job_type" class="exec-label">Engagement Model *</label>
+                                    <div class="exec-input-group">
+                                        <i class="fas fa-handshake"></i>
+                                        <select class="exec-control" id="job_type" name="job_type" required>
+                                            <option value="" disabled selected>Select Model</option>
+                                            <option value="Full-time">Full-time Executive</option>
+                                            <option value="Part-time">Part-time Associate</option>
+                                            <option value="Contract">Strategic Contract</option>
+                                            <option value="Internship">Professional Internship</option>
+                                            <option value="Remote">Remote Operations</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-4 mb-5">
+                                <div class="col-12">
+                                    <h6 class="text-uppercase tracking-widest fw-bold text-primary small">02. Value & Parameters</h6>
+                                    <hr class="mt-2 border-primary border-opacity-25">
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="salary_range" class="exec-label">Compensation Bracket</label>
+                                    <div class="exec-input-group">
+                                        <i class="fas fa-wallet"></i>
+                                        <input type="text" class="exec-control" id="salary_range" name="salary_range" 
+                                               placeholder="e.g. $120,000 - $150,000 USD">
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="description" class="exec-label">Mission Briefing (Job Description) *</label>
+                                    <textarea class="exec-control-area" id="description" name="description" rows="6" required
+                                              placeholder="Outline the mission objectives, primary responsibilities, and team dynamic."></textarea>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="requirements" class="exec-label">Candidate Matrix (Requirements) *</label>
+                                    <textarea class="exec-control-area" id="requirements" name="requirements" rows="6" required
+                                              placeholder="Define the essential skills, academic background, and technical proficiencies."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="submit" class="btn-exec-deploy w-100 py-3">
+                                        Authorize Deployment <i class="fas fa-paper-plane ms-2"></i>
+                                    </button>
+                                    <div class="text-center mt-3">
+                                        <a href="{{ url_for('recruiter.dashboard') }}" class="text-muted small text-decoration-none hover-dark fw-bold text-uppercase tracking-wider">Cancel Deployment</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Job Description *</label>
-                        <textarea class="form-control" id="description" name="description" rows="5" required
-                                  placeholder="Describe the role, responsibilities, and what makes this job great"></textarea>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="requirements" class="form-label">Requirements *</label>
-                        <textarea class="form-control" id="requirements" name="requirements" rows="5" required
-                                  placeholder="List the required skills, experience, and qualifications"></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary w-100">Post Job</button>
-                </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<style>
+    :root {
+        --exec-dark: #0a0a0b;
+        --exec-grey: #f4f4f5;
+        --exec-border: #e4e4e7;
+        --text-muted: #71717a;
+    }
+
+    .deployment-layout { background-color: #ffffff; }
+    .text-outline { -webkit-text-stroke: 1px var(--exec-dark); color: transparent; }
+    .fw-extrabold { font-weight: 800; }
+    .tracking-tight { letter-spacing: -0.025em; }
+    .tracking-widest { letter-spacing: 0.15em; }
+    .x-small { font-size: 0.65rem; }
+
+    /* Card Styling */
+    .executive-deployment-card { border-radius: 30px; border: 1px solid var(--exec-border); }
+    .card-header-midnight { background: var(--exec-dark); border: none; }
+    .deployment-icon { background: #fff; color: #000; width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+
+    /* Executive Inputs */
+    .exec-label { font-size: 0.7rem; text-transform: uppercase; font-weight: 800; color: #71717a; letter-spacing: 1px; margin-bottom: 8px; display: block; }
+    .exec-input-group { position: relative; display: flex; align-items: center; }
+    .exec-input-group i { position: absolute; left: 16px; color: #a1a1aa; font-size: 0.9rem; z-index: 5; }
+    
+    .exec-control { 
+        width: 100%; background: var(--exec-grey); border: 1px solid transparent; 
+        padding: 14px 16px 14px 45px; border-radius: 12px; font-weight: 500; font-size: 0.95rem;
+        transition: all 0.2s; position: relative;
+    }
+    .exec-control:focus { outline: none; border-color: var(--exec-dark); background: #fff; }
+
+    .exec-control-area { 
+        width: 100%; background: var(--exec-grey); border: 1px solid transparent; 
+        padding: 16px; border-radius: 12px; font-weight: 500; font-size: 0.95rem;
+        transition: all 0.2s; 
+    }
+    .exec-control-area:focus { outline: none; border-color: var(--exec-dark); background: #fff; }
+
+    /* Main Action Button */
+    .btn-exec-deploy { 
+        background: var(--exec-dark); color: #fff; border: none; border-radius: 12px; 
+        font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem;
+        transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+    .btn-exec-deploy:hover { 
+        background: #000; letter-spacing: 3px; transform: translateY(-2px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+
+    .hover-dark:hover { color: var(--exec-dark) !important; }
+    .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08); }
+</style>
 {% endblock %}

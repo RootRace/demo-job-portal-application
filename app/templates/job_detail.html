@@ -1,100 +1,155 @@
 {% extends "base.html" %}
 
+{% block title %}{{ job.title }} | JobHub Briefing{% endblock %}
+
 {% block content %}
-<div class="row">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-body">
-                <h2 class="card-title">{{ job.title }}</h2>
-                <h4 class="card-subtitle text-muted mb-3">{{ job.company }}</h4>
-                
-                <div class="d-flex gap-3 mb-4 flex-wrap">
-                    <span class="badge bg-primary fs-6">{{ job.job_type }}</span>
-                    {% if job.salary_range %}
-                        <span class="badge bg-success fs-6">{{ job.salary_range }}</span>
-                    {% endif %}
-                    <span class="text-muted">
-                        <i class="fas fa-map-marker-alt me-1"></i>{{ job.location }}
-                    </span>
-                    <span class="text-muted">
-                        <i class="fas fa-clock me-1"></i>Posted {{ job.created_at[:10] }}
-                    </span>
-                </div>
-                
-                <div class="mb-4">
-                    <h5>Job Description</h5>
-                    <p class="card-text">{{ job.description }}</p>
-                </div>
-                
-                <div class="mb-4">
-                    <h5>Requirements</h5>
-                    <p class="card-text">{{ job.requirements }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Apply for this Job</h5>
-            </div>
-            <div class="card-body text-center">
-                {% if session.role == 'candidate' %}
-                    {% if has_applied %}
-                        <div class="alert alert-success">
-                            <i class="fas fa-check-circle me-2"></i>
-                            You have applied for this position
+<section class="opportunity-layout py-5">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb small text-uppercase tracking-widest">
+                <li class="breadcrumb-item"><a href="{{ url_for('jobs.list_jobs') }}" class="text-muted text-decoration-none">Marketplace</a></li>
+                <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">Briefing</li>
+            </ol>
+        </nav>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="card briefing-card border-0 shadow-2xl overflow-hidden">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="header-content mb-5">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <span class="badge-exec-midnight">{{ job.job_type }}</span>
+                                {% if job.salary_range %}
+                                    <span class="badge-exec-salary">{{ job.salary_range }}</span>
+                                {% endif %}
+                            </div>
+                            <h1 class="display-5 fw-extrabold text-dark tracking-tight mb-2">{{ job.title }}</h1>
+                            <h4 class="text-secondary fw-bold mb-4">{{ job.company }}</h4>
+                            
+                            <div class="d-flex gap-4 text-muted small fw-bold text-uppercase tracking-wider border-bottom pb-4">
+                                <span><i class="fas fa-map-marker-alt text-primary me-2"></i>{{ job.location }}</span>
+                                <span><i class="fas fa-calendar-check text-primary me-2"></i>Posted {{ job.created_at[:10] }}</span>
+                            </div>
                         </div>
-                        <p class="text-muted small">Your application is under review</p>
-                    {% else %}
-                        <p>Ready to apply for this position?</p>
-                        <a href="{{ url_for('jobs.apply_job', job_id=job.id) }}" class="btn btn-success btn-lg w-100">
-                            <i class="fas fa-paper-plane me-2"></i>Apply Now
-                        </a>
-                        <p class="small text-muted mt-2">
-                            Your profile will be submitted to the recruiter
-                        </p>
-                    {% endif %}
-                {% elif session.role == 'recruiter' %}
-                    <div class="alert alert-info">
-                        <i class="fas fa-info-circle me-2"></i>
-                        This is your job posting
+
+                        <div class="briefing-section mb-5">
+                            <h5 class="section-title-exec">01. Mission Overview</h5>
+                            <p class="section-text-exec lead-sm">{{ job.description }}</p>
+                        </div>
+
+                        <div class="briefing-section mb-0">
+                            <h5 class="section-title-exec">02. Requirements Matrix</h5>
+                            <p class="section-text-exec">{{ job.requirements }}</p>
+                        </div>
                     </div>
-                    <a href="{{ url_for('recruiter.view_applications', job_id=job.id) }}" class="btn btn-primary w-100">
-                        View Applications
-                    </a>
-                {% else %}
-                    <p>Please login as a candidate to apply for this job</p>
-                    <a href="{{ url_for('auth.login') }}" class="btn btn-primary w-100">Login</a>
-                {% endif %}
+                </div>
             </div>
-        </div>
-        
-        <div class="card mt-3">
-            <div class="card-header bg-light">
-                <h6 class="mb-0">Job Overview</h6>
-            </div>
-            <div class="card-body">
-                <div class="mb-2">
-                    <strong>Company:</strong> {{ job.company }}
-                </div>
-                <div class="mb-2">
-                    <strong>Location:</strong> {{ job.location }}
-                </div>
-                <div class="mb-2">
-                    <strong>Type:</strong> {{ job.job_type }}
-                </div>
-                {% if job.salary_range %}
-                <div class="mb-2">
-                    <strong>Salary:</strong> {{ job.salary_range }}
-                </div>
-                {% endif %}
-                <div class="mb-2">
-                    <strong>Posted:</strong> {{ job.created_at[:10] }}
+
+            <div class="col-lg-4">
+                <div class="sticky-top" style="top: 100px;">
+                    <div class="card action-console-card border-0 shadow-lg mb-4">
+                        <div class="card-header-midnight-solid p-4">
+                            <h5 class="mb-0 fw-bold text-white text-uppercase tracking-widest small">Action Console</h5>
+                        </div>
+                        <div class="card-body p-4 text-center">
+                            {% if session.role == 'candidate' %}
+                                {% if has_applied %}
+                                    <div class="status-box-success mb-3 p-3 rounded-3">
+                                        <i class="fas fa-check-circle fa-2x mb-2 text-success"></i>
+                                        <h6 class="fw-bold text-dark mb-0">Application Deployed</h6>
+                                    </div>
+                                    <p class="text-muted small">This opportunity is currently under review by the hiring entity.</p>
+                                {% else %}
+                                    <p class="text-secondary mb-4">You are eligible to apply for this executive-level position.</p>
+                                    <a href="{{ url_for('jobs.apply_job', job_id=job.id) }}" class="btn-exec-apply w-100 py-3 mb-3">
+                                        Submit Application <i class="fas fa-paper-plane ms-2"></i>
+                                    </a>
+                                    <p class="x-small text-muted">Your verified profile will be transmitted securely.</p>
+                                {% endif %}
+                            {% elif session.role == 'recruiter' %}
+                                <div class="status-box-info mb-4 p-3 rounded-3">
+                                    <i class="fas fa-user-tie fa-2x mb-2 text-primary"></i>
+                                    <h6 class="fw-bold text-dark mb-0">Ownership Detected</h6>
+                                </div>
+                                <a href="{{ url_for('recruiter.view_applications', job_id=job.id) }}" class="btn-executive-solid w-100 py-3">
+                                    Manage Talent Feed
+                                </a>
+                            {% else %}
+                                <p class="text-secondary mb-4">Initialize session as a candidate to participate in this vacancy.</p>
+                                <a href="{{ url_for('auth.login') }}" class="btn-executive-solid w-100 py-3">Login to Infrastructure</a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-sm p-4 overview-sidebar">
+                        <h6 class="x-small text-uppercase tracking-widest fw-bold text-dark mb-4">Opportunity Overview</h6>
+                        <div class="overview-item">
+                            <span class="lbl">Partner Entity</span>
+                            <span class="val">{{ job.company }}</span>
+                        </div>
+                        <div class="overview-item">
+                            <span class="lbl">Primary Hub</span>
+                            <span class="val">{{ job.location }}</span>
+                        </div>
+                        <div class="overview-item">
+                            <span class="lbl">Engagement Model</span>
+                            <span class="val">{{ job.job_type }}</span>
+                        </div>
+                        {% if job.salary_range %}
+                        <div class="overview-item">
+                            <span class="lbl">Fiscal Bracket</span>
+                            <span class="val text-success fw-bold">{{ job.salary_range }}</span>
+                        </div>
+                        {% endif %}
+                        <div class="overview-item mb-0 border-0">
+                            <span class="lbl">System Log Date</span>
+                            <span class="val">{{ job.created_at[:10] }}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<style>
+    :root {
+        --exec-dark: #0a0a0b;
+        --exec-grey: #f4f4f5;
+        --exec-border: #e4e4e7;
+        --text-muted: #71717a;
+    }
+
+    .opportunity-layout { background-color: #ffffff; color: var(--exec-dark); }
+    .tracking-widest { letter-spacing: 0.2em; }
+    .fw-extrabold { font-weight: 800; }
+    .x-small { font-size: 0.65rem; }
+
+    /* Briefing Card */
+    .briefing-card { border-radius: 30px; border: 1px solid var(--exec-border); }
+    .badge-exec-midnight { background: var(--exec-dark); color: #fff; font-size: 0.65rem; font-weight: 800; padding: 6px 14px; border-radius: 100px; text-transform: uppercase; }
+    .badge-exec-salary { background: #dcfce7; color: #166534; font-size: 0.65rem; font-weight: 800; padding: 6px 14px; border-radius: 100px; text-transform: uppercase; }
+    
+    .section-title-exec { font-size: 0.75rem; text-transform: uppercase; font-weight: 800; color: #18181b; letter-spacing: 2px; margin-bottom: 20px; border-left: 3px solid var(--exec-dark); padding-left: 15px; }
+    .section-text-exec { color: #3f3f46; line-height: 1.8; font-size: 1.05rem; white-space: pre-wrap; }
+
+    /* Action Console */
+    .action-console-card { border-radius: 24px; overflow: hidden; border: 1px solid var(--exec-border); }
+    .card-header-midnight-solid { background: var(--exec-dark); }
+    .status-box-success { background: #f0fdf4; border: 1px solid #dcfce7; }
+    .status-box-info { background: #f0f9ff; border: 1px solid #e0f2fe; }
+
+    /* Buttons */
+    .btn-exec-apply { background: var(--exec-dark); color: #fff; border: none; border-radius: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; text-decoration: none; display: block; text-align: center; }
+    .btn-exec-apply:hover { background: #000; transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+    .btn-executive-solid { background: var(--exec-dark); color: #fff; border: none; border-radius: 12px; font-weight: 800; text-decoration: none; display: block; text-align: center; }
+
+    /* Sidebar Overview */
+    .overview-sidebar { border-radius: 24px; border: 1px solid var(--exec-border); }
+    .overview-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--exec-grey); }
+    .overview-item .lbl { font-size: 0.65rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); }
+    .overview-item .val { font-size: 0.85rem; font-weight: 700; color: var(--exec-dark); }
+
+    .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.05); }
+</style>
 {% endblock %}

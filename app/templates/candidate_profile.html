@@ -1,433 +1,308 @@
 {% extends "base.html" %}
 
-{% block title %}My Profile - JobHub{% endblock %}
+{% block title %}Profile | JobHub Executive{% endblock %}
 
 {% block content %}
-<section class="profile-section min-vh-100">
+<section class="profile-layout min-vh-100">
   <div class="container-fluid p-0">
     <div class="row g-0">
-      <!-- Left Side - Profile Form -->
-      <div class="col-12 col-lg-8">
-        <div class="h-100 bg-light py-4 py-lg-5">
-          <div class="px-3 px-md-4 px-lg-5">
-            <!-- Page Header -->
-            <div class="mb-4 mb-lg-5 text-center text-lg-start">
-              <h1 class="display-5 fw-bold text-primary mb-2">My Professional Profile</h1>
-              <p class="lead text-muted">Build your professional presence and stand out to employers</p>
-            </div>
+      
+      <div class="col-12 col-lg-8 builder-column">
+        <div class="px-4 px-md-5 py-5">
+          
+          <div class="mb-5 fade-in">
+            <h1 class="display-5 fw-extrabold text-dark tracking-tight mb-2">Professional Identity</h1>
+            <p class="text-secondary lead-sm">Refine your digital presence to attract elite opportunities.</p>
+          </div>
 
-            <div class="card border-0 shadow-lg rounded-3">
-              <div class="card-header bg-primary text-white py-3 py-lg-4">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
-                  <div class="mb-2 mb-md-0">
-                    <h3 class="h4 mb-1 fw-bold"><i class="fas fa-user-edit me-2"></i>Profile Information</h3>
-                    <p class="mb-0 opacity-75 small">Complete your profile to get better job matches</p>
-                  </div>
-                  <span class="badge bg-light text-primary fs-6">Auto-fill from CV</span>
+          <div class="card executive-card border-0 shadow-2xl mb-5 fade-in-up">
+            <div class="card-header-premium p-4">
+              <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                <div>
+                  <h3 class="h5 fw-bold text-white mb-1"><i class="fas fa-pen-nib me-2"></i>Curate Your Profile</h3>
+                  <p class="mb-0 x-small text-uppercase tracking-widest opacity-75 text-white">Advanced Professional Data</p>
+                </div>
+                <div class="mt-3 mt-md-0">
+                  <span class="badge-intelligence">Intelligence Enabled</span>
                 </div>
               </div>
-              
-              <div class="card-body p-3 p-md-4 p-lg-5">
-                <!-- Upload CV Section -->
-                <div class="cv-upload-section mb-4 mb-lg-5 p-3 p-md-4 bg-light rounded-3 border">
-                  <div class="d-flex align-items-center mb-3">
-                    <i class="fas fa-file-upload fa-lg text-primary me-3"></i>
-                    <div>
-                      <h5 class="fw-bold mb-1 fs-6">Upload Your CV</h5>
-                      <p class="text-muted mb-0 small">Upload your resume to automatically fill your profile details</p>
+            </div>
+            
+            <div class="card-body p-4 p-md-5">
+              <div class="cv-intelligence-box mb-5 p-4 rounded-4">
+                <div class="d-flex align-items-start gap-3 mb-4">
+                  <div class="intelligence-icon">
+                    <i class="fas fa-magic"></i>
+                  </div>
+                  <div>
+                    <h5 class="fw-bold mb-1">CV Analysis Engine</h5>
+                    <p class="text-secondary small mb-0">Upload your curriculum vitae to auto-populate your professional history.</p>
+                  </div>
+                </div>
+                
+                <div class="upload-wrapper">
+                  <div class="row align-items-center">
+                    <div class="col-md-8">
+                      <input type="file" class="d-none" id="resume_file" name="resume_file" accept=".pdf,.doc,.docx">
+                      <div class="upload-dropzone" onclick="document.getElementById('resume_file').click()">
+                        <i class="fas fa-cloud-upload-alt me-2"></i>
+                        <span id="file-label">Click to browse your professional documents</span>
+                      </div>
+                      <div id="upload-status" class="mt-2 x-small fw-bold text-uppercase tracking-wider"></div>
+                    </div>
+                    <div class="col-md-4 mt-3 mt-md-0">
+                      <p class="x-small text-muted mb-0">PDF, DOCX. Max 5MB. Intelligence parses text patterns automatically.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <form id="profileForm" method="POST" enctype="multipart/form-data">
+                <div class="row g-4">
+                  <div class="col-12 mb-2">
+                    <h6 class="text-uppercase tracking-widest fw-bold text-primary small">01. Personal Information</h6>
+                    <hr class="mt-2 border-primary border-opacity-25">
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <label class="exec-label">Full Name</label>
+                    <div class="exec-input-group">
+                      <i class="fas fa-user"></i>
+                      <input type="text" class="exec-control" id="full_name" name="full_name" 
+                             value="{{ profile.full_name if profile else '' }}" required placeholder="Legal full name">
                     </div>
                   </div>
                   
-                  <div class="row align-items-end">
-                    <div class="col-12 col-md-8">
-                      <input type="file" class="form-control form-control-sm" id="resume_file" name="resume_file" accept=".pdf,.doc,.docx">
-                      <div class="form-text text-muted mt-2 small">Supported formats: PDF, DOC, DOCX (Max 5MB)</div>
-                      <div id="upload-status" class="mt-2 fw-semibold small"></div>
+                  <div class="col-md-6">
+                    <label class="exec-label">Phone Connectivity</label>
+                    <div class="exec-input-group">
+                      <i class="fas fa-phone"></i>
+                      <input type="tel" class="exec-control" id="phone" name="phone" 
+                             value="{{ profile.phone if profile else '' }}" placeholder="+1.000.000.0000">
                     </div>
-                    <div class="col-12 col-md-4 text-start text-md-end mt-3 mt-md-0">
-                      <button type="button" class="btn btn-outline-primary btn-sm w-100 w-md-auto" onclick="document.getElementById('resume_file').click()">
-                        <i class="fas fa-cloud-upload-alt me-2"></i>Browse Files
-                      </button>
+                  </div>
+                  
+                  <div class="col-12">
+                    <label class="exec-label">Base Location</label>
+                    <div class="exec-input-group">
+                      <i class="fas fa-globe"></i>
+                      <input type="text" class="exec-control" id="location" name="location" 
+                             value="{{ profile.location if profile else '' }}" placeholder="City, State, Country">
                     </div>
+                  </div>
+                  
+                  <div class="col-12 mt-5 mb-2">
+                    <h6 class="text-uppercase tracking-widest fw-bold text-primary small">02. Professional Matrix</h6>
+                    <hr class="mt-2 border-primary border-opacity-25">
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <label class="exec-label">Years of Industry Tenure</label>
+                    <div class="exec-input-group">
+                      <i class="fas fa-clock"></i>
+                      <input type="number" class="exec-control" id="experience_years" name="experience_years" 
+                             value="{{ profile.experience_years if profile else '' }}" step="0.5" min="0" placeholder="e.g. 10.5">
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <label class="exec-label">Academic Credentials</label>
+                    <div class="exec-input-group">
+                      <i class="fas fa-graduation-cap"></i>
+                      <input type="text" class="exec-control" id="education" name="education" 
+                             value="{{ profile.education if profile else '' }}" placeholder="Highest degree & Institution">
+                    </div>
+                  </div>
+                  
+                  <div class="col-12">
+                    <label class="exec-label">Technical Skills (Keywords)</label>
+                    <textarea class="exec-control-area" id="skills" name="skills" rows="3" 
+                              placeholder="Python, AWS, Strategic Planning...">{{ profile.skills if profile else '' }}</textarea>
+                  </div>
+                  
+                  <div class="col-12">
+                    <label class="exec-label">Professional Bio / Executive Summary</label>
+                    <textarea class="exec-control-area" id="resume_text" name="resume_text" rows="5" 
+                              placeholder="Summarize your career impact and objectives...">{{ profile.resume_text if profile else '' }}</textarea>
+                  </div>
+                  
+                  <div class="col-12 mt-5">
+                    <button type="submit" class="btn-exec-action w-100 py-3">
+                      Deploy Profile Updates <i class="fas fa-chevron-right ms-2"></i>
+                    </button>
                   </div>
                 </div>
-
-                <!-- Profile Form -->
-                <form id="profileForm" method="POST" enctype="multipart/form-data">
-                  <div class="row g-3 g-lg-4">
-                    <!-- Personal Information -->
-                    <div class="col-12">
-                      <h5 class="fw-bold border-bottom pb-2 pb-lg-3 mb-3 mb-lg-4 text-primary fs-5 fs-lg-4">
-                        <i class="fas fa-user-circle me-2"></i>Personal Information
-                      </h5>
-                    </div>
-                    
-                    <div class="col-12 col-md-6">
-                      <label for="full_name" class="form-label fw-semibold">Full Name *</label>
-                      <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0">
-                          <i class="fas fa-user text-muted"></i>
-                        </span>
-                        <input type="text" class="form-control border-start-0 ps-0" id="full_name" name="full_name" 
-                               value="{{ profile.full_name if profile else '' }}" required placeholder="Enter your full name">
-                      </div>
-                    </div>
-                    
-                    <div class="col-12 col-md-6">
-                      <label for="phone" class="form-label fw-semibold">Phone Number</label>
-                      <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0">
-                          <i class="fas fa-phone text-muted"></i>
-                        </span>
-                        <input type="tel" class="form-control border-start-0 ps-0" id="phone" name="phone" 
-                               value="{{ profile.phone if profile else '' }}" placeholder="+1 (555) 123-4567">
-                      </div>
-                    </div>
-                    
-                    <div class="col-12">
-                      <label for="location" class="form-label fw-semibold">Location</label>
-                      <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0">
-                          <i class="fas fa-map-marker-alt text-muted"></i>
-                        </span>
-                        <input type="text" class="form-control border-start-0 ps-0" id="location" name="location" 
-                               value="{{ profile.location if profile else '' }}" placeholder="City, State, Country">
-                      </div>
-                    </div>
-                    
-                    <!-- Professional Details -->
-                    <div class="col-12 mt-4 mt-lg-5">
-                      <h5 class="fw-bold border-bottom pb-2 pb-lg-3 mb-3 mb-lg-4 text-primary fs-5 fs-lg-4">
-                        <i class="fas fa-briefcase me-2"></i>Professional Details
-                      </h5>
-                    </div>
-                    
-                    <div class="col-12 col-md-6">
-                      <label for="experience_years" class="form-label fw-semibold">Years of Experience</label>
-                      <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0">
-                          <i class="fas fa-chart-line text-muted"></i>
-                        </span>
-                        <input type="number" class="form-control border-start-0 ps-0" id="experience_years" name="experience_years" 
-                               value="{{ profile.experience_years if profile else '' }}" step="0.5" min="0" placeholder="0.0">
-                      </div>
-                    </div>
-                    
-                    <div class="col-12 col-md-6">
-                      <label for="education" class="form-label fw-semibold">Education</label>
-                      <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0">
-                          <i class="fas fa-graduation-cap text-muted"></i>
-                        </span>
-                        <input type="text" class="form-control border-start-0 ps-0" id="education" name="education" 
-                               value="{{ profile.education if profile else '' }}" placeholder="Degree, University">
-                      </div>
-                    </div>
-                    
-                    <div class="col-12">
-                      <label for="skills" class="form-label fw-semibold">Skills</label>
-                      <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0 align-items-start pt-3">
-                          <i class="fas fa-tools text-muted"></i>
-                        </span>
-                        <textarea class="form-control border-start-0 ps-0" id="skills" name="skills" rows="3" 
-                                  placeholder="List your skills separated by commas">{{ profile.skills if profile else '' }}</textarea>
-                      </div>
-                      <div class="form-text text-muted mt-1">Example: Python, JavaScript, React, SQL, Project Management</div>
-                    </div>
-                    
-                    <div class="col-12">
-                      <label for="resume_text" class="form-label fw-semibold">Professional Summary</label>
-                      <textarea class="form-control" id="resume_text" name="resume_text" rows="4" 
-                                placeholder="Brief summary of your experience, achievements, and career objectives">{{ profile.resume_text if profile else '' }}</textarea>
-                      <div class="form-text text-muted mt-1">This summary will be visible to employers when they view your profile.</div>
-                    </div>
-                    
-                    <!-- Submit Button -->
-                    <div class="col-12 mt-4 mt-lg-5">
-                      <button type="submit" class="btn btn-primary btn-lg w-100 py-3 fw-bold">
-                        <i class="fas fa-save me-2"></i>Save Profile & Update
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
       
-      <!-- Right Side - Profile Preview & Stats -->
-      <div class="col-12 col-lg-4">
-        <div class="h-100 bg-white py-4 py-lg-5">
-          <div class="px-3 px-md-4 px-lg-4">
-            <!-- Profile Preview Card -->
-            {% if profile %}
-            <div class="card border-0 shadow-lg rounded-3 mb-4">
-              <div class="card-header bg-success text-white py-3">
-                <h5 class="mb-0 fw-bold"><i class="fas fa-eye me-2"></i>Profile Preview</h5>
+      <div class="col-12 col-lg-4 preview-column">
+        <div class="px-4 py-5 sticky-top">
+          
+          {% if profile %}
+          <div class="preview-card mb-4 shadow-xl fade-in-delayed">
+            <div class="preview-header">
+              <div class="user-avatar-exec">
+                <i class="fas fa-user-tie"></i>
               </div>
-              <div class="card-body p-3 p-md-4">
-                <div class="text-center mb-3">
-                  <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 80px; height: 80px;">
-                    <i class="fas fa-user text-white fa-2x"></i>
-                  </div>
-                  <h5 class="fw-bold mb-1">{{ profile.full_name }}</h5>
-                  {% if profile.location %}
-                  <p class="text-muted mb-2"><i class="fas fa-map-marker-alt me-1"></i>{{ profile.location }}</p>
+              <h4 class="fw-bold text-dark mt-3 mb-1">{{ profile.full_name }}</h4>
+              <p class="x-small text-uppercase tracking-widest text-secondary fw-bold">Executive Candidate</p>
+            </div>
+            
+            <div class="preview-body px-4 pb-4">
+              <div class="strength-meter mb-4">
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="x-small fw-bold text-uppercase">Profile Integrity</span>
+                  <span class="x-small fw-bold">75%</span>
+                </div>
+                <div class="strength-bar">
+                  <div class="bar-fill" style="width: 75%"></div>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <h6 class="x-small text-uppercase tracking-widest fw-bold text-primary mb-3">Skill Stack</h6>
+                <div class="d-flex flex-wrap gap-2">
+                  {% if profile.skills %}
+                    {% for skill in profile.skills.split(',') %}
+                      <span class="skill-pill">{{ skill.strip() }}</span>
+                    {% endfor %}
                   {% endif %}
-                  
-                  <!-- Profile Strength -->
-                  <div class="mb-3">
-                    <h6 class="fw-bold text-primary mb-1">Profile Strength</h6>
-                    <div class="progress mb-1" style="height: 8px;">
-                      <div class="progress-bar bg-success" style="width: 75%"></div>
-                    </div>
-                    <small class="text-muted">Good - Complete more fields to improve</small>
-                  </div>
-                </div>
-                
-                <div class="mb-3">
-                  <h6 class="fw-bold text-primary mb-2">Skills</h6>
-                  <div class="d-flex flex-wrap gap-1">
-                    {% if profile.skills %}
-                      {% for skill in profile.skills.split(',') %}
-                        <span class="badge bg-light text-dark border small py-1 px-2">{{ skill.strip() }}</span>
-                      {% endfor %}
-                    {% else %}
-                      <span class="text-muted small">No skills added yet</span>
-                    {% endif %}
-                  </div>
-                </div>
-                
-                <div class="row text-center g-2">
-                  <div class="col-6">
-                    <div class="p-2 border rounded-3 bg-light">
-                      <h5 class="fw-bold text-primary mb-0">{{ profile.experience_years or '0' }}</h5>
-                      <p class="mb-0 text-muted small">Years Exp</p>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="p-2 border rounded-3 bg-light">
-                      <h5 class="fw-bold text-primary mb-0">
-                        {% if profile.skills %}
-                          {{ profile.skills.split(',')|length }}
-                        {% else %}
-                          0
-                        {% endif %}
-                      </h5>
-                      <p class="mb-0 text-muted small">Skills</p>
-                    </div>
-                  </div>
                 </div>
               </div>
-            </div>
-            {% endif %}
-            
-            <!-- Quick Stats -->
-            <div class="card border-0 shadow-lg rounded-3 mb-4">
-              <div class="card-header bg-info text-white py-3">
-                <h5 class="mb-0 fw-bold"><i class="fas fa-chart-bar me-2"></i>Profile Performance</h5>
-              </div>
-              <div class="card-body p-3 p-md-4">
-                <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light rounded-3">
-                  <div>
-                    <h6 class="fw-bold text-primary mb-0">Profile Views</h6>
-                    <p class="mb-0 text-muted small">This month</p>
-                  </div>
-                  <h5 class="fw-bold text-success mb-0">24</h5>
-                </div>
-                
-                <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light rounded-3">
-                  <div>
-                    <h6 class="fw-bold text-primary mb-0">Applications</h6>
-                    <p class="mb-0 text-muted small">Total submitted</p>
-                  </div>
-                  <h5 class="fw-bold text-warning mb-0">8</h5>
-                </div>
-                
-                <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded-3">
-                  <div>
-                    <h6 class="fw-bold text-primary mb-0">Matches</h6>
-                    <p class="mb-0 text-muted small">Job recommendations</p>
-                  </div>
-                  <h5 class="fw-bold text-info mb-0">12</h5>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Tips Card -->
-            <div class="card border-0 shadow-lg rounded-3">
-              <div class="card-header bg-warning text-white py-3">
-                <h5 class="mb-0 fw-bold"><i class="fas fa-lightbulb me-2"></i>Profile Tips</h5>
-              </div>
-              <div class="card-body p-3 p-md-4">
-                <div class="d-flex mb-3">
-                  <div class="me-3 text-primary">
-                    <i class="fas fa-check-circle"></i>
-                  </div>
-                  <div>
-                    <h6 class="fw-bold mb-1">Complete All Fields</h6>
-                    <p class="small text-muted mb-0">Complete profiles get 3x more views</p>
+
+              <div class="row g-2">
+                <div class="col-6">
+                  <div class="stat-mini">
+                    <span class="val">{{ profile.experience_years or '0' }}</span>
+                    <span class="lbl">Years</span>
                   </div>
                 </div>
-                
-                <div class="d-flex mb-3">
-                  <div class="me-3 text-primary">
-                    <i class="fas fa-check-circle"></i>
-                  </div>
-                  <div>
-                    <h6 class="fw-bold mb-1">Use Specific Skills</h6>
-                    <p class="small text-muted mb-0">List technical skills and tools</p>
-                  </div>
-                </div>
-                
-                <div class="d-flex mb-3">
-                  <div class="me-3 text-primary">
-                    <i class="fas fa-check-circle"></i>
-                  </div>
-                  <div>
-                    <h6 class="fw-bold mb-1">Quantify Achievements</h6>
-                    <p class="small text-muted mb-0">Use numbers to show your impact</p>
-                  </div>
-                </div>
-                
-                <div class="d-flex">
-                  <div class="me-3 text-primary">
-                    <i class="fas fa-check-circle"></i>
-                  </div>
-                  <div>
-                    <h6 class="fw-bold mb-1">Upload Your CV</h6>
-                    <p class="small text-muted mb-0">Auto-fill to save time</p>
+                <div class="col-6">
+                  <div class="stat-mini">
+                    <span class="val">{{ profile.skills.split(',')|length if profile.skills else '0' }}</span>
+                    <span class="lbl">Skills</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          {% endif %}
+          
+          <div class="card metrics-card border-0 mb-4 p-4 shadow-sm">
+            <h6 class="x-small text-uppercase tracking-widest fw-bold text-dark mb-4"><i class="fas fa-chart-line me-2"></i>Engagement Metrics</h6>
+            
+            <div class="metric-row d-flex justify-content-between align-items-center mb-3 p-3 rounded-3">
+              <div>
+                <span class="d-block fw-bold text-dark">Profile Impressions</span>
+                <span class="x-small text-muted">Active Cycle</span>
+              </div>
+              <span class="metric-val text-primary">24</span>
+            </div>
+            
+            <div class="metric-row d-flex justify-content-between align-items-center mb-3 p-3 rounded-3">
+              <div>
+                <span class="d-block fw-bold text-dark">Application Volume</span>
+                <span class="x-small text-muted">Total Activity</span>
+              </div>
+              <span class="metric-val text-dark">8</span>
+            </div>
+          </div>
+
+          <div class="tips-box p-4 rounded-4">
+            <h6 class="x-small text-uppercase tracking-widest fw-bold text-white mb-3">Optimization Tips</h6>
+            <div class="tip-item d-flex gap-3 mb-3">
+              <i class="fas fa-circle-check text-success mt-1"></i>
+              <p class="x-small text-white opacity-75 mb-0">Quantitative data in summaries increases recruiter retention by 40%.</p>
+            </div>
+            <div class="tip-item d-flex gap-3">
+              <i class="fas fa-circle-check text-success mt-1"></i>
+              <p class="x-small text-white opacity-75 mb-0">Profiles with defined base locations appear 3x more in localized queries.</p>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Add custom CSS for responsive profile page -->
 <style>
-  .profile-section {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  :root {
+    --exec-dark: #0a0a0b;
+    --exec-grey: #f4f4f5;
+    --exec-primary: #18181b;
+    --exec-border: #e4e4e7;
+    --text-muted: #71717a;
   }
+
+  /* Layout */
+  .builder-column { background-color: #ffffff; border-right: 1px solid var(--exec-border); }
+  .preview-column { background-color: #fafafa; }
+  .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.05); }
+  .fw-extrabold { font-weight: 800; }
+  .x-small { font-size: 0.65rem; }
+
+  /* Header Card */
+  .card-header-premium { background: var(--exec-dark); border-radius: 0; }
+  .badge-intelligence { background: rgba(255,255,255,0.1); color: #fff; font-size: 0.6rem; text-transform: uppercase; font-weight: 800; padding: 6px 12px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.2); }
+
+  /* CV Box */
+  .cv-intelligence-box { background: var(--exec-grey); border: 1px solid var(--exec-border); }
+  .intelligence-icon { background: var(--exec-dark); color: #fff; width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+  .upload-dropzone { border: 2px dashed #d1d5db; padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; color: var(--text-muted); font-size: 0.85rem; transition: all 0.3s; }
+  .upload-dropzone:hover { border-color: var(--exec-dark); color: var(--exec-dark); background: #fff; }
+
+  /* Inputs */
+  .exec-label { font-size: 0.7rem; text-transform: uppercase; font-weight: 800; color: #71717a; letter-spacing: 1px; margin-bottom: 8px; display: block; }
+  .exec-input-group { position: relative; display: flex; align-items: center; }
+  .exec-input-group i { position: absolute; left: 16px; color: #a1a1aa; font-size: 0.9rem; }
+  .exec-control { width: 100%; background: var(--exec-grey); border: 1px solid transparent; padding: 14px 16px 14px 45px; border-radius: 12px; font-weight: 500; font-size: 0.95rem; transition: all 0.2s; }
+  .exec-control:focus { outline: none; border-color: var(--exec-dark); background: #fff; }
+  .exec-control-area { width: 100%; background: var(--exec-grey); border: 1px solid transparent; padding: 16px; border-radius: 12px; font-weight: 500; font-size: 0.95rem; transition: all 0.2s; }
+  .exec-control-area:focus { outline: none; border-color: var(--exec-dark); background: #fff; }
+
+  /* Preview Card */
+  .preview-card { background: #fff; border-radius: 30px; border: 1px solid var(--exec-border); overflow: hidden; }
+  .preview-header { padding: 40px 30px 20px; text-align: center; background: radial-gradient(circle at top right, rgba(24,24,27,0.02) 0%, transparent 50%); }
+  .user-avatar-exec { background: var(--exec-dark); color: #fff; width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
   
-  .min-vh-100 {
-    min-height: 100vh;
-  }
+  .strength-bar { width: 100%; height: 6px; background: #f1f5f9; border-radius: 10px; overflow: hidden; }
+  .bar-fill { height: 100%; background: #10b981; border-radius: 10px; box-shadow: 0 0 10px rgba(16,185,129,0.3); }
+  .skill-pill { background: #fff; border: 1px solid var(--exec-border); padding: 5px 12px; border-radius: 100px; font-size: 0.65rem; font-weight: 700; color: #3f3f46; }
+  .stat-mini { background: #fafafa; border: 1px solid #f1f5f9; padding: 12px; border-radius: 15px; text-align: center; }
+  .stat-mini .val { display: block; font-weight: 800; font-size: 1.1rem; color: var(--exec-dark); }
+  .stat-mini .lbl { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+
+  /* Buttons & Extras */
+  .btn-exec-action { background: var(--exec-dark); color: #fff; border: none; border-radius: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.85rem; transition: all 0.3s; }
+  .btn-exec-action:hover { background: #000; letter-spacing: 2px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
   
-  .card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .card:hover {
-    transform: translateY(-5px);
-  }
-  
-  .input-group-text {
-    border-right: none;
-  }
-  
-  .form-control:focus {
-    box-shadow: none;
-    border-color: #0d6efd;
-  }
-  
-  .btn-primary {
-    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
-    border: none;
-    transition: all 0.3s ease;
-  }
-  
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
-  }
-  
-  .cv-upload-section {
-    border-left: 4px solid #0d6efd;
-  }
-  
-  .badge {
-    font-size: 0.75em;
-  }
-  
-  .progress {
-    border-radius: 10px;
-  }
-  
-  .progress-bar {
-    border-radius: 10px;
-  }
-  
-  /* Mobile-specific adjustments */
-  @media (max-width: 768px) {
-    .profile-section .container-fluid {
-      padding-left: 0;
-      padding-right: 0;
-    }
-    
-    .profile-section .row.g-0 > [class*="col-"] {
-      padding-left: 0;
-      padding-right: 0;
-    }
-    
-    .profile-section .bg-light,
-    .profile-section .bg-white {
-      padding-top: 1.5rem !important;
-      padding-bottom: 1.5rem !important;
-    }
-    
-    .profile-section .display-5 {
-      font-size: 2rem;
-    }
-    
-    .profile-section .lead {
-      font-size: 1rem;
-    }
-    
-    .card-body {
-      padding: 1rem !important;
-    }
-    
-    .btn-lg {
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
-    }
-  }
-  
-  /* Medium devices (tablets) */
-  @media (min-width: 768px) and (max-width: 991.98px) {
-    .profile-section .bg-light,
-    .profile-section .bg-white {
-      padding-top: 2rem !important;
-      padding-bottom: 2rem !important;
-    }
-    
-    .card-body {
-      padding: 1.5rem !important;
-    }
-  }
+  .metric-row { background: #fff; border: 1px solid #f1f5f9; }
+  .metric-val { font-size: 1.4rem; font-weight: 800; }
+  .tips-box { background: var(--exec-dark); }
+
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-in-up { animation: fadeInUp 0.8s ease forwards; }
+  .fade-in-delayed { animation: fadeInUp 0.8s 0.3s ease forwards; opacity: 0; }
 </style>
 
-<!-- ✅ AJAX CV Upload Script -->
 <script>
 document.getElementById('resume_file').addEventListener('change', async function() {
     const fileInput = this;
     const uploadStatus = document.getElementById('upload-status');
+    const label = document.getElementById('file-label');
     
     if (!fileInput.files.length) return;
 
+    label.textContent = fileInput.files[0].name;
     const formData = new FormData();
     formData.append('resume_file', fileInput.files[0]);
 
-    uploadStatus.textContent = "Extracting data from CV... ⏳";
-    uploadStatus.classList.remove('text-danger','text-success');
-    uploadStatus.classList.add('text-muted');
+    uploadStatus.textContent = "Intelligence Analysis in Progress... ⏳";
+    uploadStatus.style.color = "#71717a";
 
     try {
         const response = await fetch('{{ url_for("api.upload_cv_extract") }}', {
@@ -438,9 +313,8 @@ document.getElementById('resume_file').addEventListener('change', async function
         const data = await response.json();
 
         if (data.success) {
-            uploadStatus.textContent = "CV data extracted successfully ✅";
-            uploadStatus.classList.remove('text-muted','text-danger');
-            uploadStatus.classList.add('text-success');
+            uploadStatus.textContent = "Identity Data Synthesized Successfully ✅";
+            uploadStatus.style.color = "#10b981";
 
             // Auto-fill form fields
             document.getElementById('full_name').value = data.full_name || '';
@@ -451,15 +325,12 @@ document.getElementById('resume_file').addEventListener('change', async function
             document.getElementById('education').value = data.education || '';
             document.getElementById('resume_text').value = data.resume_text || '';
         } else {
-            uploadStatus.textContent = data.error || "Couldn't extract data from CV ❌";
-            uploadStatus.classList.remove('text-muted','text-success');
-            uploadStatus.classList.add('text-danger');
+            uploadStatus.textContent = data.error || "Data Extraction Failed ❌";
+            uploadStatus.style.color = "#ef4444";
         }
     } catch (err) {
-        console.error(err);
-        uploadStatus.textContent = "Error while reading CV ❌";
-        uploadStatus.classList.remove('text-muted','text-success');
-        uploadStatus.classList.add('text-danger');
+        uploadStatus.textContent = "Network Protocol Error ❌";
+        uploadStatus.style.color = "#ef4444";
     }
 });
 </script>
