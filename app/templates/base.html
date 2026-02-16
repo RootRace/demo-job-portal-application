@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}JobHub | Executive Career Portal{% endblock %}</title>
+    <title>{% block title %}Vettorix | Executive Career Portal{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -11,11 +11,11 @@
     
     <style>
         :root {
-            --exec-black: #0a0a0b;
-            --exec-dark-grey: #18181b;
+            --exec-black: #2CBFAE;          /* previously black, now teal */
+            --exec-dark-grey: #2CBFAE;       /* previously dark grey, now also teal */
             --exec-border: rgba(255, 255, 255, 0.1);
             --accent-white: #ffffff;
-            --text-muted: #a1a1aa;
+            --text-muted: #1F4ED8;
             --success-glow: #10b981;
             --error-glow: #ef4444;
         }
@@ -23,13 +23,13 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #ffffff;
-            color: var(--exec-black);
+            color: #0a0a0b;                  /* keep text dark, not teal */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* --- High-Contrast Midnight Navbar --- */
+        /* --- High-Contrast Midnight Navbar (now teal) --- */
         .navbar-executive {
             background-color: var(--exec-black);
             padding: 1.25rem 0;
@@ -75,10 +75,10 @@
             color: #fff !important;
         }
 
-        /* --- User Profile Badge in Nav --- */
+        /* --- User Profile Badge in Nav (updated to teal with subtle border) --- */
         .nav-user-context {
             background: var(--exec-dark-grey);
-            border: 1px solid var(--exec-border);
+            border: 1px solid rgba(255,255,255,0.2);
             padding: 6px 16px;
             border-radius: 100px;
             display: flex;
@@ -94,11 +94,11 @@
 
         .role-indicator {
             font-size: 0.65rem;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.2);
             padding: 2px 8px;
             border-radius: 4px;
             text-transform: uppercase;
-            color: var(--text-muted);
+            color: #fff;
         }
 
         /* --- Content Area --- */
@@ -107,7 +107,7 @@
             padding-bottom: 5rem;
         }
 
-        /* --- Solid Alerts for Visibility --- */
+        /* --- Solid Alerts (background now teal) --- */
         .alert-premium {
             border: none;
             border-radius: 0;
@@ -123,7 +123,7 @@
             border-left-color: var(--error-glow);
         }
 
-        /* --- Minimalist Footer --- */
+        /* --- Minimalist Footer (background now teal) --- */
         .footer-exec {
             background: var(--exec-black);
             color: var(--text-muted);
@@ -172,6 +172,18 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* --- Client color updates: all buttons #1F4ED8 --- */
+        .btn-light {
+            background-color: #1F4ED8 !important;
+            border-color: #1F4ED8 !important;
+            color: #fff !important;
+            font-weight: 700;
+        }
+        .btn-light:hover {
+            background-color: #163A8E !important;
+            border-color: #163A8E !important;
+        }
     </style>
 </head>
 <body>
@@ -180,7 +192,7 @@
         <div class="container">
             <a class="navbar-brand-exec" href="{{ url_for('auth.index') }}">
                 <div class="brand-icon"><i class="fas fa-briefcase"></i></div>
-                JOBHUB
+                Vettorix
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -257,7 +269,7 @@
 
     <footer class="footer-exec">
         <div class="container text-center">
-            <a href="/" class="footer-logo">JOBHUB</a>
+            <a href="/" class="footer-logo">Vettorix</a>
             
             <ul class="footer-nav-links">
                 <li><a href="#">Network</a></li>
@@ -269,7 +281,7 @@
 
             <div class="pt-4 border-top border-secondary border-opacity-10 mt-4">
                 <p class="small text-uppercase tracking-widest opacity-50 mb-0">
-                    &copy; 2026 JobHub Infrastructure. All Rights Reserved.
+                    &copy; 2026 Vettorix Infrastructure. All Rights Reserved.
                 </p>
             </div>
         </div>

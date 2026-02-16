@@ -1,6 +1,6 @@
 {% extends "base.html" %} 
 
-{% block title %}Register | JobHub Executive{% endblock %} 
+{% block title %}Register | Vettorix Executive{% endblock %} 
 
 {% block content %}
 <section class="register-section min-vh-100 d-flex align-items-center">
@@ -63,11 +63,11 @@
         <div class="shape shape-2"></div>
       </div>
 
-      <div class="col-lg-6 d-flex align-items-center justify-content-center bg-form-dark py-5">
+      <div class="col-lg-6 d-flex align-items-center justify-content-center bg-form-teal py-5">
         <div class="w-100 px-4" style="max-width: 550px">
           <div class="text-center mb-5 fade-in">
             <h2 class="display-6 fw-extrabold text-white mb-2">Create Identity</h2>
-            <p class="text-secondary small text-uppercase tracking-widest">Secure Infrastructure Enrollment</p>
+            <p class="text-white-50 small text-uppercase tracking-widest">Secure Infrastructure Enrollment</p>
           </div>
 
           <div class="card premium-card border-0 shadow-2xl fade-in-up">
@@ -130,7 +130,7 @@
               </form>
 
               <div class="text-center mb-4">
-                <p class="divider-text text-secondary mb-4"><span>Third-Party Authentication</span></p>
+                <p class="divider-text text-white-50 mb-4"><span>Third-Party Authentication</span></p>
                 <div class="d-flex gap-3 justify-content-center">
                   <button type="button" class="btn-social">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="18" alt="Google" />
@@ -142,14 +142,14 @@
               </div>
 
               <div class="text-center pt-3 border-top border-white border-opacity-10">
-                <p class="mb-0 text-secondary small">Existing identity found? <a href="{{ url_for('auth.login') }}" class="text-white fw-bold text-decoration-none ms-1">Sign In</a></p>
+                <p class="mb-0 text-white-50 small">Existing identity found? <a href="{{ url_for('auth.login') }}" class="text-white fw-bold text-decoration-none ms-1">Sign In</a></p>
               </div>
             </div>
           </div>
 
           <div class="mt-4 p-4 demo-box rounded-4 fade-in-delayed">
-            <p class="x-small text-uppercase tracking-widest text-white opacity-50 mb-3 text-center fw-bold">Framework Classifications</p>
-            <div class="row g-3 x-small text-secondary">
+            <p class="x-small text-uppercase tracking-widest text-white opacity-75 mb-3 text-center fw-bold">Framework Classifications</p>
+            <div class="row g-3 x-small text-white-50">
               <div class="col-md-6 border-end border-white border-opacity-10">
                 <p class="mb-1 fw-bold text-white"><i class="fas fa-user-graduate me-1"></i> Talent:</p>
                 <p class="mb-0">Construct profiles and deploy applications across global opportunities.</p>
@@ -168,76 +168,115 @@
 
 <style>
   :root {
-    --exec-darker: #0f1115;
-    --exec-card: #161a21;
-    --accent-blue: #ffffff;
+    --exec-teal: #2CBFAE;
+    --exec-teal-dark: #1F9A8A;
+    --exec-teal-light: #4AD3C2;
     --text-muted: #94a3b8;
+    --button-blue: #1F4ED8;
+    --button-blue-hover: #163A8E;
   }
 
   /* Layout & Branding */
-  .register-section { background-color: var(--exec-darker); font-family: 'Plus Jakarta Sans', sans-serif; }
-  .bg-form-dark { background-color: var(--exec-darker); }
-  .branding-column { background-color: #000; color: white; }
-  .overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.9) 100%); z-index: 1; }
+  .register-section { background-color: var(--exec-teal); font-family: 'Plus Jakarta Sans', sans-serif; }
+  .bg-form-teal { background-color: var(--exec-teal); }
+  .branding-column { background-color: var(--exec-teal); color: white; }
+  .overlay { 
+    position: absolute; top:0; left:0; width:100%; height:100%; 
+    background: linear-gradient(135deg, rgba(31,78,216,0.2) 0%, rgba(0,0,0,0.1) 100%); 
+    z-index: 1; 
+  }
   .content-z { z-index: 2; }
-  .benefit-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
+  .benefit-box { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); }
   .icon-circle { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
 
   /* Premium Card & Inputs */
-  .premium-card { background: var(--exec-card); border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
-  .exec-label { font-size: 0.7rem; text-transform: uppercase; font-weight: 800; color: var(--text-muted); letter-spacing: 1.5px; margin-bottom: 8px; display: block; }
+  .premium-card { background: var(--exec-teal-dark); border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3); }
+  .exec-label { font-size: 0.7rem; text-transform: uppercase; font-weight: 800; color: rgba(255,255,255,0.7); letter-spacing: 1.5px; margin-bottom: 8px; display: block; }
   .input-group-premium { position: relative; display: flex; align-items: center; }
-  .input-group-premium .icon { position: absolute; left: 18px; color: #fff; opacity: 0.5; z-index: 5; }
+  .input-group-premium .icon { position: absolute; left: 18px; color: #fff; opacity: 0.8; z-index: 5; }
   .form-control-premium {
-    width: 100%; background: #1e252e; border: 1px solid #2d3748;
+    width: 100%; background: var(--exec-teal-light); border: 1px solid rgba(255,255,255,0.2);
     color: white; padding: 14px 16px 14px 48px; border-radius: 12px;
     transition: all 0.3s;
   }
+  .form-control-premium::placeholder {
+    color: rgba(255,255,255,0.6);
+    opacity: 1;
+  }
   .form-control-premium:focus {
-    outline: none; border-color: #fff; background: #252d37;
+    outline: none; border-color: #fff; background: #56DBCA; /* slightly brighter teal */
   }
 
   /* Role Select Buttons */
   .btn-role-select { 
-    background: #1e252e; border: 1px solid #2d3748; color: var(--text-muted); 
-    transition: all 0.2s; border-radius: 12px; 
+    background: var(--exec-teal-light); 
+    border: 1px solid rgba(255,255,255,0.2); 
+    color: white; 
+    transition: all 0.2s; 
+    border-radius: 12px; 
   }
-  .btn-role-select:hover { border-color: #fff; color: #fff; }
+  .btn-role-select:hover { 
+    border-color: #fff; 
+    background: var(--exec-teal-dark); 
+  }
   .btn-check:checked + .btn-role-select { 
-    background: #fff; border-color: #fff; color: #000 !important; 
+    background: #fff; 
+    border-color: #fff; 
+    color: #000 !important; 
     box-shadow: 0 10px 20px rgba(255,255,255,0.1);
   }
 
   /* Main Action Button */
   .btn-primary-premium {
-    background: #fff; border: none; border-radius: 12px; color: #000;
+    background: var(--button-blue); 
+    border: none; 
+    border-radius: 12px; 
+    color: #fff;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .btn-primary-premium:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(255,255,255,0.2); background: #f4f4f5; }
+  .btn-primary-premium:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 10px 20px rgba(31,78,216,0.3); 
+    background: var(--button-blue-hover); 
+  }
 
   /* Social Auth */
   .btn-social {
-    background: #1e252e; border: 1px solid #2d3748; color: white;
-    width: 60px; height: 50px; border-radius: 12px; transition: all 0.2s;
+    background: var(--exec-teal-light); 
+    border: 1px solid rgba(255,255,255,0.2); 
+    color: white;
+    width: 60px; height: 50px; border-radius: 12px; 
+    transition: all 0.2s;
   }
-  .btn-social:hover { background: #2d3748; border-color: #fff; }
+  .btn-social:hover { 
+    background: var(--exec-teal-dark); 
+    border-color: #fff; 
+  }
 
   /* Framework Description Box */
-  .demo-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); }
+  .demo-box { 
+    background: rgba(255,255,255,0.1); 
+    border: 1px solid rgba(255,255,255,0.2); 
+  }
 
   /* Decorative Elements */
   .shape { position: absolute; border-radius: 50%; filter: blur(100px); z-index: 0; }
-  .shape-1 { width: 400px; height: 400px; background: rgba(255,255,255,0.05); top: -100px; left: -100px; }
-  .shape-2 { width: 300px; height: 300px; background: rgba(255,255,255,0.03); bottom: -50px; right: -50px; }
+  .shape-1 { width: 400px; height: 400px; background: rgba(31,78,216,0.2); top: -100px; left: -100px; }
+  .shape-2 { width: 300px; height: 300px; background: rgba(22,58,142,0.2); bottom: -50px; right: -50px; }
 
   /* Typography & Misc */
   .fw-extrabold { font-weight: 800; }
   .tracking-tight { letter-spacing: -0.02em; }
   .x-small { font-size: 0.65rem; }
   .divider-text { display: flex; align-items: center; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
-  .divider-text::before, .divider-text::after { content: ""; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+  .divider-text::before, .divider-text::after { content: ""; flex: 1; height: 1px; background: rgba(255,255,255,0.2); }
   .divider-text span { padding: 0 15px; }
-  .icon-box { width: 80px; height: 80px; background: #fff; border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 15px 30px rgba(255,255,255,0.2); color: #000; }
+  .icon-box { 
+    width: 80px; height: 80px; background: var(--button-blue); 
+    border-radius: 20px; display: flex; align-items: center; justify-content: center; 
+    box-shadow: 0 15px 30px rgba(31,78,216,0.4); 
+    color: #fff; 
+  }
 
   /* Animations */
   @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }

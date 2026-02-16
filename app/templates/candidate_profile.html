@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Profile | JobHub Executive{% endblock %}
+{% block title %}Profile | Vettorix Executive{% endblock %}
 
 {% block content %}
 <section class="profile-layout min-vh-100">
@@ -231,7 +231,7 @@
 
 <style>
   :root {
-    --exec-dark: #0a0a0b;
+    --exec-dark: #2CBFAE;          /* previously black, now teal */
     --exec-grey: #f4f4f5;
     --exec-primary: #18181b;
     --exec-border: #e4e4e7;
@@ -277,8 +277,22 @@
   .stat-mini .lbl { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
 
   /* Buttons & Extras */
-  .btn-exec-action { background: var(--exec-dark); color: #fff; border: none; border-radius: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.85rem; transition: all 0.3s; }
-  .btn-exec-action:hover { background: #000; letter-spacing: 2px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+  .btn-exec-action {
+    background: #1F4ED8 !important;      /* button colour */
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 0.85rem;
+    transition: all 0.3s;
+  }
+  .btn-exec-action:hover {
+    background: #163A8E !important;      /* darker blue for hover */
+    letter-spacing: 2px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
   
   .metric-row { background: #fff; border: 1px solid #f1f5f9; }
   .metric-val { font-size: 1.4rem; font-weight: 800; }

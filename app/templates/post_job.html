@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Deploy Vacancy | JobHub Executive{% endblock %}
+{% block title %}Deploy Vacancy | Vettorix Executive{% endblock %}
 
 {% block content %}
 <section class="deployment-layout py-5">
@@ -129,14 +129,17 @@
 
 <style>
     :root {
-        --exec-dark: #0a0a0b;
+        --exec-black: #0a0a0b;              /* kept for text, borders, outlines */
+        --exec-teal: #2CBFAE;                /* new teal for backgrounds */
         --exec-grey: #f4f4f5;
         --exec-border: #e4e4e7;
         --text-muted: #71717a;
+        --button-blue: #1F4ED8;
+        --button-blue-hover: #163A8E;
     }
 
     .deployment-layout { background-color: #ffffff; }
-    .text-outline { -webkit-text-stroke: 1px var(--exec-dark); color: transparent; }
+    .text-outline { -webkit-text-stroke: 1px var(--exec-black); color: transparent; }
     .fw-extrabold { font-weight: 800; }
     .tracking-tight { letter-spacing: -0.025em; }
     .tracking-widest { letter-spacing: 0.15em; }
@@ -144,7 +147,7 @@
 
     /* Card Styling */
     .executive-deployment-card { border-radius: 30px; border: 1px solid var(--exec-border); }
-    .card-header-midnight { background: var(--exec-dark); border: none; }
+    .card-header-midnight { background: var(--exec-teal); border: none; }
     .deployment-icon { background: #fff; color: #000; width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
 
     /* Executive Inputs */
@@ -157,27 +160,27 @@
         padding: 14px 16px 14px 45px; border-radius: 12px; font-weight: 500; font-size: 0.95rem;
         transition: all 0.2s; position: relative;
     }
-    .exec-control:focus { outline: none; border-color: var(--exec-dark); background: #fff; }
+    .exec-control:focus { outline: none; border-color: var(--exec-teal); background: #fff; }
 
     .exec-control-area { 
         width: 100%; background: var(--exec-grey); border: 1px solid transparent; 
         padding: 16px; border-radius: 12px; font-weight: 500; font-size: 0.95rem;
         transition: all 0.2s; 
     }
-    .exec-control-area:focus { outline: none; border-color: var(--exec-dark); background: #fff; }
+    .exec-control-area:focus { outline: none; border-color: var(--exec-teal); background: #fff; }
 
     /* Main Action Button */
     .btn-exec-deploy { 
-        background: var(--exec-dark); color: #fff; border: none; border-radius: 12px; 
+        background: var(--button-blue); color: #fff; border: none; border-radius: 12px; 
         font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem;
         transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     }
     .btn-exec-deploy:hover { 
-        background: #000; letter-spacing: 3px; transform: translateY(-2px);
+        background: var(--button-blue-hover); letter-spacing: 3px; transform: translateY(-2px);
         box-shadow: 0 15px 30px rgba(0,0,0,0.1);
     }
 
-    .hover-dark:hover { color: var(--exec-dark) !important; }
+    .hover-dark:hover { color: var(--exec-black) !important; }
     .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08); }
 </style>
 {% endblock %}

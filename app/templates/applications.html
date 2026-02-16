@@ -184,7 +184,7 @@
     }
 
     /* Header & Base */
-    .header-dark { background: var(--exec-dark); border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .header-dark { background: #2CBFAE; border-bottom: 1px solid rgba(255,255,255,0.1); }
     .text-outline-white { -webkit-text-stroke: 1px #fff; color: transparent; }
     .meta-capsule { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 16px; border-radius: 100px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
 
@@ -205,7 +205,7 @@
     /* Candidate Matrix */
     .candidate-matrix-card { border-radius: 24px; border: 1px solid var(--exec-border); transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     .candidate-matrix-card:hover { border-color: var(--exec-dark); transform: scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.06) !important; }
-    .avatar-sq { width: 50px; height: 50px; background: var(--exec-dark); color: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.25rem; }
+    .avatar-sq { width: 50px; height: 50px; background: #2CBFAE; color: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.25rem; }
     .status-pill-exec { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; padding: 4px 10px; border-radius: 100px; letter-spacing: 1px; }
     .status-applied { background: #f4f4f5; color: #71717a; }
     .status-shortlisted { background: #dcfce7; color: #166534; }
@@ -218,10 +218,47 @@
     .bg-success-glow:hover { background: #059669; }
     .btn-exec-status-outline { background: transparent; border: 1px solid; border-radius: 8px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; padding: 10px; flex-grow: 1; }
     .btn-exec-view { background: var(--exec-grey); border: none; border-radius: 8px; width: 42px; display: flex; align-items: center; justify-content: center; }
-    .btn-exec-view:hover { background: var(--exec-dark); color: #fff; }
+    .btn-exec-view:hover { background: #2CBFAE; color: #fff; }
 
     .empty-state-exec { padding: 60px; color: var(--exec-border); }
     .fw-extrabold { font-weight: 800; }
+
+    /* Client color updates – all buttons #1F4ED8, black backgrounds to #2CBFAE */
+    .btn-exec-outline-white,
+    .btn-exec-outline {
+        border-color: #1F4ED8 !important;
+        color: #1F4ED8 !important;
+        background: transparent !important;
+    }
+
+    .btn-exec-outline-white:hover,
+    .btn-exec-outline:hover {
+        background: #1F4ED8 !important;
+        color: #fff !important;
+        border-color: #1F4ED8 !important;
+    }
+
+    .btn-exec-status.bg-success-glow {
+        background: #1F4ED8 !important;
+    }
+    .btn-exec-status.bg-success-glow:hover {
+        background: #163A8E !important; /* slightly darker for hover */
+    }
+
+    .btn-exec-status-outline {
+        border-color: #1F4ED8 !important;
+        color: #1F4ED8 !important;
+        background: transparent !important;
+    }
+    .btn-exec-status-outline:hover {
+        background: #1F4ED8 !important;
+        color: #fff !important;
+    }
+
+    .btn-exec-view {
+        background: #1F4ED8 !important;
+        color: #fff !important;
+    }
 </style>
 
 <script>

@@ -22,7 +22,7 @@
                                 <h2 class="display-6 fw-extrabold mb-0">{{ jobs|length }}</h2>
                                 <p class="text-muted text-uppercase tracking-wider small fw-bold">Active Postings</p>
                             </div>
-                            <div class="metric-icon-box bg-dark text-white">
+                            <div class="metric-icon-box bg-teal text-white">
                                 <i class="fas fa-briefcase"></i>
                             </div>
                         </div>
@@ -174,9 +174,12 @@
 <style>
     :root {
         --exec-black: #0a0a0b;
+        --exec-teal: #2CBFAE;
         --exec-border: #e4e4e7;
         --exec-light: #f4f4f5;
         --text-muted: #71717a;
+        --button-blue: #1F4ED8;
+        --button-blue-hover: #163A8E;
     }
 
     .dashboard-layout { background-color: #ffffff; color: var(--exec-black); }
@@ -192,19 +195,61 @@
     .border-primary-fade { border-left: 4px solid var(--exec-black); }
     .border-success-fade { border-left: 4px solid #10b981; }
 
+    /* Override Bootstrap bg-dark with teal */
+    .bg-dark, .bg-teal {
+        background-color: var(--exec-teal) !important;
+    }
+
     /* Management Table */
     .executive-table-card { border-radius: 24px; border: 1px solid var(--exec-border); }
     .table-exec thead th { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); border-bottom: 2px solid var(--exec-light); padding: 20px 10px; }
     .table-exec tbody tr:hover { background-color: var(--exec-light); }
     
-    .badge-status-applied { background: var(--exec-black); color: #fff; padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.75rem; }
+    .badge-status-applied {
+        background: var(--exec-teal);
+        color: #fff;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-weight: 800;
+        font-size: 0.75rem;
+    }
     .badge-exec-active { background: #dcfce7; color: #166534; font-size: 0.6rem; font-weight: 800; padding: 4px 10px; border-radius: 100px; text-transform: uppercase; }
 
     /* Buttons */
-    .btn-executive-solid { background: var(--exec-black); color: #fff; border: none; border-radius: 10px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s; text-decoration: none; }
-    .btn-executive-solid:hover { background: #000; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-    .btn-executive-outline { border: 1px solid var(--exec-border); color: var(--exec-black); border-radius: 10px; font-weight: 700; font-size: 0.75rem; text-decoration: none; text-align: center; display: block; }
-    .btn-executive-outline:hover { background: var(--exec-black); color: #fff; }
+    .btn-executive-solid {
+        background: var(--button-blue);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .btn-executive-solid:hover {
+        background: var(--button-blue-hover);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .btn-executive-outline {
+        border: 1px solid var(--exec-border);
+        color: var(--exec-black);
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.75rem;
+        text-decoration: none;
+        text-align: center;
+        display: block;
+        transition: all 0.3s;
+    }
+    .btn-executive-outline:hover {
+        background: var(--button-blue);
+        color: #fff;
+        border-color: var(--button-blue);
+    }
 
     /* Sidebar Feed */
     .executive-sidebar-card { border-radius: 24px; border: 1px solid var(--exec-border); }

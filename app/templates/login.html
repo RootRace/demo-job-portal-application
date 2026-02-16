@@ -14,7 +14,7 @@
             <div class="icon-box mx-auto mb-4">
                <i class="fas fa-briefcase fa-3x text-white"></i>
             </div>
-            <h1 class="display-4 fw-bold mb-3 tracking-tight">Welcome to <br>Job Hunt Portal</h1>
+            <h1 class="display-4 fw-bold mb-3 tracking-tight">Welcome to <br>Vettorix</h1>
             <p class="lead mb-4 opacity-75">Your career journey starts here. Connect with top employers and find opportunities that match your skills.</p>
           </div>
           
@@ -42,14 +42,14 @@
         <div class="w-100 px-4" style="max-width: 500px;">
           <div class="text-center mb-5">
             <h2 class="display-6 fw-bold text-white mb-2">Sign In</h2>
-            <p class="text-secondary">Access your Job Hunt Portal account</p>
+            <p class="text-white-50">Access your Job Hunt Portal account</p>
           </div>
           
           <div class="card premium-card border-0 shadow-2xl">
             <div class="card-body p-4 p-md-5">
               <form method="POST">
                 <div class="mb-4">
-                  <label for="email" class="form-label small text-uppercase tracking-widest text-secondary">Email Address</label>
+                  <label for="email" class="form-label small text-uppercase tracking-widest text-white-50">Email Address</label>
                   <div class="input-group-premium">
                     <span class="icon"><i class="fas fa-envelope"></i></span>
                     <input type="email" class="form-control-premium" id="email" name="email" placeholder="Enter your email" required>
@@ -58,9 +58,9 @@
                 
                 <div class="mb-4">
                   <div class="d-flex justify-content-between align-items-center mb-1">
-                    <label for="password" class="form-label small text-uppercase tracking-widest text-secondary">Password</label>
+                    <label for="password" class="form-label small text-uppercase tracking-widest text-white-50">Password</label>
                     <a href="{{ url_for('auth.forgot_password') }}"
-                      class="text-primary small text-decoration-none hover-glow">
+                      class="text-white small text-decoration-none hover-glow">
                       Forgot Password?
                     </a>
                   </div>
@@ -72,7 +72,7 @@
                 
                 <div class="mb-4 form-check custom-check">
                   <input type="checkbox" class="form-check-input" id="remember">
-                  <label class="form-check-label text-secondary small" for="remember">Keep me logged in</label>
+                  <label class="form-check-label text-white-50 small" for="remember">Keep me logged in</label>
                 </div>
                 
                 <button type="submit" class="btn btn-primary-premium w-100 py-3 mb-4 fw-bold text-uppercase tracking-widest">
@@ -81,7 +81,7 @@
               </form>
               
               <div class="text-center mb-4">
-                <p class="divider-text text-secondary mb-4"><span>Or continue with</span></p>
+                <p class="divider-text text-white-50 mb-4"><span>Or continue with</span></p>
                 <div class="d-flex gap-3 justify-content-center">
                   <button type="button" class="btn btn-social">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="18" alt="Google">
@@ -92,29 +92,29 @@
                 </div>
               </div>
               
-              <div class="text-center pt-3 border-top border-secondary border-opacity-10">
-                <p class="mb-0 text-secondary small">Don't have an account? <a href="{{ url_for('auth.register') }}" class="text-primary fw-bold text-decoration-none ms-1">Create Account</a></p>
+              <div class="text-center pt-3 border-top border-white border-opacity-10">
+                <p class="mb-0 text-white-50 small">Don't have an account? <a href="{{ url_for('auth.register') }}" class="text-white fw-bold text-decoration-none ms-1">Create Account</a></p>
               </div>
             </div>
           </div>
           
           <div class="mt-4 p-4 demo-box rounded-4">
-            <p class="x-small text-uppercase tracking-widest text-primary mb-3 text-center fw-bold">Demo Access Control</p>
+            <p class="x-small text-uppercase tracking-widest text-white mb-3 text-center fw-bold">Demo Access Control</p>
             <div class="row g-3">
               <div class="col-sm-6">
                 <div class="demo-item">
-                  <i class="fas fa-user-circle text-primary mb-2"></i>
+                  <i class="fas fa-user-circle text-white mb-2"></i>
                   <p class="mb-0 fw-bold text-white small">Candidate</p>
-                  <code class="x-small">candidate@demo.com</code>
-                  <code class="x-small">candidate123</code>
+                  <code class="x-small text-white-50">candidate@demo.com</code>
+                  <code class="x-small text-white-50">candidate123</code>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="demo-item">
-                  <i class="fas fa-building text-primary mb-2"></i>
+                  <i class="fas fa-building text-white mb-2"></i>
                   <p class="mb-0 fw-bold text-white small">Recruiter</p>
-                  <code class="x-small">recruiter@demo.com</code>
-                  <code class="x-small">recruiter123</code>
+                  <code class="x-small text-white-50">recruiter@demo.com</code>
+                  <code class="x-small text-white-50">recruiter123</code>
                 </div>
               </div>
             </div>
@@ -127,64 +127,96 @@
 
 <style>
   :root {
-    --bg-darker: #0f1115;
-    --bg-card: #161a21;
-    --accent-blue: #3b82f6;
-    --text-muted: #94a3b8;
+    --exec-teal: #2CBFAE;                /* main teal */
+    --exec-teal-dark: #1F9A8A;            /* darker teal for card */
+    --exec-teal-light: #4AD3C2;            /* lighter teal for inputs */
+    --button-blue: #1F4ED8;
+    --button-blue-hover: #163A8E;
   }
 
   /* Layout Base */
-  .login-section { background-color: var(--bg-darker); font-family: 'Inter', sans-serif; }
-  .bg-form { background-color: var(--bg-darker); }
-  .branding-column { background-color: #000; color: white; }
-  .overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(135deg, rgba(59,130,246,0.3) 0%, rgba(0,0,0,0.9) 100%); z-index: 1; }
+  .login-section { background-color: var(--exec-teal); font-family: 'Inter', sans-serif; }
+  .bg-form { background-color: var(--exec-teal); }
+  .branding-column { background-color: var(--exec-teal); color: white; }
+  .overlay { 
+    position: absolute; top:0; left:0; width:100%; height:100%; 
+    background: linear-gradient(135deg, rgba(31,78,216,0.3) 0%, rgba(0,0,0,0.1) 100%); 
+    z-index: 1; 
+  }
   .content-z { z-index: 2; }
 
   /* Premium Card */
-  .premium-card { background: var(--bg-card); border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+  .premium-card { background: var(--exec-teal-dark); border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3); }
   
   /* Form Elements */
   .input-group-premium { position: relative; display: flex; align-items: center; }
-  .input-group-premium .icon { position: absolute; left: 16px; color: var(--accent-blue); }
+  .input-group-premium .icon { position: absolute; left: 16px; color: #fff; opacity: 0.8; }
   .form-control-premium {
-    width: 100%; background: #1e252e; border: 1px solid #2d3748;
+    width: 100%; background: var(--exec-teal-light); border: 1px solid rgba(255,255,255,0.2);
     color: white; padding: 14px 16px 14px 45px; border-radius: 12px;
     transition: all 0.3s;
   }
+  .form-control-premium::placeholder {
+    color: rgba(255,255,255,0.6);
+    opacity: 1;
+  }
   .form-control-premium:focus {
-    outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    outline: none; border-color: #fff; background: #56DBCA; /* slightly brighter teal */
   }
 
   /* Buttons */
   .btn-primary-premium {
-    background: var(--accent-blue); border: none; border-radius: 12px; color: white;
+    background: var(--button-blue); border: none; border-radius: 12px; color: white;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .btn-primary-premium:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3); background: #2563eb; }
+  .btn-primary-premium:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 10px 20px rgba(31, 78, 216, 0.3); 
+    background: var(--button-blue-hover); 
+  }
 
   .btn-social {
-    background: #1e252e; border: 1px solid #2d3748; color: white;
-    width: 60px; height: 50px; border-radius: 12px; transition: all 0.2s;
+    background: var(--exec-teal-light); 
+    border: 1px solid rgba(255,255,255,0.2); 
+    color: white;
+    width: 60px; height: 50px; border-radius: 12px; 
+    transition: all 0.2s;
   }
-  .btn-social:hover { background: #2d3748; border-color: var(--accent-blue); }
+  .btn-social:hover { 
+    background: var(--exec-teal-dark); 
+    border-color: #fff; 
+  }
 
   /* Demo Box */
-  .demo-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); }
-  .demo-item { background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; height: 100%; }
-  code { color: var(--text-muted); }
+  .demo-box { 
+    background: rgba(255,255,255,0.1); 
+    border: 1px solid rgba(255,255,255,0.2); 
+  }
+  .demo-item { 
+    background: rgba(0,0,0,0.2); 
+    padding: 12px; 
+    border-radius: 12px; 
+    height: 100%; 
+  }
+  code { color: rgba(255,255,255,0.7); }
 
   /* Decorative Shapes */
   .shape { position: absolute; border-radius: 50%; filter: blur(100px); z-index: 0; }
-  .shape-1 { width: 400px; height: 400px; background: rgba(59, 130, 246, 0.2); top: -100px; left: -100px; }
-  .shape-2 { width: 300px; height: 300px; background: rgba(37, 99, 235, 0.2); bottom: -50px; right: -50px; }
+  .shape-1 { width: 400px; height: 400px; background: rgba(31,78,216,0.2); top: -100px; left: -100px; }
+  .shape-2 { width: 300px; height: 300px; background: rgba(22,58,142,0.2); bottom: -50px; right: -50px; }
 
   /* Helpers */
   .divider-text { display: flex; align-items: center; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
-  .divider-text::before, .divider-text::after { content: ""; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+  .divider-text::before, .divider-text::after { content: ""; flex: 1; height: 1px; background: rgba(255,255,255,0.2); }
   .divider-text span { padding: 0 15px; }
   .tracking-widest { letter-spacing: 2px; }
   .x-small { font-size: 0.65rem; }
-  .icon-box { width: 80px; height: 80px; background: var(--accent-blue); border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 15px 30px rgba(59,130,246,0.4); }
+  .icon-box { 
+    width: 80px; height: 80px; background: var(--button-blue); 
+    border-radius: 20px; display: flex; align-items: center; justify-content: center; 
+    box-shadow: 0 15px 30px rgba(31,78,216,0.4); 
+  }
+  .hover-glow:hover { color: #fff !important; text-shadow: 0 0 8px rgba(255,255,255,0.4); }
 
   /* Animations */
   @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }

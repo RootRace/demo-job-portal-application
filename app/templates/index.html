@@ -140,16 +140,16 @@
 
 <section class="cta-executive">
   <div class="container">
-    <div class="row align-items-center py-6 px-4 bg-dark rounded-4 shadow-2xl">
+    <div class="row align-items-center py-6 px-4 bg-teal rounded-4 shadow-2xl">
       <div class="col-lg-8 text-center text-lg-start">
         <h2 class="display-5 fw-bold text-white mb-3">Ready to Accelerate?</h2>
-        <p class="text-secondary lead mb-0">Experience the difference of a tailored career platform.</p>
+        <p class="text-white-50 lead mb-0">Experience the difference of a tailored career platform.</p>
       </div>
       <div class="col-lg-4 text-center text-lg-end mt-4 mt-lg-0">
         {% if not session.user_id %}
-          <a href="{{ url_for('auth.register') }}" class="btn-cta-white">Get Started Now</a>
+          <a href="{{ url_for('auth.register') }}" class="btn-cta-blue">Get Started Now</a>
         {% else %}
-          <a href="{{ url_for('jobs.list_jobs') }}" class="btn-cta-white">Go to Dashboard</a>
+          <a href="{{ url_for('jobs.list_jobs') }}" class="btn-cta-blue">Go to Dashboard</a>
         {% endif %}
       </div>
     </div>
@@ -160,27 +160,29 @@
   @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
 
   :root {
-    --executive-dark: #0a0a0b;
+    --executive-teal: #2CBFAE;          /* black replaced with teal */
     --accent: #ffffff;
-    --secondary-dark: #141416;
+    --secondary-teal: #1F9A8A;           /* darker teal for accents */
     --text-gray: #a0a0ab;
     --border-dim: #27272a;
+    --button-blue: #1F4ED8;              /* button colour */
+    --button-blue-hover: #163A8E;
   }
 
-  body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; color: var(--executive-dark); }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; color: #0a0a0b; }
   .py-6 { padding: 6rem 0; }
   .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4); }
 
-  /* Hero: Midnight Theme */
+  /* Hero: Teal Theme */
   .hero-executive {
-    background-color: var(--executive-dark);
+    background-color: var(--executive-teal);
     min-height: 90vh;
     padding: 100px 0;
     overflow: hidden;
   }
   .background-mesh {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-image: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 40%);
+    background-image: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 40%);
     pointer-events: none;
   }
 
@@ -194,29 +196,41 @@
   .text-accent { color: #fff; text-decoration: underline; text-underline-offset: 8px; }
   .lead-premium { color: var(--text-gray); font-size: 1.25rem; font-weight: 400; line-height: 1.7; }
 
-  /* Search: Perfect Visibility */
+  /* Search: White background, blue button */
   .search-executive { background: #fff; border-radius: 16px; overflow: hidden; }
   .input-wrapper { display: flex; align-items: center; padding: 15px 25px; background: #fff; }
   .input-wrapper i { color: #71717a; margin-right: 15px; }
   .control-premium { border: none; font-size: 1rem; color: #18181b; width: 100%; font-weight: 500; }
   .control-premium:focus { outline: none; }
   .btn-search-premium {
-    background: var(--executive-dark); color: #fff; border: none; width: 100%; height: 100%;
+    background: var(--button-blue); color: #fff; border: none; width: 100%; height: 100%;
     font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
     transition: all 0.3s;
   }
-  .btn-search-premium:hover { background: #000; letter-spacing: 1.5px; }
+  .btn-search-premium:hover { background: var(--button-blue-hover); letter-spacing: 1.5px; }
 
   /* Buttons */
-  .btn-solid-premium { background: #fff; color: #000; padding: 16px 40px; border-radius: 12px; font-weight: 800; text-decoration: none; display: inline-block; transition: transform 0.3s; }
-  .btn-outline-premium { border: 2px solid rgba(255,255,255,0.2); color: #fff; padding: 14px 40px; border-radius: 12px; font-weight: 800; text-decoration: none; display: inline-block; }
-  .btn-solid-premium:hover { transform: translateY(-3px); background: #f4f4f5; }
+  .btn-solid-premium {
+    background: var(--button-blue); color: #fff; padding: 16px 40px; border-radius: 12px;
+    font-weight: 800; text-decoration: none; display: inline-block; transition: transform 0.3s;
+  }
+  .btn-solid-premium:hover { transform: translateY(-3px); background: var(--button-blue-hover); }
+
+  .btn-outline-premium {
+    border: 2px solid var(--button-blue); color: var(--button-blue); padding: 14px 40px;
+    border-radius: 12px; font-weight: 800; text-decoration: none; display: inline-block;
+    transition: background 0.3s, color 0.3s;
+  }
+  .btn-outline-premium:hover {
+    background: var(--button-blue); color: #fff;
+  }
+
   .popular-searches { color: #52525b; font-size: 0.75rem; }
   .popular-searches .label { color: var(--text-gray); font-weight: 800; margin-right: 10px; }
 
   /* Hero Visuals */
   .hero-visual-premium { position: relative; padding: 20px; }
-  .image-frame { border-radius: 30px; overflow: hidden; border: 8px solid rgba(255,255,255,0.05); }
+  .image-frame { border-radius: 30px; overflow: hidden; border: 8px solid rgba(255,255,255,0.1); }
   .hero-img { width: 100%; height: auto; filter: grayscale(20%); }
   
   .stat-badge {
@@ -225,13 +239,16 @@
   }
   .badge-top { top: 10%; left: -10%; }
   .badge-bottom { bottom: 10%; right: -5%; }
-  .badge-icon { width: 40px; height: 40px; background: #000; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
+  .badge-icon {
+    width: 40px; height: 40px; background: var(--executive-teal); color: #fff;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px;
+  }
   .badge-text strong { display: block; font-size: 1.2rem; color: #000; line-height: 1; }
   .badge-text span { font-size: 0.7rem; color: #71717a; text-transform: uppercase; font-weight: 700; }
 
   /* Stats Bar */
   .stats-bar { padding: 40px 0; background: #fafafa; border-bottom: 1px solid #e4e4e7; }
-  .stat-val { font-size: 2.5rem; font-weight: 800; color: var(--executive-dark); }
+  .stat-val { font-size: 2.5rem; font-weight: 800; color: var(--executive-teal); }
   .stat-lbl { font-size: 0.7rem; font-weight: 700; color: #71717a; text-transform: uppercase; letter-spacing: 2px; }
 
   /* Job Card Elite */
@@ -240,20 +257,29 @@
     transition: all 0.3s; position: relative; height: 100%; display: flex; flex-direction: column;
   }
   .job-card-elite:hover { border-color: #000; box-shadow: 0 15px 30px rgba(0,0,0,0.05); transform: translateY(-5px); }
-  .company-sq { width: 50px; height: 50px; background: #18181b; color: #fff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+  .company-sq {
+    width: 50px; height: 50px; background: var(--executive-teal); color: #fff;
+    border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+  }
   .type-tag { font-size: 0.65rem; font-weight: 800; background: #f4f4f5; padding: 5px 12px; border-radius: 100px; text-transform: uppercase; }
   .job-title { margin-top: 20px; font-weight: 800; font-size: 1.2rem; }
   .company-name { color: #71717a; font-weight: 600; font-size: 0.9rem; }
   .job-meta { margin: 15px 0; display: flex; gap: 20px; font-size: 0.75rem; color: #a1a1aa; font-weight: 600; }
   .job-snippet { color: #52525b; font-size: 0.9rem; margin-bottom: 25px; line-height: 1.6; }
   .btn-apply-elite {
-    margin-top: auto; text-align: center; background: #f4f4f5; color: #18181b; padding: 12px;
+    margin-top: auto; text-align: center; background: var(--button-blue); color: #fff; padding: 12px;
     border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 0.85rem; transition: all 0.3s;
   }
-  .btn-apply-elite:hover { background: #000; color: #fff; }
+  .btn-apply-elite:hover { background: var(--button-blue-hover); }
 
   /* CTA */
-  .btn-cta-white { background: #fff; color: #000; padding: 18px 45px; border-radius: 12px; font-weight: 800; text-decoration: none; display: inline-block; font-size: 1rem; }
+  .bg-teal { background-color: var(--executive-teal) !important; }
+  .btn-cta-blue {
+    background: var(--button-blue); color: #fff; padding: 18px 45px; border-radius: 12px;
+    font-weight: 800; text-decoration: none; display: inline-block; font-size: 1rem;
+    transition: background 0.3s;
+  }
+  .btn-cta-blue:hover { background: var(--button-blue-hover); }
 
   @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 </style>
