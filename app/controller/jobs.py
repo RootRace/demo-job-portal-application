@@ -65,9 +65,36 @@ def job_detail(job_id):
     has_applied = conn.execute(
         "SELECT id FROM applications WHERE job_id = ? AND candidate_id = ?", (job_id, session["user_id"])
     ).fetchone()
+
+    # Calculate Eligibility Score for candidates
+    eligibility_score = None
+    if session.get("role") == "candidate":
+        profile = conn.execute(
+            "SELECT skills, experience_years FROM candidate_profiles WHERE user_id = ?", (session["user_id"],)
+        ).fetchone()
+
+        if profile and profile["skills"]:
+            job_reqs = str(job["requirements"]).lower() + " " + str(job["description"]).lower()
+            candidate_skills = [s.strip().lower() for s in str(profile["skills"]).split(",")]
+
+            # Simple keyword matching calculation
+            if candidate_skills:
+                matches = sum(1 for skill in candidate_skills if skill in job_reqs)
+                match_percentage = min(
+                    int((matches / max(len(candidate_skills), 1)) * 100) + 30, 99
+                )  # Add base score, cap at 99
+
+                # Bonus for experience
+                if profile["experience_years"] and float(profile["experience_years"]) > 3:
+                    match_percentage = min(match_percentage + 15, 99)
+
+                eligibility_score = f"{match_percentage}%"
+
     conn.close()
 
-    return render_template("job_detail.html", job=job, has_applied=bool(has_applied))
+    return render_template(
+        "job_detail.html", job=job, has_applied=bool(has_applied), eligibility_score=eligibility_score
+    )
 
 
 @jobs_bp.route("/job/<int:job_id>/apply")

@@ -54,6 +54,9 @@ def init_db():
             experience_years REAL,
             education TEXT,
             resume_text TEXT,
+            verification_status TEXT DEFAULT 'Unverified',
+            verification_score INTEGER DEFAULT 0,
+            verification_recommendation TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users (id)
         )
@@ -87,6 +90,34 @@ def init_db():
             FOREIGN KEY (candidate_id) REFERENCES users (id)
         )
     """)
+
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS vetting_applications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            candidate_id INTEGER NOT NULL,
+            application_text TEXT NOT NULL,
+            score INTEGER DEFAULT 0,
+            status TEXT DEFAULT 'submitted',
+            submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (candidate_id) REFERENCES users (id)
+        )
+    """)
+
+    # Attempt to alter existing table in case it was created previously without these columns
+    try:
+        c.execute("ALTER TABLE candidate_profiles ADD COLUMN verification_status TEXT DEFAULT 'Unverified'")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        c.execute("ALTER TABLE candidate_profiles ADD COLUMN verification_score INTEGER DEFAULT 0")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        c.execute("ALTER TABLE candidate_profiles ADD COLUMN verification_recommendation TEXT")
+    except sqlite3.OperationalError:
+        pass
 
     conn.commit()
     conn.close()

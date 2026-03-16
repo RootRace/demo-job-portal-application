@@ -3,21 +3,20 @@
 {% block title %}Deploy Vacancy | Vettorix Executive{% endblock %}
 
 {% block content %}
-<section class="deployment-layout py-5">
-    <div class="container">
-        <div class="row mb-5 justify-content-center">
-            <div class="col-lg-10">
-                <nav aria-label="breadcrumb" class="mb-3">
-                    <ol class="breadcrumb small text-uppercase tracking-widest">
-                        <li class="breadcrumb-item"><a href="{{ url_for('recruiter.dashboard') }}" class="text-muted text-decoration-none">Console</a></li>
-                        <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">Deployment</li>
-                    </ol>
-                </nav>
-                <h1 class="display-5 fw-extrabold text-dark tracking-tight">Deploy New <span class="text-outline">Vacancy</span></h1>
-                <p class="text-secondary">Initialize a new talent acquisition campaign with precise specifications.</p>
-            </div>
+<section class="deployment-layout pb-5">
+    <div class="header-dark py-5 mb-5 position-relative overflow-hidden">
+        <div class="container position-relative z-10">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('recruiter.dashboard') }}" class="text-white text-decoration-none opacity-75 fw-bold">Console</a></li>
+                    <li class="breadcrumb-item text-white fw-bold" aria-current="page">Deployment</li>
+                </ol>
+            </nav>
+            <h1 class="display-4 fw-extrabold text-white tracking-tight mb-2">Deploy New <span class="text-outline-white">Vacancy</span></h1>
+            <p class="text-white opacity-75 lead mb-0">Initialize a new talent acquisition campaign with precise specifications.</p>
         </div>
-
+    </div>
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="card executive-deployment-card border-0 shadow-2xl overflow-hidden">
@@ -129,7 +128,7 @@
 
 <style>
     :root {
-        --exec-black: #0a0a0b;              /* kept for text, borders, outlines */
+
         --exec-teal: #2CBFAE;                /* new teal for backgrounds */
         --exec-grey: #f4f4f5;
         --exec-border: #e4e4e7;
@@ -138,12 +137,17 @@
         --button-blue-hover: #163A8E;
     }
 
-    .deployment-layout { background-color: #ffffff; }
+    .deployment-layout { background-color: #f4f4f5; min-height: 100vh; }
+    .header-dark { background: #2CBFAE; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .text-outline-white { -webkit-text-stroke: 1px #fff; color: transparent; }
     .text-outline { -webkit-text-stroke: 1px var(--exec-black); color: transparent; }
     .fw-extrabold { font-weight: 800; }
     .tracking-tight { letter-spacing: -0.025em; }
     .tracking-widest { letter-spacing: 0.15em; }
     .x-small { font-size: 0.65rem; }
+    
+    .text-primary { color: var(--button-blue) !important; }
+    .border-primary { border-color: var(--button-blue) !important; }
 
     /* Card Styling */
     .executive-deployment-card { border-radius: 30px; border: 1px solid var(--exec-border); }

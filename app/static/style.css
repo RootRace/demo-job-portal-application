@@ -4,7 +4,7 @@ body {
 }
 
 .hero-section {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    background: linear-gradient(135deg, #1F4ED8 0%, #163A8E 100%);
 }
 
 .card {
@@ -60,17 +60,17 @@ body {
 
 /* Custom colors */
 .bg-primary {
-    background-color: #007bff !important;
+    background-color: #1F4ED8 !important;
 }
 
 .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+    background-color: #1F4ED8;
+    border-color: #1F4ED8;
 }
 
 .btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+    background-color: #163A8E;
+    border-color: #163A8E;
 }
 
 /* Stats cards animation */

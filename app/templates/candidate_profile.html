@@ -24,6 +24,11 @@
                 </div>
                 <div class="mt-3 mt-md-0">
                   <span class="badge-intelligence">Intelligence Enabled</span>
+                  {% if profile and profile.verification_status == 'Verified' %}
+                    <span class="badge bg-success ms-2"><i class="fas fa-check-circle me-1"></i>Vetted: Verified</span>
+                  {% elif profile and profile.verification_status and profile.verification_status != 'Unverified' %}
+                    <span class="badge bg-warning text-dark ms-2"><i class="fas fa-clock me-1"></i>Vetted: {{ profile.verification_status }}</span>
+                  {% endif %}
                 </div>
               </div>
             </div>
@@ -56,6 +61,21 @@
                   </div>
                 </div>
               </div>
+
+              {% if profile and (not profile.verification_status or profile.verification_status == 'Unverified') %}
+              <div class="card mb-5 border-0 shadow-sm" style="background-color: #f8f9fa;">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-shield-alt text-primary fa-3x mb-3" style="color: #1F4ED8 !important;"></i>
+                    <h4 class="h5 fw-bold">Boost Your Profile Visibility</h4>
+                    <p class="text-muted small mb-3">
+                        Apply for Vettorix Vetting to increase your credibility and show employers you are a pre-verified candidate.
+                    </p>
+                    <a href="{{ url_for('candidate.vetting_application') }}" class="btn btn-primary px-4 py-2" style="background-color: #1F4ED8; border-color: #1F4ED8;">
+                        Apply for Vetting
+                    </a>
+                </div>
+              </div>
+              {% endif %}
 
               <form id="profileForm" method="POST" enctype="multipart/form-data">
                 <div class="row g-4">

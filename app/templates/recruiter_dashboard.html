@@ -1,17 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="dashboard-layout py-5">
-    <div class="container">
-        <div class="row mb-5 align-items-end">
-            <div class="col-md-8">
-                <h6 class="text-primary fw-bold text-uppercase tracking-widest small mb-2">Management Console</h6>
-                <h1 class="display-5 fw-extrabold text-dark tracking-tight">Recruiter <span class="text-outline">Dashboard</span></h1>
-            </div>
-            <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                <p class="text-muted small mb-0">Infrastructure Status: <span class="text-success fw-bold">● Operational</span></p>
-            </div>
+<section class="dashboard-layout pb-5">
+    <div class="header-dark py-5 mb-5 position-relative overflow-hidden">
+        <div class="container position-relative z-10">
+            <h6 class="text-white fw-bold text-uppercase tracking-widest small mb-2 opacity-75">Management Console</h6>
+            <h1 class="display-4 fw-extrabold text-white tracking-tight mb-2">Recruiter <span class="text-outline-white">Dashboard</span></h1>
+            <p class="text-white opacity-75 small mb-0 mt-3"><i class="fas fa-circle text-success me-2"></i>Infrastructure Status: Operational</p>
         </div>
+    </div>
+    <div class="container">
 
         <div class="row g-4 mb-5">
             <div class="col-md-4">
@@ -173,7 +171,7 @@
 
 <style>
     :root {
-        --exec-black: #0a0a0b;
+        /* --exec-black: #0a0a0b; */
         --exec-teal: #2CBFAE;
         --exec-border: #e4e4e7;
         --exec-light: #f4f4f5;
@@ -182,7 +180,9 @@
         --button-blue-hover: #163A8E;
     }
 
-    .dashboard-layout { background-color: #ffffff; color: var(--exec-black); }
+    .dashboard-layout { background-color: #f4f4f5; color: var(--exec-black); min-height: 100vh;}
+    .header-dark { background: #2CBFAE; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .text-outline-white { -webkit-text-stroke: 1px #fff; color: transparent; }
     .text-outline { -webkit-text-stroke: 1px var(--exec-black); color: transparent; }
     .tracking-widest { letter-spacing: 0.2em; }
     .fw-extrabold { font-weight: 800; }
@@ -192,13 +192,15 @@
     .metric-card { background: #fff; border: 1px solid var(--exec-border); border-radius: 20px; transition: all 0.3s ease; }
     .metric-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.04); }
     .metric-icon-box { width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
-    .border-primary-fade { border-left: 4px solid var(--exec-black); }
+    .border-primary-fade { border-left: 4px solid var(--exec-teal); }
     .border-success-fade { border-left: 4px solid #10b981; }
 
-    /* Override Bootstrap bg-dark with teal */
-    .bg-dark, .bg-teal {
+    /* Override Bootstrap bg-dark, primary with teal */
+    .bg-dark, .bg-teal, .bg-primary {
         background-color: var(--exec-teal) !important;
     }
+    
+    .text-primary { color: var(--button-blue) !important; }
 
     /* Management Table */
     .executive-table-card { border-radius: 24px; border: 1px solid var(--exec-border); }

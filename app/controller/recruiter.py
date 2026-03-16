@@ -87,7 +87,8 @@ def view_applications(job_id):
 
     applications = conn.execute(
         """
-        SELECT a.*, cp.full_name, cp.skills, cp.experience_years, cp.location as candidate_location
+        SELECT a.*, cp.full_name, cp.skills, cp.experience_years, cp.location as candidate_location, 
+               cp.verification_status, cp.verification_score, cp.verification_recommendation
         FROM applications a
         JOIN candidate_profiles cp ON a.candidate_id = cp.user_id
         WHERE a.job_id = ?
@@ -127,3 +128,29 @@ def update_application_status():
 
     conn.close()
     return redirect(request.referrer)
+
+
+@recruiter_bp.route("/application/<int:application_id>")
+@role_required("recruiter")
+def application_detail(application_id):
+    conn = get_db_connection()
+    application = conn.execute(
+        """
+        SELECT a.id as application_id, a.status, a.applied_at, 
+               j.id as job_id, j.title as job_title, j.company as company,
+               cp.*
+        FROM applications a
+        JOIN jobs j ON a.job_id = j.id
+        JOIN candidate_profiles cp ON a.candidate_id = cp.user_id
+        WHERE a.id = ? AND j.recruiter_id = ?
+    """,
+        (application_id, session["user_id"]),
+    ).fetchone()
+
+    conn.close()
+
+    if not application:
+        flash("Application profile not found.", "error")
+        return redirect(url_for("recruiter.dashboard"))
+
+    return render_template("application_detail.html", profile=application)

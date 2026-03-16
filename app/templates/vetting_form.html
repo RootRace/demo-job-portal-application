@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Apply for Vetting - Vettorix{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card p-4">
+                <h2 class="mb-4">Vetting Application</h2>
+                <p class="text-muted mb-4">
+                    Increase your credibility with employers by completing our vetting process. 
+                    Provide a detailed summary of your skills, past projects, and why you are a top candidate.
+                </p>
+
+                <form method="POST" action="{{ url_for('candidate.vetting_application') }}">
+                    <div class="mb-4">
+                        <label for="application_text" class="form-label fw-bold">Application Details</label>
+                        <textarea class="form-control" id="application_text" name="application_text" rows="6" required placeholder="Describe your experience and qualifications in detail..."></textarea>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">Submit Application</button>
+                        <a href="{{ url_for('candidate.candidate_profile') }}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

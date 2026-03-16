@@ -61,6 +61,20 @@
                                     <p class="text-muted small">This opportunity is currently under review by the hiring entity.</p>
                                 {% else %}
                                     <p class="text-secondary mb-4">You are eligible to apply for this executive-level position.</p>
+                                    
+                                    {% if eligibility_score %}
+                                        <div class="eligibility-box mb-4 p-3 rounded-4">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <span class="x-small fw-bold text-uppercase tracking-widest text-primary">Vetting Match</span>
+                                                <span class="fw-extrabold text-primary" style="font-size:1.2rem;">{{ eligibility_score }}</span>
+                                            </div>
+                                            <div class="progress" style="height: 6px;">
+                                                <div class="progress-bar bg-primary" role="progressbar" style="width: {{ eligibility_score }};" aria-valuenow="{{ eligibility_score|replace('%','') }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                            <p class="x-small text-muted mt-2 mb-0">Based on your Intelligence Profile vs Requirements.</p>
+                                        </div>
+                                    {% endif %}
+                                    
                                     <a href="{{ url_for('jobs.apply_job', job_id=job.id) }}" class="btn-exec-apply w-100 py-3 mb-3">
                                         Submit Application <i class="fas fa-paper-plane ms-2"></i>
                                     </a>
@@ -149,6 +163,7 @@
     .card-header-midnight-solid { background: var(--exec-teal); }
     .status-box-success { background: #f0fdf4; border: 1px solid #dcfce7; }
     .status-box-info { background: #f0f9ff; border: 1px solid #e0f2fe; }
+    .eligibility-box { background: #e0e7ff; border: 1px solid #c7d2fe; }
 
     /* Buttons */
     .btn-exec-apply {

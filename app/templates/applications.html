@@ -116,6 +116,29 @@
                                         <div class="x-small text-muted fw-bold text-uppercase tracking-wider">
                                             <i class="fas fa-location-arrow me-1 text-primary"></i>{{ application.candidate_location }}
                                         </div>
+                                        
+                                        {% if application.verification_status == 'Verified' %}
+                                            {% if application.verification_score > 80 %}
+                                                <div class="verification-badge bg-success text-white mt-2">
+                                                    <i class="fas fa-check-circle me-1"></i> Highly Recommended
+                                                </div>
+                                            {% elif application.verification_score > 50 %}
+                                                <div class="verification-badge bg-primary text-white mt-2">
+                                                    <i class="fas fa-check me-1"></i> Recommended
+                                                </div>
+                                            {% else %}
+                                                <div class="verification-badge bg-warning text-dark mt-2">
+                                                    <i class="fas fa-exclamation-triangle me-1"></i> Needs Review
+                                                </div>
+                                            {% endif %}
+                                            <div class="mt-2 p-2 bg-light rounded text-muted x-small border" style="max-width:350px;">
+                                                <strong>Intelligence Summary:</strong> {{ application.verification_recommendation }}
+                                            </div>
+                                        {% elif application.verification_status and application.verification_status != 'Unverified' %}
+                                            <div class="verification-badge bg-secondary text-white mt-2">
+                                                <i class="fas fa-clock me-1"></i> Vetting: {{ application.verification_status }}
+                                            </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <span class="status-pill-exec status-{{ application.status }}">
@@ -155,9 +178,9 @@
                                         <button type="submit" name="status" value="rejected" class="btn-exec-status-outline text-danger border-danger">Reject</button>
                                     {% endif %}
                                 </form>
-                                <button class="btn-exec-view view-profile" data-id="{{ application.id }}">
+                                <a href="{{ url_for('recruiter.application_detail', application_id=application.id) }}" class="btn-exec-view view-profile" style="text-decoration: none;">
                                     <i class="fas fa-eye"></i>
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -212,6 +235,7 @@
     .status-rejected { background: #fee2e2; color: #991b1b; }
 
     /* Buttons & Actions */
+    .verification-badge { display: inline-block; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; letter-spacing: 0.5px; }
     .skill-pill-sm { background: var(--exec-grey); color: var(--exec-dark); padding: 4px 12px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; }
     .btn-exec-status { border: none; border-radius: 8px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #fff; padding: 10px; flex-grow: 1; transition: 0.2s; }
     .bg-success-glow { background: #10b981; }
