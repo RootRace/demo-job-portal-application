@@ -38,9 +38,39 @@ def dashboard():
         (session["user_id"],),
     ).fetchall()
 
+    # Aggregate Analytics for Dashboard
+    metrics = conn.execute(
+        """
+        SELECT 
+            COUNT(DISTINCT a.candidate_id) as total_candidates,
+            COUNT(a.id) as total_applications,
+            SUM(CASE WHEN a.status = 'applied' THEN 1 ELSE 0 END) as applied_count,
+            SUM(CASE WHEN a.status = 'shortlisted' THEN 1 ELSE 0 END) as shortlisted_count,
+            SUM(CASE WHEN a.status = 'rejected' THEN 1 ELSE 0 END) as rejected_count
+        FROM applications a
+        JOIN jobs j ON a.job_id = j.id
+        WHERE j.recruiter_id = ?
+        """, (session["user_id"],)
+    ).fetchone()
+
+    total_candidates = metrics["total_candidates"] or 0
+    total_applications = metrics["total_applications"] or 0
+    chart_data = {
+        "applied": metrics["applied_count"] or 0,
+        "shortlisted": metrics["shortlisted_count"] or 0,
+        "rejected": metrics["rejected_count"] or 0
+    }
+
     conn.close()
 
-    return render_template("recruiter_dashboard.html", jobs=jobs, recent_applications=recent_applications)
+    return render_template(
+        "recruiter_dashboard.html", 
+        jobs=jobs, 
+        recent_applications=recent_applications,
+        total_candidates=total_candidates,
+        total_applications=total_applications,
+        chart_data=chart_data
+    )
 
 
 @recruiter_bp.route("/post-job", methods=["GET", "POST"])
