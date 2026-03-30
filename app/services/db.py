@@ -103,6 +103,21 @@ def init_db():
         )
     """)
 
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS vetting_criteria (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            weight INTEGER NOT NULL
+        )
+    """)
+
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS system_settings (
+            key TEXT PRIMARY KEY,
+            value TEXT NOT NULL
+        )
+    """)
+
     # Attempt to alter existing table in case it was created previously without these columns
     try:
         c.execute("ALTER TABLE candidate_profiles ADD COLUMN verification_status TEXT DEFAULT 'Unverified'")
@@ -118,6 +133,24 @@ def init_db():
         c.execute("ALTER TABLE candidate_profiles ADD COLUMN verification_recommendation TEXT")
     except sqlite3.OperationalError:
         pass
+
+    # Seed Default Admin User
+    admin_exists = c.execute("SELECT id FROM users WHERE email = 'admin@vettorix.com'").fetchone()
+    if not admin_exists:
+        from app.services.auth import hash_password
+        admin_pass = hash_password("admin123")
+        c.execute("INSERT INTO users (email, password, role) VALUES (?, ?, ?)", ("admin@vettorix.com", admin_pass, "admin"))
+
+    # Seed Default Criteria if none exist
+    criteria_count = c.execute("SELECT COUNT(*) as count FROM vetting_criteria").fetchone()["count"]
+    if criteria_count == 0:
+        c.execute("INSERT INTO vetting_criteria (name, weight) VALUES ('Word Count Mastery', 40)")
+        c.execute("INSERT INTO vetting_criteria (name, weight) VALUES ('Keyword Fluency', 60)")
+
+    # Seed Default Setting
+    threshold_exists = c.execute("SELECT key FROM system_settings WHERE key = 'passing_threshold'").fetchone()
+    if not threshold_exists:
+        c.execute("INSERT INTO system_settings (key, value) VALUES ('passing_threshold', '50')")
 
     conn.commit()
     conn.close()

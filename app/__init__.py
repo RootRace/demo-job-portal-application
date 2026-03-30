@@ -6,6 +6,7 @@ from app.controller.candidate import candidate_bp
 from app.controller.recruiter import recruiter_bp
 from app.controller.jobs import jobs_bp
 from app.controller.api import api_bp
+from app.controller.admin import admin_bp
 from app.services.db import init_db, migrate_users_table
 
 load_dotenv()
@@ -29,6 +30,7 @@ def create_app():
     app.register_blueprint(recruiter_bp)
     app.register_blueprint(jobs_bp)
     app.register_blueprint(api_bp)
+    app.register_blueprint(admin_bp)
 
     # ✅ Prevent caching issues
     @app.after_request
