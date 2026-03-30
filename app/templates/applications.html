@@ -27,6 +27,7 @@
     </div>
 
     <div class="container">
+        <!-- Dashboard Statistics Layer -->
         <div class="row g-4 mb-5">
             <div class="col-md-3">
                 <div class="hub-stat-card">
@@ -54,64 +55,37 @@
             </div>
         </div>
 
+        <!-- Filter Flow Control Panel -->
         <div class="card control-center-card border-0 shadow-sm mb-5">
             <div class="card-body p-4 p-md-5">
                 <div class="row g-4 align-items-end">
-                    <div class="col-lg-3">
-                        <label class="exec-label">Candidate Name</label>
+                    <div class="col-lg-5">
+                        <label class="exec-label">Filter by skill</label>
                         <div class="exec-input-group">
-                            <i class="fas fa-user"></i>
-                            <input type="text" id="searchInput" class="exec-control" placeholder="Name or location...">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="skill-input" class="exec-control" placeholder="e.g. Python, Agile..." value="{{ request.args.get('skill', '') }}">
                         </div>
                     </div>
-                    <div class="col-lg-2">
-                        <label class="exec-label">Required Skill</label>
+                    <div class="col-md-4 col-lg-3">
+                        <label class="exec-label">Min. years experience</label>
                         <div class="exec-input-group">
-                            <i class="fas fa-code"></i>
-                            <input type="text" id="skillFilter" class="exec-control" placeholder="E.g. Python">
+                            <i class="fas fa-briefcase"></i>
+                            <input type="number" id="exp-input" class="exec-control" placeholder="0" min="0" step="0.5" value="{{ request.args.get('min_exp', '') }}">
                         </div>
                     </div>
                     <div class="col-md-3 col-lg-2">
-                        <label class="exec-label">Status Flow</label>
-                        <select class="exec-control" id="statusFilter">
-                            <option value="all">All Channels</option>
-                            <option value="applied">Under Review</option>
-                            <option value="shortlisted">Shortlisted</option>
-                            <option value="rejected">Rejected</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3 col-lg-2">
-                        <label class="exec-label">Experience Matrix</label>
-                        <select class="exec-control" id="experienceFilter">
-                            <option value="all">All Tiers</option>
-                            <option value="0-2">0-2 years</option>
-                            <option value="2-5">2-5 years</option>
-                            <option value="5-10">5-10 years</option>
-                            <option value="10+">10+ years</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3 col-lg-2">
-                        <label class="exec-label">Sort Logic</label>
-                        <select class="exec-control" id="sortSelect">
-                            <option value="recent">Sequence: Recent</option>
-                            <option value="experience_high">Tier: Seniority</option>
-                            <option value="name">Alpha: A-Z</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2 col-lg-1">
-                        <label class="exec-label d-none d-lg-block">&nbsp;</label>
-                        <button class="btn-exec-outline w-100" id="resetFilters" title="Reset Filters" style="padding: 12px 0;">
-                            <i class="fas fa-redo"></i>
+                        <button class="btn-exec-outline w-100 py-2 d-flex justify-content-center align-items-center" id="filter-btn" style="height: 48px;">
+                            <i class="fas fa-filter me-2"></i>Filter
                         </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row g-4" id="applicationsGrid">
+        <div class="row g-4" id="candidates-list">
             {% if applications %}
                 {% for application in applications %}
-                <div class="col-xl-4 col-md-6 candidate-wrapper" data-status="{{ application.status }}" data-experience="{{ application.experience_years }}" data-skills="{{ application.skills }}">
+                <div class="col-xl-4 col-md-6 candidate-wrapper" data-status="{{ application.status }}" data-experience="{{ application.experience_years }}">
                     <div class="card candidate-matrix-card border-0 shadow-sm h-100">
                         <div class="card-body p-4">
                             <div class="d-flex justify-content-between align-items-start mb-4">
@@ -122,7 +96,7 @@
                                     <div>
                                         <h5 class="candidate-name fw-extrabold mb-1">{{ application.full_name }}</h5>
                                         <div class="x-small text-muted fw-bold text-uppercase tracking-wider">
-                                            <i class="fas fa-location-arrow me-1 text-primary"></i>{{ application.candidate_location }}
+                                            <i class="fas fa-location-arrow me-1 text-primary"></i>{{ application.candidate_location or 'Unknown' }}
                                         </div>
                                         
                                         {% if application.verification_status == 'Verified' %}
@@ -166,7 +140,7 @@
                             <div class="skill-stack mb-4">
                                 <label class="exec-label x-small mb-2">Keyword Proficiency</label>
                                 <div class="d-flex flex-wrap gap-2">
-                                    {% set skills_list = application.skills.split(',') %}
+                                    {% set skills_list = application.skills.split(',') if application.skills else [] %}
                                     {% for skill in skills_list[:3] %}
                                         <span class="skill-pill-sm">{{ skill.strip() }}</span>
                                     {% endfor %}
@@ -198,8 +172,8 @@
                 <div class="col-12 text-center py-5">
                     <div class="empty-state-exec">
                         <i class="fas fa-radar fa-3x mb-4"></i>
-                        <h4 class="fw-bold">Awaiting Talent Inbound</h4>
-                        <p class="text-muted">No candidates have interfaced with this vacancy yet.</p>
+                        <h4 class="fw-bold">No candidates match the filters</h4>
+                        <p class="text-muted">Try adjusting your skill or experience requirements.</p>
                     </div>
                 </div>
             {% endif %}
@@ -230,7 +204,7 @@
     .exec-label { font-size: 0.65rem; text-transform: uppercase; font-weight: 800; color: #71717a; letter-spacing: 1.5px; margin-bottom: 8px; display: block; }
     .exec-input-group { position: relative; display: flex; align-items: center; }
     .exec-input-group i { position: absolute; left: 16px; color: #a1a1aa; font-size: 0.9rem; }
-    .exec-control { width: 100%; background: var(--exec-grey); border: 1px solid transparent; padding: 12px 16px 12px 45px; border-radius: 12px; font-weight: 600; font-size: 0.9rem; transition: 0.2s; }
+    .exec-control { height: 48px; width: 100%; background: var(--exec-grey); border: 1px solid transparent; padding: 12px 16px 12px 45px; border-radius: 12px; font-weight: 600; font-size: 0.9rem; transition: 0.2s; }
     .exec-control:focus { outline: none; border-color: var(--exec-dark); background: #fff; }
 
     /* Candidate Matrix */
@@ -255,7 +229,7 @@
     .empty-state-exec { padding: 60px; color: var(--exec-border); }
     .fw-extrabold { font-weight: 800; }
 
-    /* Client color updates – all buttons #1F4ED8, black backgrounds to #2CBFAE */
+    /* Client color updates */
     .btn-exec-outline-white,
     .btn-exec-outline {
         border-color: #1F4ED8 !important;
@@ -274,7 +248,7 @@
         background: #1F4ED8 !important;
     }
     .btn-exec-status.bg-success-glow:hover {
-        background: #163A8E !important; /* slightly darker for hover */
+        background: #163A8E !important; 
     }
 
     .btn-exec-status-outline {
@@ -295,80 +269,220 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('searchInput');
-        const skillFilter = document.getElementById('skillFilter');
-        const statusFilter = document.getElementById('statusFilter');
-        const experienceFilter = document.getElementById('experienceFilter');
-        const sortSelect = document.getElementById('sortSelect');
-        const resetFilters = document.getElementById('resetFilters');
-        const candidateCards = document.querySelectorAll('.candidate-wrapper');
-        
-        function filterAndSortCards() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const skillTerm = skillFilter.value.toLowerCase();
-            const statusValue = statusFilter.value;
-            const experienceValue = experienceFilter.value;
-            const sortValue = sortSelect.value;
-            
-            candidateCards.forEach(card => {
-                const status = card.getAttribute('data-status');
-                const experience = parseInt(card.getAttribute('data-experience'));
-                const skills = (card.getAttribute('data-skills') || '').toLowerCase();
-                const text = card.textContent.toLowerCase();
-                
-                const searchMatch = text.includes(searchTerm);
-                const skillMatch = skillTerm === '' || skills.includes(skillTerm);
-                const statusMatch = statusValue === 'all' || status === statusValue;
-                
-                let experienceMatch = true;
-                if (experienceValue !== 'all') {
-                    switch(experienceValue) {
-                        case '0-2': experienceMatch = experience >= 0 && experience <= 2; break;
-                        case '2-5': experienceMatch = experience >= 2 && experience <= 5; break;
-                        case '5-10': experienceMatch = experience >= 5 && experience <= 10; break;
-                        case '10+': experienceMatch = experience >= 10; break;
-                    }
-                }
-                
-                card.style.display = (searchMatch && skillMatch && statusMatch && experienceMatch) ? 'block' : 'none';
-            });
-            
-            const visibleCards = Array.from(candidateCards).filter(card => card.style.display !== 'none');
-            const grid = document.getElementById('applicationsGrid');
-            
-            visibleCards.sort((a, b) => {
-                const nameA = a.querySelector('.candidate-name').textContent.toLowerCase();
-                const nameB = b.querySelector('.candidate-name').textContent.toLowerCase();
-                const expA = parseInt(a.getAttribute('data-experience'));
-                const expB = parseInt(b.getAttribute('data-experience'));
-                
-                if (sortValue === 'name') return nameA.localeCompare(nameB);
-                if (sortValue === 'experience_high') return expB - expA;
-                return 0; // Default: recent (DOM order)
-            });
-            
-            visibleCards.forEach(card => grid.appendChild(card));
-        }
+        let debounceTimer;
+        const skillInput = document.getElementById('skill-input');
+        const expInput = document.getElementById('exp-input');
+        const filterBtn = document.getElementById('filter-btn');
+        const candidatesList = document.getElementById('candidates-list');
+        const jobId = {{ job.id }};
 
-        searchInput.addEventListener('input', filterAndSortCards);
-        skillFilter.addEventListener('input', filterAndSortCards);
-        [statusFilter, experienceFilter, sortSelect].forEach(el => el.addEventListener('change', filterAndSortCards));
-        
-        resetFilters.addEventListener('click', () => {
-            searchInput.value = '';
-            skillFilter.value = '';
-            statusFilter.value = 'all';
-            experienceFilter.value = 'all';
-            sortSelect.value = 'recent';
-            filterAndSortCards();
+        const escapeHTML = (str) => {
+            if (!str) return '';
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
+        };
+
+        const getVerificationBadgeHTML = (app) => {
+            if (app.verification_status === 'Verified') {
+                if (app.verification_score > 80) {
+                    return `
+                        <div class="verification-badge bg-success text-white mt-2">
+                            <i class="fas fa-check-circle me-1"></i> Highly Recommended
+                        </div>
+                        <div class="mt-2 p-2 bg-light rounded text-muted x-small border" style="max-width:350px;">
+                            <strong>Intelligence Summary:</strong> ${escapeHTML(app.verification_recommendation)}
+                        </div>`;
+                } else if (app.verification_score > 50) {
+                    return `
+                        <div class="verification-badge bg-primary text-white mt-2">
+                            <i class="fas fa-check me-1"></i> Recommended
+                        </div>
+                        <div class="mt-2 p-2 bg-light rounded text-muted x-small border" style="max-width:350px;">
+                            <strong>Intelligence Summary:</strong> ${escapeHTML(app.verification_recommendation)}
+                        </div>`;
+                } else {
+                    return `
+                        <div class="verification-badge bg-warning text-dark mt-2">
+                            <i class="fas fa-exclamation-triangle me-1"></i> Needs Review
+                        </div>
+                        <div class="mt-2 p-2 bg-light rounded text-muted x-small border" style="max-width:350px;">
+                            <strong>Intelligence Summary:</strong> ${escapeHTML(app.verification_recommendation)}
+                        </div>`;
+                }
+            } else if (app.verification_status && app.verification_status !== 'Unverified') {
+                return `
+                    <div class="verification-badge bg-secondary text-white mt-2">
+                        <i class="fas fa-clock me-1"></i> Vetting: ${escapeHTML(app.verification_status)}
+                    </div>`;
+            }
+            return '';
+        };
+
+        const getSkillsHTML = (skillsStr) => {
+            if (!skillsStr) return '';
+            const skills = skillsStr.split(',');
+            let html = '';
+            for (let i = 0; i < Math.min(3, skills.length); i++) {
+                html += `<span class="skill-pill-sm">${escapeHTML(skills[i].trim())}</span>`;
+            }
+            if (skills.length > 3) {
+                html += `<span class="skill-pill-sm bg-dark text-white">+${skills.length - 3}</span>`;
+            }
+            return html;
+        };
+
+        const fetchCandidates = () => {
+            const skill = encodeURIComponent(skillInput.value.trim());
+            const minExp = encodeURIComponent(expInput.value.trim());
+
+            // Add loading state opacity
+            candidatesList.style.opacity = '0.5';
+
+            fetch(`/recruiter/applications/${jobId}/filter?skill=${skill}&min_exp=${minExp}`)
+                .then(res => res.json())
+                .then(data => {
+                    candidatesList.style.opacity = '1';
+                    
+                    if (data.error) {
+                        console.error(data.error);
+                        return;
+                    }
+                    if (data.length === 0) {
+                        candidatesList.innerHTML = `
+                            <div class="col-12 text-center py-5">
+                                <div class="empty-state-exec">
+                                    <i class="fas fa-radar fa-3x mb-4"></i>
+                                    <h4 class="fw-bold">No candidates match the filters</h4>
+                                    <p class="text-muted">Try adjusting your skill or experience requirements.</p>
+                                </div>
+                            </div>`;
+                        return;
+                    }
+                    
+                    let html = '';
+                    data.forEach(app => {
+                        const avatarLetter = (app.full_name && app.full_name.length > 0) ? app.full_name.charAt(0).toUpperCase() : '?';
+                        const locationStr = app.candidate_location ? app.candidate_location : 'Unknown';
+                        const timeStr = app.applied_at ? app.applied_at.substring(0, 10) : '';
+
+                        let actionButtons = '';
+                        if (app.status !== 'shortlisted') {
+                            actionButtons += `<button type="submit" name="status" value="shortlisted" class="btn-exec-status bg-success-glow">Shortlist</button>`;
+                        }
+                        if (app.status !== 'rejected') {
+                            actionButtons += `<button type="submit" name="status" value="rejected" class="btn-exec-status-outline text-danger border-danger">Reject</button>`;
+                        }
+
+                        html += `
+                        <div class="col-xl-4 col-md-6 candidate-wrapper">
+                            <div class="card candidate-matrix-card border-0 shadow-sm h-100">
+                                <div class="card-body p-4">
+                                    <div class="d-flex justify-content-between align-items-start mb-4">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="avatar-sq">${avatarLetter}</div>
+                                            <div>
+                                                <h5 class="candidate-name fw-extrabold mb-1">${escapeHTML(app.full_name)}</h5>
+                                                <div class="x-small text-muted fw-bold text-uppercase tracking-wider">
+                                                    <i class="fas fa-location-arrow me-1 text-primary"></i>${escapeHTML(locationStr)}
+                                                </div>
+                                                ${getVerificationBadgeHTML(app)}
+                                            </div>
+                                        </div>
+                                        <span class="status-pill-exec status-${escapeHTML(app.status)}">${escapeHTML(app.status)}</span>
+                                    </div>
+
+                                    <div class="data-row mb-4">
+                                        <div class="d-flex align-items-center x-small fw-bold text-muted mb-2">
+                                            <i class="fas fa-briefcase text-dark me-2"></i> ${app.experience_years || 0} YEARS TENURE
+                                        </div>
+                                        <div class="d-flex align-items-center x-small fw-bold text-muted">
+                                            <i class="fas fa-calendar-alt text-dark me-2"></i> LOGGED: ${timeStr}
+                                        </div>
+                                    </div>
+
+                                    <div class="skill-stack mb-4">
+                                        <label class="exec-label x-small mb-2">Keyword Proficiency</label>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            ${getSkillsHTML(app.skills)}
+                                        </div>
+                                    </div>
+
+                                    <div class="hub-actions d-flex gap-2">
+                                        <form method="POST" action="/recruiter/update-application-status" class="d-flex gap-2 flex-grow-1">
+                                            <input type="hidden" name="application_id" value="${app.id}">
+                                            ${actionButtons}
+                                        </form>
+                                        <a href="/recruiter/application/${app.id}" class="btn-exec-view view-profile" style="text-decoration: none;">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+                    });
+                    
+                    candidatesList.innerHTML = html;
+                })
+                .catch(err => {
+                    candidatesList.style.opacity = '1';
+                    console.error("Failed to fetch candidates:", err);
+                });
+        };
+
+        filterBtn.addEventListener('click', fetchCandidates);
+
+        skillInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(fetchCandidates, 300);
         });
 
-        document.querySelectorAll('.view-profile').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
-                // Potential integration point for candidate detail modal
-                console.log("Analyzing Candidate ID:", id);
-            });
+        expInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(fetchCandidates, 300);
+        });
+
+        // Push URL state natively to preserve reload functionality
+        const updateURLParams = () => {
+            const currentUrl = new URL(window.location.href);
+            if (skillInput.value) {
+                currentUrl.searchParams.set('skill', skillInput.value);
+            } else {
+                currentUrl.searchParams.delete('skill');
+            }
+            if (expInput.value) {
+                currentUrl.searchParams.set('min_exp', expInput.value);
+            } else {
+                currentUrl.searchParams.delete('min_exp');
+            }
+            window.history.replaceState({}, '', currentUrl);
+        };
+
+        // Attach to the main filter action
+        const originalFetch = fetchCandidates;
+        const wrappedFetch = () => {
+            updateURLParams();
+            originalFetch();
+        };
+
+        // Override existing bindings safely
+        filterBtn.removeEventListener('click', fetchCandidates);
+        filterBtn.addEventListener('click', wrappedFetch);
+
+        skillInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(wrappedFetch, 300);
+        });
+
+        expInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(wrappedFetch, 300);
         });
     });
 </script>

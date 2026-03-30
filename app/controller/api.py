@@ -2,8 +2,7 @@ import os
 from flask import Blueprint, request, jsonify, current_app, session
 from werkzeug.utils import secure_filename
 from app.services.cv_parser import extract_info_from_cv, ensure_nlp
-from app.services.db import get_db_connection
-from app.services.cv_parser import extract_info_from_cv, ensure_nlp
+from app.services.notifications import get_unread_notifications, mark_all_read, get_notification_count
 
 api_bp = Blueprint("api", __name__, url_prefix="/api")
 
@@ -32,32 +31,24 @@ def upload_cv_extract():
 
     return jsonify({"success": True, **extracted_data})
 
+
 @api_bp.route("/notifications", methods=["GET"])
 def get_notifications():
     if "user_id" not in session:
-        return jsonify({"success": False, "error": "Unauthorized"}), 401
-    
-    conn = get_db_connection()
-    notifications = conn.execute(
-        "SELECT id, message, is_read, created_at FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT 20",
-        (session["user_id"],)
-    ).fetchall()
-    conn.close()
-    
+        return jsonify({"error": "unauthorized"}), 401
+        
+    user_id = session["user_id"]
     return jsonify({
-        "success": True,
-        "notifications": [dict(n) for n in notifications],
-        "unread_count": sum(1 for n in notifications if not n["is_read"])
+        "count": get_notification_count(user_id),
+        "notifications": get_unread_notifications(user_id, limit=10)
     })
 
-@api_bp.route("/notifications/mark-read", methods=["POST"])
-def mark_notifications_read():
+
+@api_bp.route("/notifications/read", methods=["POST"])
+def read_notifications():
     if "user_id" not in session:
-        return jsonify({"success": False, "error": "Unauthorized"}), 401
+        return jsonify({"error": "unauthorized"}), 401
         
-    conn = get_db_connection()
-    conn.execute("UPDATE notifications SET is_read = 1 WHERE user_id = ? AND is_read = 0", (session["user_id"],))
-    conn.commit()
-    conn.close()
-    
+    user_id = session["user_id"]
+    mark_all_read(user_id)
     return jsonify({"success": True})

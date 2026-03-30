@@ -21,7 +21,7 @@ def create_app():
 
     # ✅ Initialize database automatically when the app starts
     with app.app_context():
-        init_db()  # safe (CREATE IF NOT EXISTS)
+        init_db()           # safe (CREATE IF NOT EXISTS + seed criteria)
         migrate_users_table()  # 🔥 REQUIRED for existing DBs
 
     # ✅ Register blueprints

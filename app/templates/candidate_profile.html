@@ -155,6 +155,35 @@
               </form>
             </div>
           </div>
+          
+          <!-- Activity Notifications Log -->
+          <div class="card executive-card border-0 shadow-2xl mb-5 fade-in-up" style="animation-delay: 0.1s;">
+            <div class="card-header bg-white border-bottom p-4">
+               <h4 class="h6 fw-bold mb-0 text-dark"><i class="fas fa-bell me-2" style="color: #1F4ED8;"></i>Recent Transmissions</h4>
+            </div>
+            <div class="card-body p-0">
+                {% if notifications %}
+                    <ul class="list-group list-group-flush">
+                    {% for n in notifications %}
+                        <li class="list-group-item p-4 {{ 'bg-light' if not n.is_read else '' }}">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge {{ 'bg-primary' if not n.is_read else 'bg-secondary opacity-50' }}">{{ 'New' if not n.is_read else 'Read' }}</span>
+                                <small class="text-muted fw-bold x-small text-uppercase tracking-widest">{{ n.created_at[:16] }}</small>
+                            </div>
+                            <p class="mb-0 text-dark fw-medium small" style="line-height: 1.5;">{{ n.message }}</p>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="p-5 text-center text-muted">
+                        <i class="fas fa-inbox fa-3x mb-3 opacity-25" style="color: #1F4ED8;"></i>
+                        <h6 class="fw-bold text-uppercase tracking-widest x-small">Awaiting Intelligence</h6>
+                        <p class="mb-0 small">No interactions have been recorded in this cycle.</p>
+                    </div>
+                {% endif %}
+            </div>
+          </div>
+
         </div>
       </div>
       

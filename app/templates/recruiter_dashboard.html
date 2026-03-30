@@ -12,15 +12,15 @@
     <div class="container">
 
         <div class="row g-4 mb-5">
-            <div class="col-md-3">
-                <div class="metric-card shadow-premium border-primary-fade">
+            <div class="col-md-4">
+                <div class="metric-card shadow-premium">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h2 class="display-6 fw-extrabold mb-0">{{ jobs|length }}</h2>
                                 <p class="text-muted text-uppercase tracking-wider small fw-bold">Active Postings</p>
                             </div>
-                            <div class="metric-icon-box bg-primary text-white">
+                            <div class="metric-icon-box bg-teal text-white">
                                 <i class="fas fa-briefcase"></i>
                             </div>
                         </div>
@@ -28,31 +28,15 @@
                 </div>
             </div>
             
-            <div class="col-md-3">
-                <div class="metric-card shadow-premium border-info-fade">
+            <div class="col-md-4">
+                <div class="metric-card shadow-premium border-primary-fade">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h2 class="display-6 fw-extrabold mb-0">{{ total_candidates }}</h2>
-                                <p class="text-muted text-uppercase tracking-wider small fw-bold">Total Candidates</p>
-                            </div>
-                            <div class="metric-icon-box bg-info text-dark">
-                                <i class="fas fa-users"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="metric-card shadow-premium border-warning-fade">
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h2 class="display-6 fw-extrabold mb-0">{{ total_applications }}</h2>
+                                <h2 class="display-6 fw-extrabold mb-0">{{ jobs|sum(attribute='application_count') }}</h2>
                                 <p class="text-muted text-uppercase tracking-wider small fw-bold">Total Inbound</p>
                             </div>
-                            <div class="metric-icon-box bg-warning text-dark">
+                            <div class="metric-icon-box bg-primary text-white">
                                 <i class="fas fa-file-invoice"></i>
                             </div>
                         </div>
@@ -60,12 +44,12 @@
                 </div>
             </div>
             
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="metric-card shadow-premium border-success-fade">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h2 class="display-6 fw-extrabold mb-0">{{ chart_data.shortlisted }}</h2>
+                                <h2 class="display-6 fw-extrabold mb-0">{{ jobs|sum(attribute='shortlisted_count') }}</h2>
                                 <p class="text-muted text-uppercase tracking-wider small fw-bold">Elite Shortlist</p>
                             </div>
                             <div class="metric-icon-box bg-success text-white">
@@ -77,21 +61,56 @@
             </div>
         </div>
 
-        <!-- NEW VISUAL ANALYTICS ROW -->
-        <div class="row mb-5">
-            <div class="col-md-6 offset-md-3">
-                <div class="card shadow-premium border-0" style="border-radius: 20px;">
-                    <div class="card-header bg-white border-bottom p-4">
-                        <h5 class="mb-0 fw-bold text-dark"><i class="fas fa-chart-pie me-2 text-primary"></i>Application Status Distribution</h5>
-                    </div>
-                    <div class="card-body p-4 d-flex justify-content-center">
-                        <div style="width: 100%; max-width: 350px;">
-                            <canvas id="statusChart"></canvas>
-                        </div>
-                    </div>
-                </div>
+        <section style="margin: 1.5rem 0;">
+          <h3 style="font-size:15px; font-weight:500; margin-bottom:0.75rem;
+                     color:var(--color-text-primary)">
+            Candidate Verification Distribution
+          </h3>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+
+            <div style="flex:1; min-width:130px; padding:14px 16px;
+                        border-radius:10px; border:1px solid var(--color-border-tertiary);
+                        background:var(--color-background-secondary);">
+              <div style="font-size:22px; font-weight:500; color:#3B6D11;">
+                {{ verification_dist["Verified"] }}
+              </div>
+              <div style="font-size:12px; color:var(--color-text-secondary);
+                          margin-top:3px;">Verified</div>
             </div>
-        </div>
+
+            <div style="flex:1; min-width:130px; padding:14px 16px;
+                        border-radius:10px; border:1px solid var(--color-border-tertiary);
+                        background:var(--color-background-secondary);">
+              <div style="font-size:22px; font-weight:500; color:#854F0B;">
+                {{ verification_dist["Pending Review"] }}
+              </div>
+              <div style="font-size:12px; color:var(--color-text-secondary);
+                          margin-top:3px;">Pending Review</div>
+            </div>
+
+            <div style="flex:1; min-width:130px; padding:14px 16px;
+                        border-radius:10px; border:1px solid var(--color-border-tertiary);
+                        background:var(--color-background-secondary);">
+              <div style="font-size:22px; font-weight:500; color:#A32D2D;">
+                {{ verification_dist["Needs Improvement"] }}
+              </div>
+              <div style="font-size:12px; color:var(--color-text-secondary);
+                          margin-top:3px;">Needs Improvement</div>
+            </div>
+
+            <div style="flex:1; min-width:130px; padding:14px 16px;
+                        border-radius:10px; border:1px solid var(--color-border-tertiary);
+                        background:var(--color-background-secondary);">
+              <div style="font-size:22px; font-weight:500;
+                          color:var(--color-text-secondary);">
+                {{ verification_dist["Unverified"] }}
+              </div>
+              <div style="font-size:12px; color:var(--color-text-secondary);
+                          margin-top:3px;">Unverified</div>
+            </div>
+
+          </div>
+        </section>
 
         <div class="row g-4">
             <div class="col-lg-8">
@@ -292,47 +311,4 @@
 
     .shadow-premium { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    // Dynamic Chart Logic
-    const ctx = document.getElementById('statusChart').getContext('2d');
-    
-    // Values from backend
-    const appliedData = parseInt("{{ chart_data.applied }}") || 0;
-    const shortlistData = parseInt("{{ chart_data.shortlisted }}") || 0;
-    const rejectedData = parseInt("{{ chart_data.rejected }}") || 0;
-
-    // Instantiate Chart
-    const statusChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Pending', 'Shortlisted', 'Rejected'],
-            datasets: [{
-                data: [appliedData, shortlistData, rejectedData],
-                backgroundColor: [
-                    '#f59e0b', // warning/amber
-                    '#10b981', // success/emerald
-                    '#ef4444'  // danger/red
-                ],
-                borderWidth: 0,
-                hoverOffset: 4
-            }]
-        },
-        options: {
-            responsive: true,
-            cutout: '75%',
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 20,
-                        font: { family: "'Inter', sans-serif", weight: 'bold', size: 12 }
-                    }
-                }
-            }
-        }
-    });
-});
-</script>
 {% endblock %}
