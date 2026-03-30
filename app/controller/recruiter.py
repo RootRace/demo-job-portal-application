@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, jsonify
 from app.services.db import get_db_connection
 from app.services.auth import role_required
+from app.services.notifications import create_notification
 
 recruiter_bp = Blueprint("recruiter", __name__, url_prefix="/recruiter")
 
@@ -38,9 +39,31 @@ def dashboard():
         (session["user_id"],),
     ).fetchall()
 
+    verification_stats = conn.execute("""
+        SELECT 
+            cp.verification_status,
+            COUNT(*) as count
+        FROM applications a
+        JOIN jobs j ON a.job_id = j.id
+        JOIN candidate_profiles cp ON a.candidate_id = cp.user_id
+        WHERE j.recruiter_id = ?
+        GROUP BY cp.verification_status
+    """, (session["user_id"],)).fetchall()
+
+    verification_dist = {row["verification_status"]: row["count"] 
+                         for row in verification_stats}
+
+    # Ensure all keys always exist (avoid KeyError in template)
+    for key in ["Verified", "Pending Review", "Needs Improvement", "Unverified"]:
+        verification_dist.setdefault(key, 0)
+
     conn.close()
 
-    return render_template("recruiter_dashboard.html", jobs=jobs, recent_applications=recent_applications)
+    return render_template("recruiter_dashboard.html", 
+        jobs=jobs, 
+        recent_applications=recent_applications,
+        verification_dist=verification_dist
+    )
 
 
 @recruiter_bp.route("/post-job", methods=["GET", "POST"])
@@ -77,28 +100,100 @@ def post_job():
 def view_applications(job_id):
     conn = get_db_connection()
 
+    skill_filter = request.args.get("skill", "").strip()
+    min_exp_str = request.args.get("min_exp", "").strip()
+
+    try:
+        min_exp = float(min_exp_str) if min_exp_str else 0.0
+    except ValueError:
+        min_exp = 0.0
+
     job = conn.execute(
-        "SELECT id, title FROM jobs WHERE id = ? AND recruiter_id = ?", (job_id, session["user_id"])
+        "SELECT id, title, company, location, job_type FROM jobs WHERE id = ? AND recruiter_id = ?", 
+        (job_id, session["user_id"])
     ).fetchone()
+    
     if not job:
         flash("Job not found.", "error")
         conn.close()
         return redirect(url_for("recruiter.dashboard"))
 
-    applications = conn.execute(
-        """
+    query = """
         SELECT a.*, cp.full_name, cp.skills, cp.experience_years, cp.location as candidate_location, 
                cp.verification_status, cp.verification_score, cp.verification_recommendation
         FROM applications a
         JOIN candidate_profiles cp ON a.candidate_id = cp.user_id
         WHERE a.job_id = ?
-        ORDER BY a.applied_at DESC
-    """,
-        (job_id,),
-    ).fetchall()
+    """
+    params = [job_id]
+
+    if skill_filter:
+        query += " AND LOWER(cp.skills) LIKE ?"
+        params.append(f"%{skill_filter.lower()}%")
+
+    if min_exp > 0:
+        query += " AND cp.experience_years >= ?"
+        params.append(min_exp)
+
+    query += " ORDER BY a.applied_at DESC"
+
+    applications = conn.execute(query, tuple(params)).fetchall()
 
     conn.close()
     return render_template("applications.html", applications=applications, job=job)
+
+
+@recruiter_bp.route("/applications/<int:job_id>/filter")
+@role_required("recruiter")
+def filter_applications(job_id):
+    conn = get_db_connection()
+
+    skill_filter = request.args.get("skill", "").strip()
+    min_exp_str = request.args.get("min_exp", "").strip()
+
+    try:
+        min_exp = float(min_exp_str) if min_exp_str else 0.0
+    except ValueError:
+        min_exp = 0.0
+
+    job = conn.execute(
+        "SELECT id FROM jobs WHERE id = ? AND recruiter_id = ?", 
+        (job_id, session["user_id"])
+    ).fetchone()
+    
+    if not job:
+        conn.close()
+        return jsonify({"error": "Job not found or unauthorized"}), 403
+
+    query = """
+        SELECT a.id, a.status, a.applied_at, a.job_id, a.candidate_id, 
+               cp.full_name, cp.skills, cp.experience_years, cp.location as candidate_location, 
+               cp.verification_status, cp.verification_score, cp.verification_recommendation
+        FROM applications a
+        JOIN candidate_profiles cp ON a.candidate_id = cp.user_id
+        WHERE a.job_id = ?
+    """
+    params = [job_id]
+
+    if skill_filter:
+        query += " AND LOWER(cp.skills) LIKE ?"
+        params.append(f"%{skill_filter.lower()}%")
+
+    if min_exp > 0:
+        query += " AND cp.experience_years >= ?"
+        params.append(min_exp)
+
+    query += " ORDER BY a.applied_at DESC"
+
+    results = conn.execute(query, tuple(params)).fetchall()
+    conn.close()
+
+    apps_list = []
+    for row in results:
+        app_dict = dict(row)
+        apps_list.append(app_dict)
+
+    return jsonify(apps_list)
 
 
 @recruiter_bp.route("/update-application-status", methods=["POST"])
@@ -111,7 +206,7 @@ def update_application_status():
 
     application = conn.execute(
         """
-        SELECT a.id 
+        SELECT a.id, a.candidate_id, j.title as job_title 
         FROM applications a 
         JOIN jobs j ON a.job_id = j.id 
         WHERE a.id = ? AND j.recruiter_id = ?
@@ -122,6 +217,12 @@ def update_application_status():
     if application:
         conn.execute("UPDATE applications SET status = ? WHERE id = ?", (new_status, application_id))
         conn.commit()
+        
+        create_notification(
+            application["candidate_id"],
+            f"Your application for '{application['job_title']}' has been updated to: {new_status}."
+        )
+        
         flash("Application status updated!", "success")
     else:
         flash("Application not found.", "error")

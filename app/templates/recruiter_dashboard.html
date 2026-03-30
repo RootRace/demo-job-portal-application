@@ -61,6 +61,57 @@
             </div>
         </div>
 
+        <section style="margin: 1.5rem 0;">
+          <h3 style="font-size:15px; font-weight:500; margin-bottom:0.75rem;
+                     color:var(--color-text-primary)">
+            Candidate Verification Distribution
+          </h3>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+
+            <div style="flex:1; min-width:130px; padding:14px 16px;
+                        border-radius:10px; border:1px solid var(--color-border-tertiary);
+                        background:var(--color-background-secondary);">
+              <div style="font-size:22px; font-weight:500; color:#3B6D11;">
+                {{ verification_dist["Verified"] }}
+              </div>
+              <div style="font-size:12px; color:var(--color-text-secondary);
+                          margin-top:3px;">Verified</div>
+            </div>
+
+            <div style="flex:1; min-width:130px; padding:14px 16px;
+                        border-radius:10px; border:1px solid var(--color-border-tertiary);
+                        background:var(--color-background-secondary);">
+              <div style="font-size:22px; font-weight:500; color:#854F0B;">
+                {{ verification_dist["Pending Review"] }}
+              </div>
+              <div style="font-size:12px; color:var(--color-text-secondary);
+                          margin-top:3px;">Pending Review</div>
+            </div>
+
+            <div style="flex:1; min-width:130px; padding:14px 16px;
+                        border-radius:10px; border:1px solid var(--color-border-tertiary);
+                        background:var(--color-background-secondary);">
+              <div style="font-size:22px; font-weight:500; color:#A32D2D;">
+                {{ verification_dist["Needs Improvement"] }}
+              </div>
+              <div style="font-size:12px; color:var(--color-text-secondary);
+                          margin-top:3px;">Needs Improvement</div>
+            </div>
+
+            <div style="flex:1; min-width:130px; padding:14px 16px;
+                        border-radius:10px; border:1px solid var(--color-border-tertiary);
+                        background:var(--color-background-secondary);">
+              <div style="font-size:22px; font-weight:500;
+                          color:var(--color-text-secondary);">
+                {{ verification_dist["Unverified"] }}
+              </div>
+              <div style="font-size:12px; color:var(--color-text-secondary);
+                          margin-top:3px;">Unverified</div>
+            </div>
+
+          </div>
+        </section>
+
         <div class="row g-4">
             <div class="col-lg-8">
                 <div class="card executive-table-card border-0 shadow-sm">

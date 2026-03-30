@@ -1,7 +1,8 @@
 import os
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify, current_app, session
 from werkzeug.utils import secure_filename
 from app.services.cv_parser import extract_info_from_cv, ensure_nlp
+from app.services.notifications import get_unread_notifications, mark_all_read, get_notification_count
 
 api_bp = Blueprint("api", __name__, url_prefix="/api")
 
@@ -29,3 +30,25 @@ def upload_cv_extract():
     current_app.logger.debug("CV extraction result: %s", extracted_data)
 
     return jsonify({"success": True, **extracted_data})
+
+
+@api_bp.route("/notifications", methods=["GET"])
+def get_notifications():
+    if "user_id" not in session:
+        return jsonify({"error": "unauthorized"}), 401
+        
+    user_id = session["user_id"]
+    return jsonify({
+        "count": get_notification_count(user_id),
+        "notifications": get_unread_notifications(user_id, limit=10)
+    })
+
+
+@api_bp.route("/notifications/read", methods=["POST"])
+def read_notifications():
+    if "user_id" not in session:
+        return jsonify({"error": "unauthorized"}), 401
+        
+    user_id = session["user_id"]
+    mark_all_read(user_id)
+    return jsonify({"success": True})

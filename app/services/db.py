@@ -31,6 +31,8 @@ def init_db():
     conn = get_db_connection()
     c = conn.cursor()
 
+    # Allowed roles: 'candidate', 'recruiter', 'admin'
+    # (SQLite has no ENUM — role constraint is enforced in the application layer)
     c.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -103,21 +105,56 @@ def init_db():
         )
     """)
 
-    # Attempt to alter existing table in case it was created previously without these columns
-    try:
-        c.execute("ALTER TABLE candidate_profiles ADD COLUMN verification_status TEXT DEFAULT 'Unverified'")
-    except sqlite3.OperationalError:
-        pass
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS notifications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            message TEXT NOT NULL,
+            is_read INTEGER DEFAULT 0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users (id)
+        )
+    """)
 
-    try:
-        c.execute("ALTER TABLE candidate_profiles ADD COLUMN verification_score INTEGER DEFAULT 0")
-    except sqlite3.OperationalError:
-        pass
+    # Admin-managed scoring criteria table
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS vetting_criteria (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT UNIQUE NOT NULL,
+            weight INTEGER NOT NULL DEFAULT 1,
+            passing_threshold INTEGER NOT NULL DEFAULT 60,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
 
-    try:
-        c.execute("ALTER TABLE candidate_profiles ADD COLUMN verification_recommendation TEXT")
-    except sqlite3.OperationalError:
-        pass
+    # Seed default criteria — INSERT OR IGNORE keeps this idempotent across restarts
+    default_criteria = [
+        ("Content Quality", 40, 60),
+        ("Skills",          30, 60),
+        ("Experience",      30, 60),
+    ]
+    c.executemany(
+        "INSERT OR IGNORE INTO vetting_criteria (name, weight, passing_threshold) VALUES (?, ?, ?)",
+        default_criteria,
+    )
+
+    # Attempt to alter existing tables in case they were created without these columns
+    for alter_sql in [
+        "ALTER TABLE candidate_profiles ADD COLUMN verification_status TEXT DEFAULT 'Unverified'",
+        "ALTER TABLE candidate_profiles ADD COLUMN verification_score INTEGER DEFAULT 0",
+        "ALTER TABLE candidate_profiles ADD COLUMN verification_recommendation TEXT",
+    ]:
+        try:
+            c.execute(alter_sql)
+        except sqlite3.OperationalError:
+            pass
+
+    c.execute("CREATE INDEX IF NOT EXISTS idx_applications_job_id ON applications(job_id)")
+    c.execute("CREATE INDEX IF NOT EXISTS idx_applications_candidate_id ON applications(candidate_id)")
+    c.execute("CREATE INDEX IF NOT EXISTS idx_jobs_recruiter_id ON jobs(recruiter_id)")
+    c.execute("CREATE INDEX IF NOT EXISTS idx_candidate_profiles_user_id ON candidate_profiles(user_id)")
+    c.execute("CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id)")
+    c.execute("CREATE INDEX IF NOT EXISTS idx_vetting_applications_candidate_id ON vetting_applications(candidate_id)")
 
     conn.commit()
     conn.close()

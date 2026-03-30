@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% block title %}Admin Login | Vettorix{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --admin-primary: #1F4ED8;
+        --admin-dark:    #163A8E;
+        --admin-accent:  #2CBFAE;
+    }
+
+    .admin-login-wrapper {
+        min-height: calc(100vh - 140px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 100%);
+        padding: 2rem 1rem;
+    }
+
+    .admin-login-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(31, 78, 216, 0.15);
+        padding: 3rem 2.5rem;
+        width: 100%;
+        max-width: 440px;
+        animation: fadeInEffect 0.4s ease forwards;
+    }
+
+    .admin-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, var(--admin-primary), var(--admin-accent));
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        padding: 5px 14px;
+        border-radius: 50px;
+        margin-bottom: 1.25rem;
+    }
+
+    .admin-login-card h1 {
+        font-size: 1.85rem;
+        font-weight: 800;
+        color: #0a0a0b;
+        margin-bottom: 0.4rem;
+        line-height: 1.2;
+    }
+
+    .admin-login-card p.subtitle {
+        font-size: 0.9rem;
+        color: #6b7280;
+        margin-bottom: 2rem;
+    }
+
+    .form-label-admin {
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #374151;
+        margin-bottom: 6px;
+    }
+
+    .form-control-admin {
+        border: 1.5px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        background: #f9fafb;
+    }
+
+    .form-control-admin:focus {
+        border-color: var(--admin-primary);
+        box-shadow: 0 0 0 3px rgba(31, 78, 216, 0.12);
+        background: #fff;
+        outline: none;
+    }
+
+    .input-group-icon {
+        position: relative;
+    }
+
+    .input-group-icon i {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+        font-size: 0.9rem;
+        pointer-events: none;
+    }
+
+    .input-group-icon .form-control-admin {
+        padding-left: 2.6rem;
+    }
+
+    .btn-admin-login {
+        background: linear-gradient(135deg, var(--admin-primary), var(--admin-dark));
+        border: none;
+        border-radius: 10px;
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.95rem;
+        padding: 0.8rem;
+        width: 100%;
+        transition: transform 0.2s, box-shadow 0.2s;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-admin-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(31, 78, 216, 0.35);
+    }
+
+    .back-link {
+        text-align: center;
+        margin-top: 1.5rem;
+        font-size: 0.85rem;
+        color: #6b7280;
+    }
+
+    .back-link a {
+        color: var(--admin-primary);
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .back-link a:hover { text-decoration: underline; }
+</style>
+
+<div class="admin-login-wrapper">
+    <div class="admin-login-card">
+        <div class="admin-badge">
+            <i class="fas fa-shield-halved"></i> Admin Portal
+        </div>
+        <h1>Administrator<br>Sign In</h1>
+        <p class="subtitle">Restricted to admin accounts only.</p>
+
+        <form method="POST" action="{{ url_for('admin.admin_login') }}" novalidate>
+            <div class="mb-3">
+                <label for="adminEmail" class="form-label-admin">Email Address</label>
+                <div class="input-group-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input
+                        type="email"
+                        id="adminEmail"
+                        name="email"
+                        class="form-control form-control-admin"
+                        placeholder="admin@example.com"
+                        required
+                        autocomplete="username"
+                    >
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="adminPassword" class="form-label-admin">Password</label>
+                <div class="input-group-icon">
+                    <i class="fas fa-lock"></i>
+                    <input
+                        type="password"
+                        id="adminPassword"
+                        name="password"
+                        class="form-control form-control-admin"
+                        placeholder="••••••••"
+                        required
+                        autocomplete="current-password"
+                    >
+                </div>
+            </div>
+
+            <button type="submit" id="adminLoginBtn" class="btn-admin-login">
+                <i class="fas fa-arrow-right-to-bracket me-2"></i>Access Admin Panel
+            </button>
+        </form>
+
+        <div class="back-link">
+            <a href="{{ url_for('auth.login') }}">← Back to main login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

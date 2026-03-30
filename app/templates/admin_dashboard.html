@@ -1,0 +1,561 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard | Vettorix{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --admin-primary: #1F4ED8;
+        --admin-dark:    #163A8E;
+        --admin-accent:  #2CBFAE;
+    }
+
+    .admin-wrapper {
+        background: #f0f4ff;
+        min-height: calc(100vh - 140px);
+        padding: 2.5rem 0 4rem;
+    }
+
+    /* ---- Page Header ---- */
+    .admin-page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .admin-page-header h1 {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: #0a0a0b;
+        margin: 0;
+    }
+
+    .admin-page-header p {
+        font-size: 0.88rem;
+        color: #6b7280;
+        margin: 0;
+    }
+
+    .btn-add-criterion {
+        background: linear-gradient(135deg, var(--admin-primary), var(--admin-dark));
+        border: none;
+        border-radius: 10px;
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.88rem;
+        padding: 0.65rem 1.4rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: transform 0.2s, box-shadow 0.2s;
+        white-space: nowrap;
+    }
+
+    .btn-add-criterion:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(31, 78, 216, 0.3);
+        color: #fff;
+    }
+
+    /* ---- Stats Cards ---- */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1.25rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .stat-card {
+        background: #fff;
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 16px rgba(31, 78, 216, 0.08);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition: transform 0.2s;
+    }
+
+    .stat-card:hover { transform: translateY(-3px); }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+
+    .stat-icon.blue    { background: rgba(31,78,216,0.12);  color: var(--admin-primary); }
+    .stat-icon.teal    { background: rgba(44,191,174,0.12); color: var(--admin-accent);  }
+    .stat-icon.green   { background: rgba(16,185,129,0.12); color: #10b981; }
+    .stat-icon.orange  { background: rgba(251,146,60,0.12); color: #f97316; }
+    .stat-icon.red     { background: rgba(239,68,68,0.12);  color: #ef4444; }
+
+    .stat-value {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #0a0a0b;
+        line-height: 1;
+    }
+
+    .stat-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #9ca3af;
+        margin-top: 3px;
+    }
+
+    /* ---- Criteria Table ---- */
+    .section-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 4px 16px rgba(31, 78, 216, 0.08);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    .section-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem 1.75rem;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .section-card-header h2 {
+        font-size: 1.1rem;
+        font-weight: 800;
+        margin: 0;
+        color: #0a0a0b;
+    }
+
+    .section-card-header span {
+        font-size: 0.8rem;
+        color: #9ca3af;
+        background: #f3f4f6;
+        padding: 3px 10px;
+        border-radius: 50px;
+        font-weight: 600;
+    }
+
+    .criteria-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .criteria-table th {
+        background: #f9fafb;
+        padding: 0.8rem 1.25rem;
+        text-align: left;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #9ca3af;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .criteria-table td {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid #f9fafb;
+        font-size: 0.9rem;
+        color: #374151;
+        vertical-align: middle;
+    }
+
+    .criteria-table tr:last-child td { border-bottom: none; }
+
+    .criteria-table tr:hover td { background: #fafbff; }
+
+    .criterion-name-cell {
+        font-weight: 700;
+        color: #0a0a0b;
+    }
+
+    .weight-bar-wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .weight-bar {
+        width: 80px;
+        height: 6px;
+        background: #e5e7eb;
+        border-radius: 50px;
+        overflow: hidden;
+    }
+
+    .weight-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--admin-primary), var(--admin-accent));
+        border-radius: 50px;
+    }
+
+    .threshold-badge {
+        display: inline-block;
+        background: rgba(16,185,129,0.1);
+        color: #10b981;
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 50px;
+    }
+
+    .action-btns {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-edit-sm {
+        background: rgba(31,78,216,0.1);
+        border: none;
+        border-radius: 8px;
+        color: var(--admin-primary);
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 6px 14px;
+        text-decoration: none;
+        transition: background 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-edit-sm:hover {
+        background: rgba(31,78,216,0.2);
+        color: var(--admin-primary);
+    }
+
+    .btn-delete-sm {
+        background: rgba(239,68,68,0.1);
+        border: none;
+        border-radius: 8px;
+        color: #ef4444;
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 6px 14px;
+        cursor: pointer;
+        transition: background 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-delete-sm:hover { background: rgba(239,68,68,0.2); }
+
+    .empty-criteria {
+        padding: 3rem;
+        text-align: center;
+        color: #9ca3af;
+    }
+
+    .empty-criteria i { font-size: 2rem; margin-bottom: 0.75rem; display: block; }
+
+    /* ---- Recalculate Panel ---- */
+    .recalc-panel {
+        background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-dark) 100%);
+        border-radius: 20px;
+        padding: 2rem 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        color: #fff;
+    }
+
+    .recalc-panel h3 {
+        font-size: 1.15rem;
+        font-weight: 800;
+        margin: 0 0 4px;
+    }
+
+    .recalc-panel p {
+        font-size: 0.85rem;
+        opacity: 0.75;
+        margin: 0;
+    }
+
+    .btn-recalculate {
+        background: #fff;
+        border: none;
+        border-radius: 10px;
+        color: var(--admin-primary);
+        font-weight: 800;
+        font-size: 0.9rem;
+        padding: 0.75rem 1.75rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-recalculate:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    /* ---- Confirmation modal overlay ---- */
+    .confirm-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .confirm-overlay.show { display: flex; }
+
+    .confirm-modal {
+        background: #fff;
+        border-radius: 16px;
+        padding: 2rem;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .confirm-modal h4 { font-weight: 800; margin-bottom: 0.5rem; }
+    .confirm-modal p  { color: #6b7280; font-size: 0.88rem; margin-bottom: 1.5rem; }
+
+    .confirm-modal-btns { display: flex; gap: 10px; }
+
+    .btn-confirm-yes {
+        flex: 1;
+        background: #ef4444;
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        font-weight: 700;
+        padding: 0.65rem;
+        cursor: pointer;
+    }
+
+    .btn-confirm-no {
+        flex: 1;
+        background: #f3f4f6;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 8px;
+        color: #374151;
+        font-weight: 600;
+        padding: 0.65rem;
+        cursor: pointer;
+    }
+</style>
+
+<div class="admin-wrapper">
+    <div class="container">
+
+        <!-- Header -->
+        <div class="admin-page-header">
+            <div>
+                <h1><i class="fas fa-shield-halved me-2" style="color:var(--admin-primary)"></i>Admin Dashboard</h1>
+                <p>Manage vetting criteria and candidate scoring rules.</p>
+            </div>
+            <a href="{{ url_for('admin.add_criterion') }}" class="btn-add-criterion" id="addCriterionBtn">
+                <i class="fas fa-plus"></i> Add Criterion
+            </a>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue"><i class="fas fa-users"></i></div>
+                <div>
+                    <div class="stat-value">{{ total_candidates }}</div>
+                    <div class="stat-label">Candidates</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon teal"><i class="fas fa-file-lines"></i></div>
+                <div>
+                    <div class="stat-value">{{ total_vetting }}</div>
+                    <div class="stat-label">Vetting Apps</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green"><i class="fas fa-circle-check"></i></div>
+                <div>
+                    <div class="stat-value">{{ status_map.get('Verified', 0) }}</div>
+                    <div class="stat-label">Verified</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange"><i class="fas fa-clock"></i></div>
+                <div>
+                    <div class="stat-value">{{ status_map.get('Pending Review', 0) }}</div>
+                    <div class="stat-label">Pending Review</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon red"><i class="fas fa-triangle-exclamation"></i></div>
+                <div>
+                    <div class="stat-value">{{ status_map.get('Needs Improvement', 0) }}</div>
+                    <div class="stat-label">Needs Work</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon blue"><i class="fas fa-sliders"></i></div>
+                <div>
+                    <div class="stat-value">{{ criteria | length }}</div>
+                    <div class="stat-label">Active Criteria</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Criteria Table -->
+        <div class="section-card">
+            <div class="section-card-header">
+                <h2><i class="fas fa-sliders me-2" style="color:var(--admin-primary)"></i>Vetting Criteria</h2>
+                <span>{{ criteria | length }} rule{{ 's' if criteria | length != 1 else '' }}</span>
+            </div>
+
+            {% if criteria %}
+            <table class="criteria-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Weight</th>
+                        <th>Passing Threshold</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set total_weight = criteria | sum(attribute='weight') %}
+                    {% for c in criteria %}
+                    <tr>
+                        <td style="color:#9ca3af;font-size:0.8rem;">{{ loop.index }}</td>
+                        <td class="criterion-name-cell">{{ c.name }}</td>
+                        <td>
+                            <div class="weight-bar-wrap">
+                                <div class="weight-bar">
+                                    <div class="weight-bar-fill" style="width: {{ ((c.weight / total_weight) * 100) | round(1) if total_weight > 0 else 0 }}%"></div>
+                                </div>
+                                <span style="font-weight:700;color:#374151;">{{ c.weight }}</span>
+                                <span style="font-size:0.75rem;color:#9ca3af;">({{ ((c.weight / total_weight) * 100) | round(1) if total_weight > 0 else 0 }}%)</span>
+                            </div>
+                        </td>
+                        <td><span class="threshold-badge">≥ {{ c.passing_threshold }}%</span></td>
+                        <td style="font-size:0.82rem;color:#9ca3af;">{{ c.created_at[:10] if c.created_at else '—' }}</td>
+                        <td>
+                            <div class="action-btns">
+                                <a href="{{ url_for('admin.edit_criterion', criterion_id=c.id) }}"
+                                   class="btn-edit-sm"
+                                   id="editCriterion{{ c.id }}">
+                                    <i class="fas fa-pen"></i> Edit
+                                </a>
+                                <button type="button"
+                                        class="btn-delete-sm"
+                                        id="deleteCriterion{{ c.id }}"
+                                        onclick="confirmDelete({{ c.id }}, '{{ c.name | e }}')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-criteria">
+                <i class="fas fa-sliders"></i>
+                <p>No criteria configured yet. <a href="{{ url_for('admin.add_criterion') }}" style="color:var(--admin-primary);font-weight:700;">Add the first one.</a></p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Recalculate Panel -->
+        <div class="recalc-panel">
+            <div>
+                <h3><i class="fas fa-rotate me-2"></i>Recalculate All Scores</h3>
+                <p>Re-score every existing vetting application using the current criteria weights and thresholds.</p>
+            </div>
+            <form method="POST" action="{{ url_for('admin.recalculate') }}" id="recalcForm">
+                <button type="button" class="btn-recalculate" id="recalcBtn" onclick="confirmRecalc()">
+                    <i class="fas fa-rotate"></i> Run Recalculation
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<!-- Delete confirm modal -->
+<div class="confirm-overlay" id="deleteOverlay">
+    <div class="confirm-modal">
+        <h4><i class="fas fa-trash me-2 text-danger"></i>Delete Criterion</h4>
+        <p id="deleteModalMsg">Are you sure you want to delete this criterion? This cannot be undone.</p>
+        <div class="confirm-modal-btns">
+            <button class="btn-confirm-yes" id="confirmDeleteYes" onclick="submitDelete()">Yes, Delete</button>
+            <button class="btn-confirm-no" onclick="closeDeleteModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+<form id="deleteForm" method="POST" style="display:none;"></form>
+
+<!-- Recalculate confirm modal -->
+<div class="confirm-overlay" id="recalcOverlay">
+    <div class="confirm-modal">
+        <h4><i class="fas fa-rotate me-2" style="color:var(--admin-primary)"></i>Recalculate Scores</h4>
+        <p>This will overwrite all existing verification scores and statuses using the current criteria. Continue?</p>
+        <div class="confirm-modal-btns">
+            <button class="btn-confirm-yes" style="background:var(--admin-primary);" onclick="document.getElementById('recalcForm').submit()">
+                Yes, Recalculate
+            </button>
+            <button class="btn-confirm-no" onclick="document.getElementById('recalcOverlay').classList.remove('show')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let _pendingDeleteId = null;
+
+    function confirmDelete(id, name) {
+        _pendingDeleteId = id;
+        document.getElementById('deleteModalMsg').textContent =
+            `Are you sure you want to delete "${name}"? This cannot be undone.`;
+        document.getElementById('deleteOverlay').classList.add('show');
+    }
+
+    function closeDeleteModal() {
+        _pendingDeleteId = null;
+        document.getElementById('deleteOverlay').classList.remove('show');
+    }
+
+    function submitDelete() {
+        if (!_pendingDeleteId) return;
+        const form = document.getElementById('deleteForm');
+        form.action = `/admin/criteria/${_pendingDeleteId}/delete`;
+        form.method = 'POST';
+        form.submit();
+    }
+
+    function confirmRecalc() {
+        document.getElementById('recalcOverlay').classList.add('show');
+    }
+
+    // Close overlays on background click
+    ['deleteOverlay','recalcOverlay'].forEach(id => {
+        document.getElementById(id).addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('show');
+        });
+    });
+</script>
+
+{% endblock %}

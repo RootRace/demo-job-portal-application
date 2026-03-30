@@ -209,6 +209,12 @@
                             <li class="nav-item">
                                 <a class="nav-link-exec" href="{{ url_for('candidate.candidate_profile') }}">My Profile</a>
                             </li>
+                        {% elif session.role == 'admin' %}
+                            <li class="nav-item">
+                                <a class="nav-link-exec" href="{{ url_for('admin.dashboard') }}">
+                                    <i class="fas fa-shield-halved me-1 small"></i>Admin Panel
+                                </a>
+                            </li>
                         {% else %}
                             <li class="nav-item">
                                 <a class="nav-link-exec" href="{{ url_for('recruiter.dashboard') }}">Dashboard</a>
@@ -222,6 +228,22 @@
 
                 <ul class="navbar-nav align-items-center">
                     {% if session.user_id %}
+                        <!-- Notification Poller UI -->
+                        <li class="nav-item me-lg-3 mb-3 mb-lg-0 position-relative dropdown">
+                            <a class="nav-link-exec text-white" href="#" id="notif-bell" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-bell fs-5"></i>
+                                <span id="notif-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.55rem; display: none;">0</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 p-0" aria-labelledby="notif-bell" style="width: 320px; max-height: 400px; overflow-y: auto;" id="notif-panel">
+                                <div class="p-3 bg-light border-bottom text-dark fw-bold" style="position: sticky; top: 0; z-index: 10;">
+                                    System Notifications
+                                </div>
+                                <div id="notif-list">
+                                    <div class="p-4 text-center text-muted small">No notifications</div>
+                                </div>
+                            </div>
+                        </li>
+                        
                         <li class="nav-item me-lg-3 mb-3 mb-lg-0">
                             <div class="nav-user-context">
                                 <i class="fas fa-user-circle text-muted"></i>
@@ -306,6 +328,59 @@
                     bsAlert.close();
                 });
             }, 6000);
+
+            {% if session.user_id %}
+            // Real-time Notification Polling Worker
+            function fetchNotifications() {
+                fetch('/api/notifications')
+                    .then(res => {
+                        if (res.status === 401) return null;
+                        return res.json();
+                    })
+                    .then(data => {
+                        if (!data) return;
+                        const countBadge = document.getElementById('notif-count');
+                        const notifList = document.getElementById('notif-list');
+                        
+                        if (data.count > 0) {
+                            countBadge.textContent = data.count > 9 ? '9+' : data.count;
+                            countBadge.style.display = 'block';
+                        } else {
+                            countBadge.style.display = 'none';
+                        }
+
+                        if (data.notifications && data.notifications.length > 0) {
+                            let html = '';
+                            data.notifications.forEach(n => {
+                                // Reformat date to standard locale safely
+                                let d = new Date(n.created_at + 'Z');
+                                let dateString = isNaN(d) ? n.created_at : d.toLocaleString();
+                                html += `
+                                <div class="dropdown-item border-bottom py-3 text-wrap" style="white-space: normal;">
+                                    <div class="small fw-bold text-dark mb-1" style="line-height: 1.3;">${n.message}</div>
+                                    <div class="x-small text-muted">${dateString}</div>
+                                </div>`;
+                            });
+                            notifList.innerHTML = html;
+                        } else {
+                            notifList.innerHTML = '<div class="p-4 text-center text-muted small">No active notifications</div>';
+                        }
+                    })
+                    .catch(err => console.error("Polling system paused.", err));
+            }
+
+            fetchNotifications(); // Initialize
+            setInterval(fetchNotifications, 15000); // Poll 15s
+
+            // Acknowledge read state dynamically on interaction
+            document.getElementById('notif-bell').addEventListener('click', () => {
+                fetch('/api/notifications/read', { method: 'POST' })
+                    .then(() => {
+                        document.getElementById('notif-count').style.display = 'none';
+                        document.getElementById('notif-count').textContent = '0';
+                    });
+            });
+            {% endif %}
         });
     </script>
 </body>

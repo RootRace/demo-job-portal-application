@@ -6,6 +6,7 @@ from app.controller.candidate import candidate_bp
 from app.controller.recruiter import recruiter_bp
 from app.controller.jobs import jobs_bp
 from app.controller.api import api_bp
+from app.controller.admin import admin_bp
 from app.services.db import init_db, migrate_users_table
 
 load_dotenv()
@@ -20,7 +21,7 @@ def create_app():
 
     # ✅ Initialize database automatically when the app starts
     with app.app_context():
-        init_db()  # safe (CREATE IF NOT EXISTS)
+        init_db()           # safe (CREATE IF NOT EXISTS + seed criteria)
         migrate_users_table()  # 🔥 REQUIRED for existing DBs
 
     # ✅ Register blueprints
@@ -29,6 +30,7 @@ def create_app():
     app.register_blueprint(recruiter_bp)
     app.register_blueprint(jobs_bp)
     app.register_blueprint(api_bp)
+    app.register_blueprint(admin_bp)
 
     # ✅ Prevent caching issues
     @app.after_request
