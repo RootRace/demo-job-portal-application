@@ -57,11 +57,18 @@
         <div class="card control-center-card border-0 shadow-sm mb-5">
             <div class="card-body p-4 p-md-5">
                 <div class="row g-4 align-items-end">
-                    <div class="col-lg-4">
-                        <label class="exec-label">Candidate Search</label>
+                    <div class="col-lg-3">
+                        <label class="exec-label">Candidate Name</label>
                         <div class="exec-input-group">
-                            <i class="fas fa-search"></i>
-                            <input type="text" id="searchInput" class="exec-control" placeholder="Name, skills, or location...">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="searchInput" class="exec-control" placeholder="Name or location...">
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <label class="exec-label">Required Skill</label>
+                        <div class="exec-input-group">
+                            <i class="fas fa-code"></i>
+                            <input type="text" id="skillFilter" class="exec-control" placeholder="E.g. Python">
                         </div>
                     </div>
                     <div class="col-md-3 col-lg-2">
@@ -91,9 +98,10 @@
                             <option value="name">Alpha: A-Z</option>
                         </select>
                     </div>
-                    <div class="col-md-3 col-lg-2">
-                        <button class="btn-exec-outline w-100" id="resetFilters">
-                            <i class="fas fa-redo me-2"></i>Reset
+                    <div class="col-md-2 col-lg-1">
+                        <label class="exec-label d-none d-lg-block">&nbsp;</label>
+                        <button class="btn-exec-outline w-100" id="resetFilters" title="Reset Filters" style="padding: 12px 0;">
+                            <i class="fas fa-redo"></i>
                         </button>
                     </div>
                 </div>
@@ -103,7 +111,7 @@
         <div class="row g-4" id="applicationsGrid">
             {% if applications %}
                 {% for application in applications %}
-                <div class="col-xl-4 col-md-6 candidate-wrapper" data-status="{{ application.status }}" data-experience="{{ application.experience_years }}">
+                <div class="col-xl-4 col-md-6 candidate-wrapper" data-status="{{ application.status }}" data-experience="{{ application.experience_years }}" data-skills="{{ application.skills }}">
                     <div class="card candidate-matrix-card border-0 shadow-sm h-100">
                         <div class="card-body p-4">
                             <div class="d-flex justify-content-between align-items-start mb-4">
@@ -288,6 +296,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const searchInput = document.getElementById('searchInput');
+        const skillFilter = document.getElementById('skillFilter');
         const statusFilter = document.getElementById('statusFilter');
         const experienceFilter = document.getElementById('experienceFilter');
         const sortSelect = document.getElementById('sortSelect');
@@ -296,6 +305,7 @@
         
         function filterAndSortCards() {
             const searchTerm = searchInput.value.toLowerCase();
+            const skillTerm = skillFilter.value.toLowerCase();
             const statusValue = statusFilter.value;
             const experienceValue = experienceFilter.value;
             const sortValue = sortSelect.value;
@@ -303,9 +313,11 @@
             candidateCards.forEach(card => {
                 const status = card.getAttribute('data-status');
                 const experience = parseInt(card.getAttribute('data-experience'));
+                const skills = (card.getAttribute('data-skills') || '').toLowerCase();
                 const text = card.textContent.toLowerCase();
                 
                 const searchMatch = text.includes(searchTerm);
+                const skillMatch = skillTerm === '' || skills.includes(skillTerm);
                 const statusMatch = statusValue === 'all' || status === statusValue;
                 
                 let experienceMatch = true;
@@ -318,7 +330,7 @@
                     }
                 }
                 
-                card.style.display = (searchMatch && statusMatch && experienceMatch) ? 'block' : 'none';
+                card.style.display = (searchMatch && skillMatch && statusMatch && experienceMatch) ? 'block' : 'none';
             });
             
             const visibleCards = Array.from(candidateCards).filter(card => card.style.display !== 'none');
@@ -339,10 +351,12 @@
         }
 
         searchInput.addEventListener('input', filterAndSortCards);
+        skillFilter.addEventListener('input', filterAndSortCards);
         [statusFilter, experienceFilter, sortSelect].forEach(el => el.addEventListener('change', filterAndSortCards));
         
         resetFilters.addEventListener('click', () => {
             searchInput.value = '';
+            skillFilter.value = '';
             statusFilter.value = 'all';
             experienceFilter.value = 'all';
             sortSelect.value = 'recent';
