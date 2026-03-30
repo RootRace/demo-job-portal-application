@@ -118,6 +118,17 @@ def init_db():
         )
     """)
 
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS notifications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            message TEXT NOT NULL,
+            is_read INTEGER DEFAULT 0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users (id)
+        )
+    """)
+
     # Attempt to alter existing table in case it was created previously without these columns
     try:
         c.execute("ALTER TABLE candidate_profiles ADD COLUMN verification_status TEXT DEFAULT 'Unverified'")
@@ -152,5 +163,15 @@ def init_db():
     if not threshold_exists:
         c.execute("INSERT INTO system_settings (key, value) VALUES ('passing_threshold', '50')")
 
+    conn.commit()
+    conn.close()
+
+def create_notification(user_id, message):
+    """Helper function to securely add a notification."""
+    conn = get_db_connection()
+    conn.execute(
+        "INSERT INTO notifications (user_id, message) VALUES (?, ?)",
+        (user_id, message)
+    )
     conn.commit()
     conn.close()

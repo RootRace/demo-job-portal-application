@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from app.services.db import get_db_connection
+from app.services.db import get_db_connection, create_notification
 from app.services.auth import role_required
 
 recruiter_bp = Blueprint("recruiter", __name__, url_prefix="/recruiter")
@@ -111,7 +111,7 @@ def update_application_status():
 
     application = conn.execute(
         """
-        SELECT a.id 
+        SELECT a.id, a.candidate_id, j.title as job_title 
         FROM applications a 
         JOIN jobs j ON a.job_id = j.id 
         WHERE a.id = ? AND j.recruiter_id = ?
@@ -122,6 +122,11 @@ def update_application_status():
     if application:
         conn.execute("UPDATE applications SET status = ? WHERE id = ?", (new_status, application_id))
         conn.commit()
+        
+        # Notify the candidate
+        message = f"Your application for '{application['job_title']}' has been marked as: {new_status}."
+        create_notification(application["candidate_id"], message)
+        
         flash("Application status updated!", "success")
     else:
         flash("Application not found.", "error")
