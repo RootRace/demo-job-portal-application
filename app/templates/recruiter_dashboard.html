@@ -61,55 +61,58 @@
             </div>
         </div>
 
-        <section style="margin: 1.5rem 0;">
-          <h3 style="font-size:15px; font-weight:500; margin-bottom:0.75rem;
-                     color:var(--color-text-primary)">
-            Candidate Verification Distribution
-          </h3>
-          <div style="display:flex; gap:12px; flex-wrap:wrap;">
-
-            <div style="flex:1; min-width:130px; padding:14px 16px;
-                        border-radius:10px; border:1px solid var(--color-border-tertiary);
-                        background:var(--color-background-secondary);">
-              <div style="font-size:22px; font-weight:500; color:#3B6D11;">
-                {{ verification_dist["Verified"] }}
-              </div>
-              <div style="font-size:12px; color:var(--color-text-secondary);
-                          margin-top:3px;">Verified</div>
+        <!-- Verification Distribution Breakdown (PBI-20) -->
+        <section class="mb-5">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="section-badge bg-white shadow-sm rounded-pill px-3 py-1 border x-small fw-bold text-uppercase tracking-wider">Talent Quality Metrics</div>
+                <hr class="flex-grow-1 opacity-10">
             </div>
+            
+            <div class="row g-3">
+                <!-- Verified -->
+                <div class="col-6 col-md-3">
+                    <div class="talent-metric-card talent-verified">
+                        <div class="talent-icon shadow-sm"><i class="fas fa-certificate"></i></div>
+                        <div class="talent-content">
+                            <div class="talent-value">{{ verification_dist["Verified"] }}</div>
+                            <div class="talent-label">Elite Verified</div>
+                        </div>
+                    </div>
+                </div>
 
-            <div style="flex:1; min-width:130px; padding:14px 16px;
-                        border-radius:10px; border:1px solid var(--color-border-tertiary);
-                        background:var(--color-background-secondary);">
-              <div style="font-size:22px; font-weight:500; color:#854F0B;">
-                {{ verification_dist["Pending Review"] }}
-              </div>
-              <div style="font-size:12px; color:var(--color-text-secondary);
-                          margin-top:3px;">Pending Review</div>
+                <!-- Pending -->
+                <div class="col-6 col-md-3">
+                    <div class="talent-metric-card talent-pending">
+                        <div class="talent-icon shadow-sm"><i class="fas fa-hourglass-half"></i></div>
+                        <div class="talent-content">
+                            <div class="talent-value">{{ verification_dist["Pending Review"] }}</div>
+                            <div class="talent-label">Pending Review</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Needs Improvement -->
+                <div class="col-6 col-md-3">
+                    <div class="talent-metric-card talent-improvement">
+                        <div class="talent-icon shadow-sm"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="talent-content">
+                            <div class="talent-value">{{ verification_dist["Needs Improvement"] }}</div>
+                            <div class="talent-label">Action Required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Unverified -->
+                <div class="col-6 col-md-3">
+                    <div class="talent-metric-card talent-unverified">
+                        <div class="talent-icon shadow-sm"><i class="fas fa-user-secret"></i></div>
+                        <div class="talent-content">
+                            <div class="talent-value">{{ verification_dist["Unverified"] }}</div>
+                            <div class="talent-label">Unverified List</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div style="flex:1; min-width:130px; padding:14px 16px;
-                        border-radius:10px; border:1px solid var(--color-border-tertiary);
-                        background:var(--color-background-secondary);">
-              <div style="font-size:22px; font-weight:500; color:#A32D2D;">
-                {{ verification_dist["Needs Improvement"] }}
-              </div>
-              <div style="font-size:12px; color:var(--color-text-secondary);
-                          margin-top:3px;">Needs Improvement</div>
-            </div>
-
-            <div style="flex:1; min-width:130px; padding:14px 16px;
-                        border-radius:10px; border:1px solid var(--color-border-tertiary);
-                        background:var(--color-background-secondary);">
-              <div style="font-size:22px; font-weight:500;
-                          color:var(--color-text-secondary);">
-                {{ verification_dist["Unverified"] }}
-              </div>
-              <div style="font-size:12px; color:var(--color-text-secondary);
-                          margin-top:3px;">Unverified</div>
-            </div>
-
-          </div>
         </section>
 
         <div class="row g-4">
@@ -310,5 +313,52 @@
     .empty-icon-box { width: 80px; height: 80px; background: var(--exec-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 1.5rem; }
 
     .shadow-premium { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+
+    /* Improved Talent Talent Metrics (PBI-20) */
+    .talent-metric-card {
+        background: #fff;
+        border: 1px solid var(--exec-border);
+        border-radius: 16px;
+        padding: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    .talent-metric-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+        border-color: var(--button-blue);
+    }
+    .talent-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+    }
+    .talent-value {
+        font-size: 1.5rem;
+        font-weight: 800;
+        line-height: 1.2;
+        color: var(--exec-black);
+    }
+    .talent-label {
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-muted);
+    }
+
+    /* Status Specific Colors */
+    .talent-verified .talent-icon { background: #ecfdf5; color: #10b981; }
+    .talent-pending .talent-icon { background: #fffbeb; color: #f59e0b; }
+    .talent-improvement .talent-icon { background: #fef2f2; color: #ef4444; }
+    .talent-unverified .talent-icon { background: #f4f4f5; color: #71717a; }
 </style>
 {% endblock %}
