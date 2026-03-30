@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, flash, session, redirect, url_for
 from app.services.db import get_db_connection
 from app.services.auth import role_required
+from app.services.vetting import calculate_dynamic_score, determine_status_and_recommendation
 
 candidate_bp = Blueprint("candidate", __name__, url_prefix="/candidate")
 
@@ -69,21 +70,13 @@ def vetting_application():
     if request.method == "POST":
         application_text = request.form.get("application_text", "")
 
-        # Simple mock verification score logic:
-        # Base score 40 + word count bonus (up to 40) + random factor (simulating real review/ML score)
-        word_count = len(application_text.split())
-        score = 40 + min(word_count, 40)
+        # Get current threshold
+        setting = conn.execute("SELECT value FROM system_settings WHERE key = 'passing_threshold'").fetchone()
+        threshold = int(setting["value"]) if setting else 50
 
-        # Determine status and recommendation text
-        if score > 70:
-            status = "Verified"
-            recommendation = "Highly Recommended: This candidate demonstrated exceptional proficiency. Their background and qualifications significantly align with standards of excellence in this sector."
-        elif score > 50:
-            status = "Pending Review"
-            recommendation = "Recommended: This candidate possesses solid foundational skills and represents a capable choice for the role."
-        else:
-            status = "Needs Improvement"
-            recommendation = "Needs Review: The candidate may require additional support or verification to meet the standard requirements."
+        # Use new dynamic calculating logic instead of hardcoded rules
+        score = calculate_dynamic_score(conn, application_text)
+        status, recommendation = determine_status_and_recommendation(score, threshold)
 
         conn.execute(
             """

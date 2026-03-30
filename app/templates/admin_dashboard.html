@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dashboard-layout pb-5">
+    <div class="header-dark py-5 mb-5 position-relative overflow-hidden">
+        <div class="container position-relative z-10">
+            <h6 class="text-white fw-bold text-uppercase tracking-widest small mb-2 opacity-75">Platform Management</h6>
+            <h1 class="display-4 fw-extrabold text-white tracking-tight mb-2">Vetting <span class="text-outline-white">Criteria Engine</span></h1>
+            <p class="text-white opacity-75 small mb-0 mt-3">Configure NLP algorithm weightings and thresholds.</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="row g-4 mb-5">
+            <!-- Global Threshold Setting -->
+            <div class="col-lg-4">
+                <div class="card executive-sidebar-card border-0 shadow-sm h-100">
+                    <div class="card-header bg-white border-bottom p-4">
+                        <h5 class="mb-0 fw-bold text-dark">Global Threshold</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="POST" action="{{ url_for('admin.update_threshold') }}">
+                            <div class="mb-3">
+                                <label class="exec-label">Passing Score Boundary</label>
+                                <p class="small text-muted mb-3">Scores above this boundary will be marked as "Pending Review" or higher.</p>
+                                <input type="number" name="threshold" class="exec-control form-control-lg fw-bold" value="{{ threshold }}" min="1" max="100" required>
+                            </div>
+                            <button type="submit" class="btn-executive-solid w-100 py-3 mt-2">
+                                Update Boundary
+                            </button>
+                        </form>
+
+                        <div class="mt-4 pt-4 border-top">
+                            <h6 class="fw-bold x-small text-uppercase text-muted tracking-wider">Scoring Health</h6>
+                            <div class="d-flex align-items-center justify-content-between mt-2">
+                                <span class="fw-bold text-dark">Total Engine Weights:</span>
+                                <span class="badge {% if total_weight > 100 %}bg-danger{% elif total_weight == 100 %}bg-success{% else %}bg-warning{% endif %} rounded-pill px-3">{{ total_weight }}</span>
+                            </div>
+                            <p class="x-small text-muted mt-2 mb-0">Note: Engine normalizes final score to 100 max, but optimal criteria sum is 100.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Criteria Management -->
+            <div class="col-lg-8">
+                <div class="card executive-table-card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-white border-bottom p-4">
+                        <h5 class="mb-0 fw-bold text-dark">Active Scoring Criteria</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-exec align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="ps-4">Criterion Focus</th>
+                                        <th>Assigned Weight</th>
+                                        <th class="text-end pe-4">System Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for criterion in criteria %}
+                                        <tr>
+                                            <td class="ps-4 py-4">
+                                                <form method="POST" action="{{ url_for('admin.edit_criterion', id=criterion.id) }}" class="d-flex align-items-center gap-3" id="form-edit-{{ criterion.id }}">
+                                                    <i class="fas fa-brain text-primary"></i>
+                                                    <input type="text" name="name" value="{{ criterion.name }}" class="form-control form-control-sm border-0 bg-light fw-bold" required>
+                                                </form>
+                                            </td>
+                                            <td>
+                                                <input type="number" name="weight" value="{{ criterion.weight }}" form="form-edit-{{ criterion.id }}" class="form-control form-control-sm border-0 bg-light fw-bold" style="width: 80px;" required>
+                                            </td>
+                                            <td class="text-end pe-4">
+                                                <div class="d-flex justify-content-end gap-2">
+                                                    <button type="submit" form="form-edit-{{ criterion.id }}" class="btn btn-sm btn-light border" title="Save Changes">
+                                                        <i class="fas fa-save text-success"></i>
+                                                    </button>
+                                                    <form method="POST" action="{{ url_for('admin.delete_criterion', id=criterion.id) }}" onsubmit="return confirm('WARNING: Deleting criteria adjusts the scoring engine. Continue?');">
+                                                        <button type="submit" class="btn btn-sm btn-light border text-danger" title="Delete">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="3" class="text-center py-5">
+                                                <span class="text-muted small">No vetting criteria defined. Engine is running on defaults.</span>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add New Criterion -->
+                <div class="card executive-sidebar-card border-0 shadow-sm border-primary-fade">
+                    <div class="card-body p-4">
+                        <h6 class="fw-bold text-dark mb-3"><i class="fas fa-plus-circle text-primary me-2"></i>Deploy New Criterion</h6>
+                        <form method="POST" action="{{ url_for('admin.add_criterion') }}" class="row g-3 align-items-end">
+                            <div class="col-md-7">
+                                <label class="exec-label">Focus Area (Name)</label>
+                                <input type="text" name="name" class="exec-control" placeholder="e.g., Code Quality Analysis" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="exec-label">Weight</label>
+                                <input type="number" name="weight" class="exec-control" placeholder="0-100" min="1" required>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn-executive-solid w-100 py-2">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Reuse Recruiter Dashboard Styles */
+    .dashboard-layout { background-color: #f4f4f5; color: #0a0a0b; min-height: 100vh;}
+    .header-dark { background: #2CBFAE; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .text-outline-white { -webkit-text-stroke: 1px #fff; color: transparent; }
+    .tracking-widest { letter-spacing: 0.2em; }
+    .fw-extrabold { font-weight: 800; }
+    .x-small { font-size: 0.65rem; }
+
+    .executive-sidebar-card, .executive-table-card { border-radius: 20px; border: 1px solid #e4e4e7; }
+    .border-primary-fade { border-left: 4px solid #2CBFAE; }
+
+    .exec-label { font-size: 0.65rem; text-transform: uppercase; font-weight: 800; color: #71717a; letter-spacing: 1.5px; margin-bottom: 8px; display: block; }
+    .exec-control { width: 100%; background: #f4f4f5; border: 1px solid transparent; padding: 12px 16px; border-radius: 12px; font-weight: 600; font-size: 0.9rem; transition: 0.2s; }
+    .exec-control:focus { outline: none; border-color: #0a0a0b; background: #fff; }
+
+    .table-exec thead th { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; color: #71717a; border-bottom: 2px solid #f4f4f5; padding: 20px 10px; }
+    .table-exec tbody tr:hover { background-color: #f4f4f5; }
+
+    .btn-executive-solid {
+        background: #1F4ED8;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s;
+    }
+    .btn-executive-solid:hover {
+        background: #163A8E;
+        color: #fff;
+    }
+</style>
+{% endblock %}
