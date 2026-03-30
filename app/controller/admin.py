@@ -1,6 +1,6 @@
 import re
 from flask import Blueprint, render_template, request, session, redirect, url_for, flash
-from app.services.db import get_db_connection
+from app.services.db import get_db_connection, create_notification
 from app.services.auth import role_required
 from app.services.vetting import calculate_dynamic_score, determine_status_and_recommendation
 
@@ -104,6 +104,10 @@ def recalculate_all_scores():
             new_score = calculate_dynamic_score(conn, app["application_text"])
             status, recommendation = determine_status_and_recommendation(new_score, threshold)
             
+            # Get old profile status to compare
+            profile = conn.execute("SELECT verification_status FROM candidate_profiles WHERE user_id = ?", (app["candidate_id"],)).fetchone()
+            old_status = profile["verification_status"] if profile else None
+
             # Update vetting application
             conn.execute(
                 "UPDATE vetting_applications SET score = ?, status = ? WHERE id = ?",
@@ -115,6 +119,10 @@ def recalculate_all_scores():
                 "UPDATE candidate_profiles SET verification_status = ?, verification_score = ?, verification_recommendation = ? WHERE user_id = ?",
                 (status, new_score, recommendation, app["candidate_id"])
             )
+
+            # Trigger notification if status changed
+            if old_status and old_status != status:
+                create_notification(app["candidate_id"], f"Your vetting status has changed to: {status}")
             
         conn.commit()
     except Exception as e:

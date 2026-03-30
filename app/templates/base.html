@@ -226,6 +226,23 @@
 
                 <ul class="navbar-nav align-items-center">
                     {% if session.user_id %}
+                        <!-- Notification Bell -->
+                        <li class="nav-item me-lg-2 dropdown" id="notificationDropdownContainer">
+                            <a class="nav-link-exec text-white position-relative" href="#" id="notificationBell" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-bell"></i>
+                                <span class="position-absolute top-25 start-75 translate-middle badge rounded-pill bg-danger d-none" id="notifBadge" style="font-size:0.5rem; padding:0.25em 0.4em; transform: translate(-30%, -30%);"></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end shadow border-0 p-0" aria-labelledby="notificationBell" style="width:320px; max-height:400px; overflow-y:auto; border-radius:12px;">
+                                <div class="text-white p-3 fw-bold d-flex justify-content-between align-items-center" style="background-color: var(--button-blue, #1F4ED8);">
+                                    <span>Notifications</span>
+                                    <button class="btn btn-sm btn-light py-0 px-2 fw-bold" id="markReadBtn" style="font-size: 0.65rem; background:#fff !important; color:#000 !important; border:none !important;">Mark Read</button>
+                                </div>
+                                <div id="notificationList" class="p-1">
+                                    <div class="text-center p-3 text-muted small">Loading...</div>
+                                </div>
+                            </div>
+                        </li>
+
                         <li class="nav-item me-lg-3 mb-3 mb-lg-0">
                             <div class="nav-user-context">
                                 <i class="fas fa-user-circle text-muted"></i>
@@ -310,6 +327,64 @@
                     bsAlert.close();
                 });
             }, 6000);
+            
+            // Notification Polling System
+            const notifBadge = document.getElementById('notifBadge');
+            const notifList = document.getElementById('notificationList');
+            const markReadBtn = document.getElementById('markReadBtn');
+            
+            if(notifBadge && notifList) {
+                function fetchNotifications() {
+                    fetch('/api/notifications')
+                        .then(r => r.json())
+                        .then(data => {
+                            if(!data.success) return;
+                            
+                            if(data.unread_count > 0) {
+                                notifBadge.classList.remove('d-none');
+                                notifBadge.innerText = data.unread_count;
+                            } else {
+                                notifBadge.classList.add('d-none');
+                            }
+                            
+                            if (data.notifications.length === 0) {
+                                notifList.innerHTML = '<div class="text-center p-4 text-muted small"><i class="fas fa-inbox fa-2x mb-2 opacity-50"></i><br>No new alerts</div>';
+                                const inlineList = document.getElementById('inlineNotificationsList');
+                                if(inlineList) inlineList.innerHTML = '<div class="text-center p-3 text-muted small">No recent activity.</div>';
+                            } else {
+                                const renderHtml = data.notifications.map(n => `
+                                    <div class="p-3 border-bottom \${n.is_read ? '' : 'bg-light'}">
+                                        <div class="small fw-bold \${n.is_read ? 'text-muted' : 'text-dark'}">\${n.message}</div>
+                                        <div class="text-muted" style="font-size:0.65rem; margin-top:4px;"><i class="fas fa-clock me-1"></i>\${new Date(n.created_at + 'Z').toLocaleString()}</div>
+                                    </div>
+                                `).join('');
+                                
+                                notifList.innerHTML = renderHtml;
+                                
+                                const inlineList = document.getElementById('inlineNotificationsList');
+                                if(inlineList) inlineList.innerHTML = renderHtml;
+                            }
+                        })
+                        .catch(err => console.error("Notification Polling Error", err));
+                }
+                
+                // Initial fetch
+                fetchNotifications();
+                
+                // Poll every 15 seconds for "near real-time"
+                setInterval(fetchNotifications, 15000);
+                
+                if (markReadBtn) {
+                    markReadBtn.addEventListener('click', (e) => {
+                        e.stopPropagation(); // prevent dropdown close
+                        fetch('/api/notifications/mark-read', { method: 'POST' })
+                            .then(r => r.json())
+                            .then(data => {
+                                if(data.success) fetchNotifications();
+                            });
+                    });
+                }
+            }
         });
     </script>
 </body>
