@@ -49,12 +49,12 @@ To quickly start testing with pre-loaded recruiters, admins, and candidates:
 python seed.py
 ```
 
-### 🔐 Test Credentials
-| Role | Email | Password |
-| :--- | :--- | :--- |
-| **Admin** | `admin@test.com` | `password123` |
-| **Recruiter** | `recruiter@test.com` | `password123` |
-| **Candidate** | `candidate@test.com` | `password123` |
+### 🔐 Active Demo Accounts
+| Role | Name | Email | Password |
+| :--- | :--- | :--- | :--- |
+| **Admin** | Super Admin | `admin@portal.com` | `Admin@123` |
+| **Recruiter** | Rachel Morgan | `rachel.morgan@portal.com` | `Recruiter@1` |
+| **Candidate** | Ethan Hunt | `ethan.hunt@mail.com` | `Candidate@1` |
 
 ---
 
