@@ -6,4 +6,3 @@ __pycache__/
 *.db
 instance/
 uploads/
-jobs.db
