@@ -76,8 +76,12 @@ def login():
             session["role"] = user["role"]
             flash("Login successful!", "success")
 
-            if user["role"] == "recruiter":
+            if user["role"] == "admin":
+                return redirect(url_for("admin.dashboard"))
+            elif user["role"] == "recruiter":
                 return redirect(url_for("recruiter.dashboard"))
+            elif user["role"] == "candidate":
+                return redirect(url_for("candidate.candidate_profile"))
             else:
                 return redirect(url_for("jobs.list_jobs"))
         else:

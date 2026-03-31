@@ -56,6 +56,12 @@ def init_db():
             experience_years REAL,
             education TEXT,
             resume_text TEXT,
+            headline TEXT,
+            summary TEXT,
+            linkedin_url TEXT,
+            portfolio_url TEXT,
+            resume_filename TEXT,
+            availability_status TEXT DEFAULT 'available',
             verification_status TEXT DEFAULT 'Unverified',
             verification_score INTEGER DEFAULT 0,
             verification_recommendation TEXT,
@@ -75,6 +81,7 @@ def init_db():
             requirements TEXT NOT NULL,
             salary_range TEXT,
             job_type TEXT,
+            status TEXT DEFAULT 'active',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (recruiter_id) REFERENCES users (id)
         )
@@ -88,6 +95,7 @@ def init_db():
             status TEXT DEFAULT 'applied',
             applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             notes TEXT,
+            cover_letter TEXT,
             FOREIGN KEY (job_id) REFERENCES jobs (id),
             FOREIGN KEY (candidate_id) REFERENCES users (id)
         )
@@ -101,7 +109,9 @@ def init_db():
             score INTEGER DEFAULT 0,
             status TEXT DEFAULT 'submitted',
             submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (candidate_id) REFERENCES users (id)
+            vetted_by INTEGER,
+            FOREIGN KEY (candidate_id) REFERENCES users (id),
+            FOREIGN KEY (vetted_by) REFERENCES users (id)
         )
     """)
 
@@ -121,7 +131,10 @@ def init_db():
         CREATE TABLE IF NOT EXISTS vetting_criteria (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT UNIQUE NOT NULL,
+            description TEXT,
             weight INTEGER NOT NULL DEFAULT 1,
+            category TEXT,
+            max_score INTEGER DEFAULT 10,
             passing_threshold INTEGER NOT NULL DEFAULT 60,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
