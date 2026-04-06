@@ -202,9 +202,11 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
+                    {% if session.user_id %}
                     <li class="nav-item">
                         <a class="nav-link-exec" href="{{ url_for('jobs.list_jobs') }}">Marketplace</a>
                     </li>
+                    {% endif %}
                     {% if session.user_id %}
                         {% if session.role == 'candidate' %}
                             <li class="nav-item">
