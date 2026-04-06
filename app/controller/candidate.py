@@ -120,7 +120,7 @@ def candidate_profile():
     return render_template("candidate_profile.html", profile=profile, notifications=notifications)
 
 
-@candidate_bp.route("/vetting", methods=["GET", "POST"])
+@candidate_bp.route("/vetting", methods=["POST"])
 @role_required("candidate")
 def vetting_application():
     conn = get_db_connection()
@@ -136,62 +136,56 @@ def vetting_application():
         conn.close()
         return redirect(url_for("candidate.candidate_profile"))
 
-    if request.method == "POST":
-        application_text = request.form.get("application_text", "")
+    # Score is calculated directly from the candidate's profile — no form needed
+    criteria = _get_criteria(conn)
+    score, status = _compute_score(
+        "",  # application_text no longer required
+        profile["skills"],
+        profile["experience_years"],
+        criteria,
+    )
 
-        # Fetch active criteria and compute weighted score
-        criteria = _get_criteria(conn)
-        score, status = _compute_score(
-            application_text,
-            profile["skills"],
-            profile["experience_years"],
-            criteria,
+    # Build recommendation text based on status
+    if status == "Verified":
+        recommendation = (
+            "Highly Recommended: This candidate demonstrated exceptional proficiency. "
+            "Their background and qualifications significantly align with standards of excellence in this sector."
+        )
+    elif status == "Pending Review":
+        recommendation = (
+            "Recommended: This candidate possesses solid foundational skills and represents "
+            "a capable choice for the role."
+        )
+    else:
+        recommendation = (
+            "Needs Review: The candidate may require additional support or verification "
+            "to meet the standard requirements."
         )
 
-        # Build recommendation text based on status
-        if status == "Verified":
-            recommendation = (
-                "Highly Recommended: This candidate demonstrated exceptional proficiency. "
-                "Their background and qualifications significantly align with standards of excellence in this sector."
-            )
-        elif status == "Pending Review":
-            recommendation = (
-                "Recommended: This candidate possesses solid foundational skills and represents "
-                "a capable choice for the role."
-            )
-        else:
-            recommendation = (
-                "Needs Review: The candidate may require additional support or verification "
-                "to meet the standard requirements."
-            )
+    conn.execute(
+        """
+        INSERT INTO vetting_applications (candidate_id, application_text, score, status)
+        VALUES (?, ?, ?, ?)
+        """,
+        (session["user_id"], "", score, status),
+    )
 
-        conn.execute(
-            """
-            INSERT INTO vetting_applications (candidate_id, application_text, score, status)
-            VALUES (?, ?, ?, ?)
-            """,
-            (session["user_id"], application_text, score, status),
-        )
+    conn.execute(
+        """
+        UPDATE candidate_profiles 
+        SET verification_status = ?, verification_score = ?, verification_recommendation = ?
+        WHERE user_id = ?
+        """,
+        (status, score, recommendation, session["user_id"]),
+    )
 
-        conn.execute(
-            """
-            UPDATE candidate_profiles 
-            SET verification_status = ?, verification_score = ?, verification_recommendation = ?
-            WHERE user_id = ?
-            """,
-            (status, score, recommendation, session["user_id"]),
-        )
+    conn.commit()
 
-        conn.commit()
-        
-        create_notification(
-            session["user_id"], 
-            f"Your vetting application result: {status}. Score: {score}/100."
-        )
-        
-        flash("Vetting application submitted successfully!", "success")
-        conn.close()
-        return redirect(url_for("candidate.candidate_profile"))
+    create_notification(
+        session["user_id"],
+        f"Your vetting application result: {status}. Score: {score}/100."
+    )
 
+    flash(f"Vetting complete! Your score: {score}/100 — {status}.", "success")
     conn.close()
-    return render_template("vetting_form.html")
+    return redirect(url_for("candidate.candidate_profile"))

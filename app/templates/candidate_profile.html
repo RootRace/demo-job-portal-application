@@ -70,9 +70,11 @@
                     <p class="text-muted small mb-3">
                         Apply for Vettorix Vetting to increase your credibility and show employers you are a pre-verified candidate.
                     </p>
-                    <a href="{{ url_for('candidate.vetting_application') }}" class="btn btn-primary px-4 py-2" style="background-color: #1F4ED8; border-color: #1F4ED8;">
-                        Apply for Vetting
-                    </a>
+                    <form method="POST" action="{{ url_for('candidate.vetting_application') }}" style="display:inline;">
+                        <button type="submit" class="btn btn-primary px-4 py-2" style="background-color: #1F4ED8; border-color: #1F4ED8;">
+                            Apply for Vetting
+                        </button>
+                    </form>
                 </div>
               </div>
               {% endif %}
